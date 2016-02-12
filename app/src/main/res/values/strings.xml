@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TaskManager</string>
+    <string name="baseUrl">http://10.0.0.2:8080/WooshServer/mvc</string>
+</resources>
