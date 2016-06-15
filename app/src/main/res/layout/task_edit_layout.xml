@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorLightGrey"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Edit Task" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="2"
+            android:columnOrderPreserved="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:padding="17dp"
+                android:id="@+id/task_edit_layout_task_title"
+                android:lines="1"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_columnSpan="2"
+                android:background="@color/colorLightGrey" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="15dp"
+                android:src="@drawable/ic_menu_user" />
+
+            <ViewSwitcher android:id="@+id/task_edit_layout_assignee_switcher">
+
+
+                   <RelativeLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+
+                       <TextView
+                           android:id="@+id/task_edit_layout_add_assignee"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:hint="Add an assignee"
+                           android:paddingTop="22dp"
+                           android:paddingBottom="22dp"
+                           android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                       <View
+                           android:layout_width="match_parent"
+                           android:layout_height="0.8dp"
+                           android:layout_below="@id/task_edit_layout_add_assignee"
+                           android:background="@color/colorLightGrey" />
+                   </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/task_edit_layout_assignee_initials"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/circular_label"
+                        android:gravity="center"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/task_edit_layout_assignee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/task_edit_layout_assignee_initials"
+                        android:paddingLeft="5dp"
+                         />
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/task_edit_layout_remove_assignee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/task_edit_layout_assignee"
+                        android:background="@color/colorWhite"
+                        android:src="@drawable/ic_menu_remove" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+            </ViewSwitcher>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="15dp"
+                android:src="@drawable/ic_menu_follower" />
+
+            <RelativeLayout android:layout_width="match_parent">
+
+                <TextView
+                    android:id="@+id/task_edit_layout_followers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Add a follower"
+                    android:paddingBottom="22dp"
+                    android:paddingTop="22dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:layout_below="@id/task_edit_layout_followers"
+                    android:background="@color/colorLightGrey" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="15dp"
+                android:src="@drawable/ic_menu_date" />
+
+            <RelativeLayout>
+
+                <com.codefish.android.taskmanager.component.smartDateView.SmartDateTextView
+                    android:id="@+id/task_edit_layout_due_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Add a due date"
+                    android:paddingBottom="22dp"
+                    android:paddingTop="22dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:layout_below="@id/task_edit_layout_due_date"
+                    android:background="@color/colorLightGrey" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="15dp"
+                android:src="@drawable/ic_menu_description" />
+
+            <RelativeLayout>
+
+                <TextView
+                    android:id="@+id/task_edit_layout_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Add a description"
+                    android:paddingBottom="22dp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:paddingTop="22dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:layout_below="@id/task_edit_layout_description"
+                    android:background="@color/colorLightGrey" />
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="15dp"
+                android:src="@drawable/ic_menu_attachment" />
+
+            <RelativeLayout>
+
+                <TextView
+                    android:id="@+id/task_edit_attachments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Add attachments"
+                    android:paddingBottom="22dp"
+                    android:paddingTop="22dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:layout_below="@id/task_edit_attachments"
+                    android:background="@color/colorLightGrey" />
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="15dp"
+                android:src="@drawable/ic_menu_project" />
+
+            <RelativeLayout>
+
+                <TextView
+                    android:id="@+id/task_edit_project"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Move to project"
+                    android:paddingBottom="22dp"
+                    android:paddingTop="22dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:layout_below="@id/task_edit_project"
+                    android:background="@color/colorLightGrey" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="15dp"
+                android:src="@drawable/ic_menu_tag" />
+
+
+            <TextView
+                android:id="@+id/task_edit_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Add tag"
+                android:paddingBottom="22dp"
+                android:paddingTop="22dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_columnSpan="2"
+                android:background="@color/colorLightGrey" />
+
+
+
+        </GridLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="18dp"
+            android:text="DELETE TASK"
+            android:id="@+id/task_edit_layout_delete"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat"
+            android:textColor="@color/colorRed" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

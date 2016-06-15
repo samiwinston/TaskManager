@@ -1,98 +1,98 @@
 package com.codefish.android.taskmanager.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
-import com.codefish.android.taskmanager.MyApplication;
-import com.codefish.android.taskmanager.R;
-import com.codefish.android.taskmanager.model.AppUser;
-import com.codefish.android.taskmanager.presenter.LoginPresenterImpl;
-import com.codefish.android.taskmanager.utils.IUser;
+import com.codefish.android.taskmanager.fragment.LoginFragment;
+import com.codefish.android.taskmanager.fragment.SingleFragmentActivity;
+import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.ServiceModel;
+import com.codefish.android.taskmanager.model.AppUserBean;
 
 
-import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 
-public class LoginActivity extends AppCompatActivity implements ILoginView {
+public class LoginActivity extends SingleFragmentActivity {
 
 
-    @Bind(R.id.userEdtView)
-    EditText userEdtView;
-    @Bind(R.id.passEdtView)
-    EditText passEdtView;
-    @Bind(R.id.loginProgressBar)
-    ProgressBar loginProgressBar;
-
-    @Inject
-    LoginPresenterImpl loginPresenter;
-
-
-    private Boolean mockValidation = false;
+    private LoginFragment fragment;
+    private boolean mock = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected Fragment createFragment() {
+        fragment = new LoginFragment();
+        return fragment;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
-        MyApplication.inject(this);
-
-
-        String response = loginPresenter != null ? "Not Null" : "Is Null";
-        Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
     }
 
 
-    public void loginHandler(View view) {
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (mock) navigateToTasksView();
+    }
 
-        loginPresenter.validateCredentials(userEdtView.getText().toString(),passEdtView.getText().toString());
+    public void navigateToTasksView() {
+        Intent intent = TasksListActivity.newInstance(this);
+        startActivity(intent);
     }
 
 
-    private void requestData() {
+    public void validateCredentials(String username, String password) {
+        fragment.showProgressBar();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.baseUrl))
-                .build();
 
-        IUser user = retrofit.create(IUser.class);
-        user.getUser(new Callback<AppUser>() {
+        if (username == null || username.length() == 0
+                || password == null || password.length() == 0) {
+            fragment.showToast("Please check your username or password");
+            fragment.hideProgressBar();
+            return;
+        }
+        getUser(username, password);
+    }
+
+    private void getUser(final String username, final String password) {
+
+
+        ServiceModel.getInstance().userService.getUser(username, password).enqueue(new Callback<AppUserBean>() {
             @Override
-            public void onResponse(Response<AppUser> response) {
-                AppUser user = response.body();
+            public void onResponse(Call<AppUserBean> call, Response<AppUserBean> response) {
+                if (response.isSuccessful()) {
+                    AppUserBean user = response.body();
+                    if (user.getId() > 0) {
+                        LoginModel.getInstance().setUserBean(user);
+                        navigateToTasksView();
+                        finish();
+                    } else {
+                        fragment.showToast("Can not login, please check your username or password");
+                    }
+
+
+                } else {
+                    fragment.showToast("Can not reach CodeFish: response is not successful");
+                }
+
+                fragment.hideProgressBar();
+
             }
 
             @Override
-            public void onFailure(Throwable t) {
-
+            public void onFailure(Call<AppUserBean> call, Throwable t) {
+                fragment.showToast("Can not reach CodeFish: error "+t.getMessage());
+                fragment.hideProgressBar();
+                t.printStackTrace();
             }
         });
-    }
-
-
-    @Override
-    public void toggleProgressBar(int visibilityType) {
-        loginProgressBar.setVisibility(visibilityType);
-    }
-
-    @Override
-    public void navigateToTasksView() {
 
     }
-
-    @Override
-    public void showErrorMessage(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
 
 }

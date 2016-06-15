@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorLightGrey"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Followers" />
+
+
+<RelativeLayout android:id="@+id/task_followers_layout_add_follower_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
+
+    <ImageView android:id="@+id/task_edit_followers_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu_follower"/>
+
+    <TextView android:id="@+id/task_edit_followers_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add another follower"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/task_edit_followers_icon"/>
+    <TextView android:layout_below="@id/task_edit_followers_label"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="Followers receive notifications about activity"
+        android:layout_toRightOf="@id/task_edit_followers_icon"/>
+</RelativeLayout>
+
+    <com.codefish.android.taskmanager.component.userListView.FollowersListView
+        android:id="@+id/task_followers_layout_followers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp">
+
+    </com.codefish.android.taskmanager.component.userListView.FollowersListView>
+
+
+
+
+
+</LinearLayout>

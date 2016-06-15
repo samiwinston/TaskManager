@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listItemView"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:lines="1"
+        android:textStyle="bold" />
+
+    <com.codefish.android.taskmanager.component.smartDateView.SmartDateTextView
+        android:id="@+id/dueDateView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp" />
+</LinearLayout>

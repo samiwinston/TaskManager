@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainGroup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/new_task_window"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    >
+
+ <!--   user select area
+    task name area
+    task description area
+    due date/ create area-->
+
+    <LinearLayout
+        android:id="@+id/hGroup"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorClearGrey"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="For:" />
+
+
+        <com.codefish.android.taskmanager.component.SearchUserEditText
+            android:id="@+id/searchUsersInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Anyone"
+            app:beanPath="com.codefish.frameworkModule.reportBeans.AppUsersReportBean"
+            app:labelField="name" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="In:" />
+
+        <com.codefish.android.taskmanager.component.MyProjectsEditText
+            android:id="@+id/searchProjectInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Project" />
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/usersListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </ListView>
+
+    <ListView
+        android:id="@+id/projectsListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </ListView>
+
+    <EditText
+        android:id="@+id/taskNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/light_separator"
+        android:hint="Task Name"
+        android:paddingLeft="10dp"
+        android:textColorHint="@color/colorBlack"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/task_new_layout_description"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/light_separator"
+        android:gravity="top|left"
+        android:hint="Description"
+        android:padding="10dp"
+        android:textAlignment="gravity"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorWhite">
+
+        <com.codefish.android.taskmanager.component.smartDateView.SmartDateButton
+            android:id="@+id/task_new_layout_date_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:drawablePadding="5dp"
+            android:textSize="14sp"
+            android:background="@color/colorWhite"
+            android:drawableLeft="@drawable/ic_date_range_black_18dp"
+            android:elevation="0dp"
+             />
+
+
+        <Button
+            android:id="@+id/createNewTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:text="CREATE"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</LinearLayout>

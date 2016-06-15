@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorLightGrey"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Followers" />
+
+    <com.codefish.android.taskmanager.component.SearchUserEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Anybody"
+        app:beanPath="com.codefish.frameworkModule.reportBeans.AppUsersReportBean"
+        android:padding="22dp"
+        app:labelField="name"
+        android:id="@+id/task_add_followers_search_text"/>
+
+    <ListView
+        android:id="@+id/task_add_followers_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+
+</LinearLayout>

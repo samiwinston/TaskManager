@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tasks_list_layout_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:background="@drawable/separator"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tasks_list_layout_user_widget"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/circular_label"
+                    android:gravity="center"
+                    android:text="AS"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tasks_list_layout_open_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/tasks_list_layout_user_widget"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="25dp"
+                    android:text="∨"
+                    android:textSize="10sp" />
+
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/tasks_list_view_projects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/tasks_list_layout_mic"
+                    android:background="@color/colorWhite"
+                    android:padding="10dp"
+                    android:src="@drawable/icon_lists_dark" />
+
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/tasks_list_layout_mic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/colorWhite"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_menu_mic" />
+
+
+                <TextView
+                    android:id="@+id/tasks_list_layout_project_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:padding="15dp"
+                    android:text="My Tasks"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/tasks_list_layout_swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/tasks_list_layout_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+
+        </LinearLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/tasks_list_layout_coordinator_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/tasks_list_layout_add_new_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="18dp"
+                android:src="@drawable/ic_add_24dp"
+                app:backgroundTint="@color/colorPrimary" />
+        </android.support.design.widget.CoordinatorLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@color/colorPrimary"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/tasks_list_layout_drawer_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp"
+            android:text="Projects"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/fab_add" />
+
+
+        <com.codefish.android.taskmanager.component.projectsNavList.ProjectsNavListView
+            android:id="@+id/tasks_list_layout_nav_drawer_projects"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tasks_list_layout_drawer_title"
+            android:layout_marginTop="15dp"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp" />
+    </RelativeLayout>
+
+
+</android.support.v4.widget.DrawerLayout>
