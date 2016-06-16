@@ -32,6 +32,9 @@ public interface ITaskService {
     Call<List<HashMap<String,Object>>> getMyProjects(@Query("idAppUser") Integer idAppUser,@Query("getStats") Boolean getStats
                                                      ,@Query("closedProjects") Boolean closedProjects);
 
+    @GET("getTags")
+    Call<List<HashMap<String,Object>>> getTags(String searchText);
+
     @POST("getTask")
     Call<UserTaskBean> getTask(@Body GetTaskParameter params);
 
@@ -72,6 +75,11 @@ public interface ITaskService {
     @GET("deleteTask")
     Call<String> deleteTask(@Query("idAppUser") Integer idAppUser,
                               @Query("idUserTask") Integer idUserTask);
+
+    @GET("moveToProject")
+    Call<String> updateTaskProject(@Query("idInstance") Integer idInstance,
+                                   @Query("idGroup") Integer idGroup,
+                                   @Query("idAppUser") Integer idAppUser);
 
     @GET("addFollower")
     Call<String> addFollower(@Query("topicName")  String topicName,@Query("idUserTask")  Integer idUserTask,

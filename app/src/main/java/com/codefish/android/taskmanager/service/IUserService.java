@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.service;
 
-import com.codefish.android.taskmanager.model.AppUserBean;
+import com.codefish.android.taskmanager.model.MobAppUserBean;
+import com.codefish.android.taskmanager.model.MobUserTaskBean;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,7 +13,7 @@ import retrofit2.http.Query;
 public interface IUserService {
 
     @GET("checkUser")
-    Call<AppUserBean> getUser(@Query("username") String username, @Query("password") String password);
+    Call<MobAppUserBean> getUser(@Query("username") String username, @Query("password") String password);
 
     @GET("testMvc")
     Call<String> testMvc();

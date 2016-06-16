@@ -84,10 +84,37 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     }
 
     @Override
+    public void moveToProject(int idWorkflowInstance, int idProject) {
+        taskEditInteraction.moveToProject(idWorkflowInstance,idProject,LoginModel.getInstance().getUserBean().getId(),this);
+    }
+
+    @Override
+    public void moveToProjectCallBack() {
+        taskEditView.moveToProjectCallBack();
+    }
+
+    @Override
     public void setTaskEditView(ITaskEditView taskEditView) {
         this.taskEditView = taskEditView;
     }
 
+    @Override
+    public void getMyProjects() {
+        taskEditInteraction.getMyProjects(LoginModel.getInstance().getUserBean().getId(),false,false,this);
+    }
 
+    @Override
+    public void updateMyProjects(List<HashMap<String, Object>> result) {
+        taskEditView.updateMyProjects(result);
+    }
 
+    @Override
+    public void getTags() {
+
+    }
+
+    @Override
+    public void updateTags(List<HashMap<String, Object>> body) {
+        taskEditView.updateTags(body);
+    }
 }

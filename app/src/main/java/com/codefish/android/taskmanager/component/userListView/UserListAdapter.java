@@ -18,16 +18,15 @@ import java.util.List;
 /**
  * Created by abedch on 4/13/2016.
  */
-public class UserAdapter extends BaseAdapter implements Filterable {
+public class UserListAdapter extends BaseAdapter implements Filterable {
 
     private Context mContext;
-    private CharSequence mLabelField;
+    private CharSequence mLabelField = "name";
     public List<HashMap<String, Object>> mResultList = new ArrayList<>();
     public List<HashMap<String, Object>> mAllResults = new ArrayList<>();
 
-    public UserAdapter(Context context, CharSequence labelField) {
+    public UserListAdapter(Context context) {
         mContext = context;
-        mLabelField = labelField;
     }
 
 
@@ -61,17 +60,21 @@ public class UserAdapter extends BaseAdapter implements Filterable {
             viewHolder.initalsTextView = (TextView) convertView.findViewById(R.id.user_item_layout_initials);
 
             convertView.setTag(viewHolder);
-        }
-        else
-        {
-            viewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        HashMap<String,Object> object = mResultList.get(position);
+        HashMap<String, Object> object = mResultList.get(position);
         String name = object.get("name").toString();
         viewHolder.nameTextView.setText(name);
-        viewHolder.emailTextView.setText(object.get("email")!=null?object.get("email").toString():"");
-        viewHolder.initalsTextView.setText(name.charAt(0)+""+name.charAt(name.lastIndexOf(' ')+1));
+        viewHolder.initalsTextView.setText(name.charAt(0) + "" + name.charAt(name.lastIndexOf(' ') + 1));
+
+        if (object.get("email") != null) {
+            viewHolder.emailTextView.setText(object.get("email").toString());
+            viewHolder.emailTextView.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.emailTextView.setVisibility(View.GONE);
+        }
 
 
         return convertView;

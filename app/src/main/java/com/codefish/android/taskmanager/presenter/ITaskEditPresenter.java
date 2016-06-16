@@ -24,4 +24,10 @@ public interface ITaskEditPresenter {
     void unassignTaskCallBack();
     void deleteTask(int idTask);
     void deleteTaskCallBack();
+    void moveToProject(int idWorkflowInstance, int idProject);
+    void moveToProjectCallBack();
+    void getMyProjects();
+    void getTags();
+    void updateMyProjects(List<HashMap<String, Object>> body);
+    void updateTags(List<HashMap<String, Object>> body);
 }

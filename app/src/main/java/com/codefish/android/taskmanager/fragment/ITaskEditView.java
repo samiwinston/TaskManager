@@ -15,4 +15,7 @@ public interface ITaskEditView {
     void showErrorMsg(String msg);
     void unassignTaskCallBack();
     void deleteTaskCallBack();
+    void moveToProjectCallBack();
+    void updateMyProjects(List<HashMap<String, Object>> result);
+    void updateTags(List<HashMap<String, Object>> body);
 }

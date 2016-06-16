@@ -17,4 +17,7 @@ public interface ITaskEditInteraction {
     void getTaskPossibleAssigness(Integer idTask, ITaskEditPresenter taskEditPresenter);
     void reassignTask(Integer idTask, Integer idAppUser, Integer reassignTo, ITaskEditPresenter taskEditPresenter);
     void deleteTask(Integer idAppUser, int idTask, final ITaskEditPresenter taskEditPresenter);
+    void moveToProject(int idWorkflowInstance, int IdProject, int idAppUser, final ITaskEditPresenter taskEditPresenter);
+    void getMyProjects(Integer idAppUser, boolean getStats, boolean closedProjects, ITaskEditPresenter taskEditPresenter);
+    void getTags(String searchText, ITaskEditPresenter taskEditPresenter);
 }

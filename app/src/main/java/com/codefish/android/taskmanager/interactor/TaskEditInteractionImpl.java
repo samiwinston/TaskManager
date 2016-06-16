@@ -1,8 +1,8 @@
 package com.codefish.android.taskmanager.interactor;
 
+import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.presenter.ITaskEditPresenter;
-import com.codefish.android.taskmanager.presenter.TaskEditPresenterImpl;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -70,6 +70,28 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
     }
 
     @Override
+    public void moveToProject(int idWorkflowInstance, int idProject, int idAppUser, final ITaskEditPresenter taskEditPresenter) {
+        ServiceModel.getInstance().taskService.updateTaskProject(idWorkflowInstance,idProject,idAppUser).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful())
+                {
+                    taskEditPresenter.moveToProjectCallBack();
+                }
+                else
+                {
+                    taskEditPresenter.showErrorMsg("Can not reach Codefish");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                taskEditPresenter.showErrorMsg("Can not reach Codefish");
+            }
+        });
+    }
+
+    @Override
     public void updateDueDate(Integer idTask, final Date date, Integer idAppUser, final ITaskEditPresenter taskEditPresenter) {
 
         ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, date).enqueue(new Callback<String>() {
@@ -106,6 +128,52 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
             }
         });
 
+
+    }
+
+    @Override
+    public void getMyProjects(Integer idAppUser,boolean getStats,boolean closedProjects,final ITaskEditPresenter taskEditPresenter) {
+
+
+        ServiceModel.getInstance().taskService.getMyProjects(LoginModel.getInstance().getUserBean().getId(), false, false).enqueue(new Callback<List<HashMap<String, Object>>>() {
+            @Override
+            public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
+                if (response.isSuccessful()) {
+                    taskEditPresenter.updateMyProjects(response.body());
+                } else {
+                    taskEditPresenter.showErrorMsg("Can not reach Codefish");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<HashMap<String, Object>>> call, Throwable t) {
+                taskEditPresenter.showErrorMsg("Can not reach Codefish");
+            }
+        });
+
+
+    }
+
+    @Override
+    public void getTags(String searchText,final ITaskEditPresenter taskEditPresenter) {
+
+        ServiceModel.getInstance().taskService.getTags(searchText).enqueue(new Callback<List<HashMap<String, Object>>>() {
+            @Override
+            public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
+                if (response.isSuccessful()) {
+                    taskEditPresenter.updateTags(response.body());
+                } else {
+                    taskEditPresenter.showErrorMsg("Can not reach Codefish");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<HashMap<String, Object>>> call, Throwable t) {
+                taskEditPresenter.showErrorMsg("Can not reach Codefish");
+            }
+        });
 
     }
 

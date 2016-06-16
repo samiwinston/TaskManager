@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import com.codefish.android.taskmanager.fragment.LoginFragment;
 import com.codefish.android.taskmanager.fragment.SingleFragmentActivity;
 import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.MobAppUserBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
-import com.codefish.android.taskmanager.model.AppUserBean;
 
 
 import retrofit2.Call;
@@ -21,7 +21,7 @@ public class LoginActivity extends SingleFragmentActivity {
 
 
     private LoginFragment fragment;
-    private boolean mock = false;
+    private boolean mock = true;
 
     @Override
     protected Fragment createFragment() {
@@ -38,7 +38,11 @@ public class LoginActivity extends SingleFragmentActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (mock) navigateToTasksView();
+        if (mock)
+        {
+            LoginModel.getInstance().setUserBean(new MobAppUserBean(1164,"Abed Chmaytilli"));
+            navigateToTasksView();
+        }
     }
 
     public void navigateToTasksView() {
@@ -63,11 +67,11 @@ public class LoginActivity extends SingleFragmentActivity {
     private void getUser(final String username, final String password) {
 
 
-        ServiceModel.getInstance().userService.getUser(username, password).enqueue(new Callback<AppUserBean>() {
+        ServiceModel.getInstance().userService.getUser(username, password).enqueue(new Callback<MobAppUserBean>() {
             @Override
-            public void onResponse(Call<AppUserBean> call, Response<AppUserBean> response) {
+            public void onResponse(Call<MobAppUserBean> call, Response<MobAppUserBean> response) {
                 if (response.isSuccessful()) {
-                    AppUserBean user = response.body();
+                    MobAppUserBean user = response.body();
                     if (user.getId() > 0) {
                         LoginModel.getInstance().setUserBean(user);
                         navigateToTasksView();
@@ -86,7 +90,7 @@ public class LoginActivity extends SingleFragmentActivity {
             }
 
             @Override
-            public void onFailure(Call<AppUserBean> call, Throwable t) {
+            public void onFailure(Call<MobAppUserBean> call, Throwable t) {
                 fragment.showToast("Can not reach CodeFish: error "+t.getMessage());
                 fragment.hideProgressBar();
                 t.printStackTrace();

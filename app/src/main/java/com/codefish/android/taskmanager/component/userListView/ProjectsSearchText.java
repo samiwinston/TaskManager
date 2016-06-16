@@ -1,4 +1,4 @@
-package com.codefish.android.taskmanager.component;
+package com.codefish.android.taskmanager.component.userListView;
 
 import android.content.Context;
 import android.text.Editable;
@@ -10,36 +10,31 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.codefish.android.taskmanager.R;
-import com.codefish.android.taskmanager.component.userListView.SearchableListAdapter;
-import com.codefish.android.taskmanager.component.userListView.UserListAdapter;
-import com.codefish.android.taskmanager.model.ServiceModel;
+import com.codefish.android.taskmanager.component.IGenericCallBack;
 
 import java.util.HashMap;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
  * Created by abedch on 4/8/2016.
  */
-public class AssigneesSearchText extends EditText {
+public class ProjectsSearchText extends EditText {
 
 
     private ListView mListView;
-    private CharSequence mLabelField = "name";
-    private UserListAdapter listAdapter;
+    private CharSequence mLabelField = "title";
+    private SearchableListAdapter listAdapter;
     private HashMap<String, Object> mSelectedItem;
     public Integer idTask;
     public IGenericCallBack genericCallBack;
     private Context mContext;
 
-    public AssigneesSearchText(Context context, AttributeSet attrs) {
+    public ProjectsSearchText(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
-        addTextChangedListener(textChangeListener());
+        if (!isInEditMode())
+            addTextChangedListener(textChangeListener());
     }
 
   /*  private void initExtraAttributes(AttributeSet attrs) {
@@ -47,7 +42,7 @@ public class AssigneesSearchText extends EditText {
 
     public void initListView(ListView value, List<HashMap<String, Object>> values) {
         mListView = value;
-        listAdapter = new UserListAdapter(mContext);
+        listAdapter = new SearchableListAdapter(mContext, mLabelField, R.layout.project_item_layout);
         listAdapter.mAllResults = listAdapter.mResultList = values;
         // the drop down list is a list view
         //listView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
@@ -83,9 +78,7 @@ public class AssigneesSearchText extends EditText {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 2) {
                     listAdapter.getFilter().filter(s);
-                }
-                else if(s.length()==0)
-                {
+                } else if (s.length() == 0) {
                     listAdapter.mResultList = listAdapter.mAllResults;
                     listAdapter.refresh();
                 }

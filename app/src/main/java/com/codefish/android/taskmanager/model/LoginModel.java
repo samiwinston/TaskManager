@@ -6,7 +6,7 @@ package com.codefish.android.taskmanager.model;
 public class LoginModel {
 
 
-    private AppUserBean userBean = new AppUserBean(1,"Abed Chmaytilli");
+    private MobAppUserBean userBean ;
 
     private static LoginModel instance = new LoginModel();
 
@@ -19,11 +19,11 @@ public class LoginModel {
         return instance;
     }
 
-    public AppUserBean getUserBean() {
+    public MobAppUserBean getUserBean() {
         return userBean;
     }
 
-    public void setUserBean(AppUserBean userBean) {
+    public void setUserBean(MobAppUserBean userBean) {
         this.userBean = userBean;
     }
 }

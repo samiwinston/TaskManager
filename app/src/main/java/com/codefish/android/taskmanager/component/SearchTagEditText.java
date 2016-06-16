@@ -26,7 +26,7 @@ import retrofit2.Response;
 /**
  * Created by abedch on 4/8/2016.
  */
-public class SearchUserEditText extends EditText {
+public class SearchTagEditText extends EditText implements IGenericCallBack {
 
 
     private ListView mListView;
@@ -40,14 +40,13 @@ public class SearchUserEditText extends EditText {
     public IGenericCallBack genericCallBack;
 
 
-    public SearchUserEditText(Context context, AttributeSet attrs) {
+    public SearchTagEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        if(!isInEditMode()) {
-            initExtraAttributes(context, attrs);
-            addTextChangedListener(textChangeListener());
-            setOnFocusChangeListener(onFocusChangeListener());
-        }
+        initExtraAttributes(context, attrs);
+        addTextChangedListener(textChangeListener());
+        setOnFocusChangeListener(onFocusChangeListener());
+
     }
 
     private void initExtraAttributes(Context context, AttributeSet attrs) {
@@ -125,11 +124,7 @@ public class SearchUserEditText extends EditText {
     }
 
     private void refreshList(CharSequence searchText) {
-
-       ServiceModel.getInstance().reportingService.executeBeanReport(mBeanPath,
-               searchText.toString(), mIdAppUser).enqueue(callBack());
-
-
+        ServiceModel.getInstance().taskService.getTags(searchText.toString()).enqueue(callBack());
     }
 
     private Callback<List<HashMap<String, Object>>> callBack(){
@@ -156,7 +151,7 @@ public class SearchUserEditText extends EditText {
 
     public void showList() {
         if(mListView.getVisibility()!=VISIBLE)
-        mListView.setVisibility(VISIBLE);
+            mListView.setVisibility(VISIBLE);
     }
 
     public void hideList() {
@@ -179,6 +174,11 @@ public class SearchUserEditText extends EditText {
             return ((Number) mSelectedItem.get("id")).intValue();
         }
         return null;
+    }
+
+    @Override
+    public void itemClicked(HashMap<String, Object> item) {
+
     }
 }
 

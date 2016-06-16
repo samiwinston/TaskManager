@@ -34,6 +34,7 @@ public class UserTaskBean {
     public int importance = 0;
     public Boolean requiresReview;
     public Boolean isReviewed;
+    public String groupName;
 
 
     public Boolean canReassign;
@@ -49,6 +50,7 @@ public class UserTaskBean {
         this.description = (String)bundle.get("description");
         this.dueDate = (Date)bundle.get("dueDate");
         this.ownerName = (String) bundle.get("ownerName");
+        this.groupName = (String) bundle.get("groupName");
         this.idOwner = (Integer) bundle.get("idOwner");
         this.idGroup = (Integer) bundle.get("idGroup");
         this.importance = (Integer) bundle.get("importance");
@@ -68,6 +70,7 @@ public class UserTaskBean {
         b.putSerializable("dueDate",dueDate);
         b.putString("description",description);
         b.putString("ownerName",ownerName);
+        b.putString("groupName",groupName);
         b.putInt("idOwner",idOwner==null?0:idOwner);
         b.putInt("idGroup",idGroup==null?0:idGroup);
         b.putBoolean("canReassign",canReassign);

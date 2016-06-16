@@ -1,7 +1,8 @@
 package com.codefish.android.taskmanager.interactor;
 
 import com.codefish.android.taskmanager.MyApplication;
-import com.codefish.android.taskmanager.model.AppUserBean;
+import com.codefish.android.taskmanager.model.MobAppUserBean;
+import com.codefish.android.taskmanager.model.MobUserTaskBean;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.presenter.ILoginPresenter;
 import com.codefish.android.taskmanager.service.IUserService;
@@ -31,12 +32,12 @@ public class LoginInteractionImpl implements ILoginInteraction {
     @Override
     public void getUser(final String username,final String password, final ILoginPresenter loginPresenter) {
 
-        userService.getUser(username, password).enqueue(new Callback<AppUserBean>() {
+        userService.getUser(username, password).enqueue(new Callback<MobAppUserBean>() {
             @Override
-            public void onResponse(Call<AppUserBean> call, Response<AppUserBean> response) {
+            public void onResponse(Call<MobAppUserBean> call, Response<MobAppUserBean> response) {
                 if(response.isSuccessful())
                 {
-                    AppUserBean user = response.body();
+                    MobAppUserBean user = response.body();
                     if(user!=null)
                     {
                         LoginModel.getInstance().setUserBean(user);
@@ -50,7 +51,7 @@ public class LoginInteractionImpl implements ILoginInteraction {
             }
 
             @Override
-            public void onFailure(Call<AppUserBean> call, Throwable t) {
+            public void onFailure(Call<MobAppUserBean> call, Throwable t) {
                 loginPresenter.showErrorMsg("Failure "+t.getMessage());
             }
         });

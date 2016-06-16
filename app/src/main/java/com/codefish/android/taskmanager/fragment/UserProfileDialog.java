@@ -18,8 +18,9 @@ import android.widget.TextView;
 
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.LoginActivity;
-import com.codefish.android.taskmanager.model.AppUserBean;
 import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.MobAppUserBean;
+import com.codefish.android.taskmanager.model.MobUserTaskBean;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,7 +38,7 @@ public class UserProfileDialog extends DialogFragment {
     @Bind(R.id.user_profile_layout_logout_button)
     AppCompatImageButton logOutBtn;
 
-    AppUserBean bean;
+    MobAppUserBean bean;
 
 
     public static UserProfileDialog newInstance(Fragment targetFragment){

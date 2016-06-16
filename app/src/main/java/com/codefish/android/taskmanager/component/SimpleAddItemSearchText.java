@@ -12,31 +12,26 @@ import android.widget.ListView;
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.component.userListView.SearchableListAdapter;
 import com.codefish.android.taskmanager.component.userListView.UserListAdapter;
-import com.codefish.android.taskmanager.model.ServiceModel;
 
 import java.util.HashMap;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
  * Created by abedch on 4/8/2016.
  */
-public class AssigneesSearchText extends EditText {
+public class SimpleAddItemSearchText extends EditText {
 
 
     private ListView mListView;
     private CharSequence mLabelField = "name";
-    private UserListAdapter listAdapter;
+    private SearchableListAdapter listAdapter;
     private HashMap<String, Object> mSelectedItem;
     public Integer idTask;
     public IGenericCallBack genericCallBack;
     private Context mContext;
 
-    public AssigneesSearchText(Context context, AttributeSet attrs) {
+    public SimpleAddItemSearchText(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
         addTextChangedListener(textChangeListener());
@@ -47,7 +42,7 @@ public class AssigneesSearchText extends EditText {
 
     public void initListView(ListView value, List<HashMap<String, Object>> values) {
         mListView = value;
-        listAdapter = new UserListAdapter(mContext);
+        listAdapter = new SearchableListAdapter(mContext,mLabelField,R.layout.simple_item_layout);
         listAdapter.mAllResults = listAdapter.mResultList = values;
         // the drop down list is a list view
         //listView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));

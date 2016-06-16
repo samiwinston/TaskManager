@@ -70,7 +70,8 @@ public class SearchableListAdapter extends BaseAdapter implements Filterable {
         }
 
 
-        viewHolder.textView.setText(getItem(position).get(mLabelField).toString());
+        String str = getItem(position).get(mLabelField).toString();
+        viewHolder.textView.setText(str);
 
         return convertView;
     }

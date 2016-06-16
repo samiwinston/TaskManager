@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatImageButton;
@@ -24,9 +23,7 @@ import com.codefish.android.taskmanager.component.smartDateView.SmartDateTextVie
 import com.codefish.android.taskmanager.model.FollowerBean;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskEditPresenter;
-import com.codefish.android.taskmanager.utils.SmartDateFormatter;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,16 +58,31 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     TextView followersTextView;
     @Bind(R.id.task_edit_layout_assignee_initials)
     TextView assigneeInitials;
+    @Bind(R.id.task_edit_layout_add_project)
+    TextView addProjectView;
+    @Bind(R.id.task_edit_layout_project)
+    TextView projectView;
+    @Bind(R.id.task_edit_layout_tag)
+    TextView tagView;
+    @Bind(R.id.task_edit_layout_add_tag)
+    TextView addTagView;
     @Bind(R.id.task_edit_layout_assignee_switcher)
-    ViewSwitcher viewSwitcher;
+    ViewSwitcher assigneeViewSwitcher;
+    @Bind(R.id.task_edit_layout_project_switcher)
+    ViewSwitcher projectViewSwitcher;
+    @Bind(R.id.task_edit_layout_tag_switcher)
+    ViewSwitcher tagViewSwitcher;
     @Inject
     ITaskEditPresenter taskEditPresenter;
-
+    Boolean isPossibleAssigneesLoaded;
+    Boolean isProjectsLoaded;
+    Boolean isTagsLoaded;
 
     private TaskDetailsActivity taskDetailsActivity;
     private UserTaskBean userTaskBean;
 
     TaskDetailsFragment targetFragment;
+    private List<HashMap<String, Object>> myProjects;
 
     public static TaskEditFragment newInstance(TaskDetailsFragment targetFragment) {
         TaskEditFragment fragment = new TaskEditFragment();
@@ -86,6 +98,9 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         MyApplication.getAppComponent().inject(this);
         taskEditPresenter.setTaskEditView(this);
         taskEditPresenter.getTaskPossibleAssignees(taskDetailsActivity.selectedTask.idWorkflowInstance);
+        taskEditPresenter.getMyProjects();
+        taskEditPresenter.getTags();
+        isPossibleAssigneesLoaded = isProjectsLoaded = isTagsLoaded = false;
     }
 
     @Nullable
@@ -98,6 +113,8 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         removeAssigneeBtn.setOnClickListener(onRemoveAssigneeClick());
         addAssigneeView.setOnClickListener(onAddAssigneeClick());
         followersTextView.setOnClickListener(onAddFollowerClick());
+        addProjectView.setOnClickListener(onAddProjectClick());
+        addTagView.setOnClickListener(onAddTagClick());
         taskTitleView.setOnClickListener(onTitleClick());
         taskDescView.setOnClickListener(onDescClick());
         deleteTextView.setOnClickListener(onDeleteClick());
@@ -108,7 +125,13 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             if (userTaskBean.ownerName != null) {
                 assigneeView.setText(userTaskBean.ownerName);
                 assigneeInitials.setText(userTaskBean.getOwnerInitals());
-                viewSwitcher.showNext();
+                assigneeViewSwitcher.showNext();
+            }
+
+            if(userTaskBean.groupName!=null)
+            {
+                projectView.setText(userTaskBean.groupName);
+                projectViewSwitcher.showNext();
             }
 
             if (userTaskBean.followers != null && userTaskBean.followers.size() > 0) {
@@ -124,6 +147,45 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         initToolBar();
         initForm();
         return view;
+
+    }
+
+    private View.OnClickListener onAddTagClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isProjectsLoaded)
+                {
+                    TaskAddTagFragment fragment = TaskAddTagFragment.newInstance(TaskEditFragment.this);
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
+                            .addToBackStack("Back To Parent").commit();
+                }
+                else
+                {
+                    showErrorMsg("Can not load tag");
+                }
+
+            }
+        };
+    }
+
+    private View.OnClickListener onAddProjectClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isProjectsLoaded)
+                {
+                    TaskAddProjectFragment taskAddProjectFragment = TaskAddProjectFragment.newInstance(TaskEditFragment.this,myProjects);
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, taskAddProjectFragment)
+                            .addToBackStack("Back To Parent").commit();
+                }
+                else
+                {
+                    showErrorMsg("Can not load project");
+                }
+
+            }
+        };
 
     }
 
@@ -187,6 +249,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     @Override
     public void updatePossibleAssignees(List<HashMap<String, Object>> result) {
         taskDetailsActivity.selectedTask.assignees = result;
+        isPossibleAssigneesLoaded = true;
     }
 
     @Override
@@ -210,6 +273,11 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         getActivity().finish();
     }
 
+    @Override
+    public void moveToProjectCallBack() {
+        //showProjectView();
+    }
+
     public View.OnClickListener onRemoveAssigneeClick() {
         return new View.OnClickListener() {
             @Override
@@ -220,7 +288,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     }
 
     private void hideAssigneeView() {
-        viewSwitcher.showPrevious();
+        assigneeViewSwitcher.showPrevious();
     }
 
 
@@ -293,7 +361,24 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             String assigneeName = item.get("name").toString();
             taskDetailsActivity.selectedTask.ownerName = assigneeName;
             taskEditPresenter.reassignTask(taskDetailsActivity.selectedTask.idTask, idReassignTo.intValue());
-        } else if (requestCode == TaskFollowersFragment.UPDATE_FOLLOWERS) {
+        } else if(requestCode == TaskAddProjectFragment.REQUEST_PROJECT)
+        {
+            HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
+            Double idProject = (Double) item.get("id");
+            String groupName = item.get("title").toString();
+            taskDetailsActivity.selectedTask.groupName = groupName;
+            showProjectView();
+            taskEditPresenter.moveToProject(taskDetailsActivity.selectedTask.idWorkflowInstance,idProject.intValue());
+        }
+        else if(requestCode == TaskAddTagFragment.REQUEST_TAG)
+        {
+            HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
+            Double idProject = (Double) item.get("id");
+            String groupName = item.get("name").toString();
+            taskDetailsActivity.selectedTask.groupName = groupName;
+            showProjectView();
+        }
+        else if (requestCode == TaskFollowersFragment.UPDATE_FOLLOWERS) {
             List<FollowerBean> followers = (List<FollowerBean>) data.getSerializableExtra(TaskAddFollowersFragment.ARGS_VALUES);
             taskDetailsActivity.selectedTask.followers = followers;
         } else if (requestCode == getResources().getInteger(R.integer.REQUEST_CHANGE_TITLE)) {
@@ -306,11 +391,24 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void updateMyProjects(List<HashMap<String, Object>> result) {
+        this.myProjects = result;
+        isProjectsLoaded=true;
     }
+
 
     public void updateDueDateCallBack(Date date) {
 
+    }
+
+    @Override
+    public void updateTags(List<HashMap<String, Object>> body) {
+    }
+
+    private void hideProjectView() {
+        assigneeViewSwitcher.showPrevious();
+    }
+    private void showProjectView() {
+        assigneeViewSwitcher.showNext();
     }
 }
