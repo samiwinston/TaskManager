@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class FollowersListView extends ListView implements IFollowerCallBack {
 
     private FollowerListAdapter listAdapter;
-    private Integer idUserTask;
+    private Integer idWorkflowInstance;
 
     public FollowersListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -31,13 +31,13 @@ public class FollowersListView extends ListView implements IFollowerCallBack {
     }
 
 
-    public void init(Integer idUserTask, List<FollowerBean> followers) {
+    public void init(Integer idWorkflowInstance, List<FollowerBean> followers) {
         listAdapter = new FollowerListAdapter(getContext());
         setAdapter(listAdapter);
         listAdapter.mAllResults = followers;
         listAdapter.notifyDataSetChanged();
         listAdapter.followerCallBack = this;
-        this.idUserTask = idUserTask;
+        this.idWorkflowInstance = idWorkflowInstance;
     }
 
     public List<FollowerBean> getAdapterList() {
@@ -53,7 +53,7 @@ public class FollowersListView extends ListView implements IFollowerCallBack {
     public void itemClicked(FollowerBean followerBean) {
         ServiceModel.getInstance()
                 .taskService
-                .removeFollower(idUserTask, LoginModel.getInstance().getUserBean().getId(), followerBean.getIdAppUser())
+                .removeFollower(LoginModel.getInstance().getUserBean().getId(),idWorkflowInstance,  followerBean.getIdAppUser())
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {

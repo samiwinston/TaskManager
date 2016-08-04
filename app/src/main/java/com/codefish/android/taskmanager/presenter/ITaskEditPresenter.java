@@ -29,5 +29,5 @@ public interface ITaskEditPresenter {
     void getMyProjects();
     void getTags();
     void updateMyProjects(List<HashMap<String, Object>> body);
-    void updateTags(List<HashMap<String, Object>> body);
+    void updateTaskField(Integer idWorkflowInstance, String path, Object value, boolean isEntity);
 }

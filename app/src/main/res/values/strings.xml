@@ -3,6 +3,8 @@
     <string name="name">name</string>
     <string name="baseUrlExtDev">http://73.236.2.194:8080/WooshServer/mvc/taskManager/</string>
     <string name="baseUrlLtDev">http://192.168.1.101:8080/WooshServer/mvc/taskManager/</string>
+    <string name="baseUrl3gDev">http://192.168.43.149:8080/WooshServer/mvc/taskManager/</string>
+    <string name="baseUrlWifiDev">http://10.0.0.155:8080/WooshServer/mvc/taskManager/</string>
     <string name="baseUrlDev">http://10.0.0.2:8080/WooshServer/mvc/taskManager/</string>
     <string name="baseUrlHotSpot">http://192.168.1.94:8080/WooshServer/mvc/taskManager/</string>
     <string name="baseUrlProd">http://codefishserver.com:8282/CodefishServer/mvc/taskManager/</string>

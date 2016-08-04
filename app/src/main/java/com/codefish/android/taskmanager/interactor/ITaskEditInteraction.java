@@ -19,5 +19,5 @@ public interface ITaskEditInteraction {
     void deleteTask(Integer idAppUser, int idTask, final ITaskEditPresenter taskEditPresenter);
     void moveToProject(int idWorkflowInstance, int IdProject, int idAppUser, final ITaskEditPresenter taskEditPresenter);
     void getMyProjects(Integer idAppUser, boolean getStats, boolean closedProjects, ITaskEditPresenter taskEditPresenter);
-    void getTags(String searchText, ITaskEditPresenter taskEditPresenter);
+    void updateTaskField(Integer idWorkflowInstance, String path, Object value, boolean isEntity, ITaskEditPresenter taskEditPresenter);
 }

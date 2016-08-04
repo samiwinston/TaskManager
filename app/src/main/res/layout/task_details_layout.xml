@@ -32,15 +32,21 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="New Task"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <Button android:id="@+id/task_details_layout_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/task_details_layout_task_title"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/task_details_owner_info_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/task_details_layout_task_title"
+            android:layout_below="@id/task_details_layout_action_button"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -76,10 +82,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
-                android:background="@color/colorWhite"
+                android:background="?android:attr/selectableItemBackground"
                 android:drawableLeft="@drawable/ic_date_range_black_18dp"
-                android:elevation="0dp"
                 android:drawablePadding="5dp"
+                android:elevation="0dp"
                 android:textSize="14sp"
                 android:textAllCaps="false"
                 android:text="Due On" />

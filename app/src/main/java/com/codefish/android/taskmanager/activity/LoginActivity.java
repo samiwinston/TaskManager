@@ -21,7 +21,7 @@ public class LoginActivity extends SingleFragmentActivity {
 
 
     private LoginFragment fragment;
-    private boolean mock = true;
+    private boolean mock = false;
 
     @Override
     protected Fragment createFragment() {

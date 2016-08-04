@@ -20,6 +20,7 @@ import com.codefish.android.taskmanager.fragment.TasksListFragment;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.TaskListBean;
+import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
     @Override
     public void onNewItemSelect() {
         Intent navToNewTask = TaskNewActivity.newInstance(this);
-        startActivityForResult(navToNewTask, getResources().getInteger(R.integer.REQUEST_ADD_NEW_ITEM));
+        startActivityForResult(navToNewTask, TasksModel.REQUEST_ADD_NEW_ITEM);
     }
 
     @Override
@@ -108,7 +109,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
         super.onActivityResult(requestCode, resultCode, data);
         UserTaskBean taskBean;
         if (tasksListFragment != null && data != null) {
-            if (requestCode == getResources().getInteger(R.integer.REQUEST_ADD_NEW_ITEM)) {
+            if (requestCode == TasksModel.REQUEST_ADD_NEW_ITEM) {
                 taskBean = new UserTaskBean(data.getExtras());
                 tasksListFragment.addItem(taskBean);
                 tasksListFragment.showTaskViewSnackBar(taskBean);

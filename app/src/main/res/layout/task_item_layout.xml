@@ -8,17 +8,36 @@
     android:orientation="vertical"
     android:padding="5dp">
 
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/task_item_layout_task_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
         android:lines="1"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
-    <com.codefish.android.taskmanager.component.smartDateView.SmartDateTextView
-        android:id="@+id/dueDateView"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp" />
+        >
+
+        <com.codefish.android.taskmanager.component.smartDateView.SmartDateTextView
+            android:id="@+id/task_item_layout_task_due_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/task_item_layout_current_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textColor="@color/colorRed"
+            android:textSize="12sp"
+            android:layout_alignParentEnd="true"
+            />
+
+    </RelativeLayout>
 </LinearLayout>

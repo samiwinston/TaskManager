@@ -29,7 +29,7 @@ public class MyApplication extends Application {
     private void initializeInjector() {
 
         appComponent = DaggerAppComponent.builder()
-                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlLtDev):
+                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlDev):
                         getResources().getString(R.string.baseUrlProd),new OkHttpClient()))
                 .build();
     }

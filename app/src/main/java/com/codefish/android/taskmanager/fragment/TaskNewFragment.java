@@ -24,6 +24,7 @@ import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobUserTaskBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.TaskListBean;
+import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.utils.SmartDateFormatter;
 
@@ -97,7 +98,7 @@ public class TaskNewFragment extends Fragment implements View.OnClickListener {
         searchProjectsInput.initListView(projectsListView, projects);
         createNewTask.setOnClickListener(this);
         DatePickerFragment datePickerFragment = new DatePickerFragment();
-        datePickerFragment.setTargetFragment(TaskNewFragment.this,getResources().getInteger(R.integer.REQUEST_DATE));
+        datePickerFragment.setTargetFragment(TaskNewFragment.this, TasksModel.REQUEST_DATE);
         dateBtn.setOnClickListener(onDateClick(datePickerFragment));
 
         return view;
@@ -112,7 +113,7 @@ public class TaskNewFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode ==getResources().getInteger(R.integer.REQUEST_DATE))
+        if(requestCode == TasksModel.REQUEST_DATE)
         {
             taskListBean.dueDate = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             updateDateLabel(taskListBean.dueDate);

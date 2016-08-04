@@ -71,7 +71,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
 
     @Override
     public void moveToProject(int idWorkflowInstance, int idProject, int idAppUser, final ITaskEditPresenter taskEditPresenter) {
-        ServiceModel.getInstance().taskService.updateTaskProject(idWorkflowInstance,idProject,idAppUser).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.moveToProject(idWorkflowInstance,idProject,idAppUser).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response.isSuccessful())
@@ -155,23 +155,24 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
 
     }
 
+
+
+
     @Override
-    public void getTags(String searchText,final ITaskEditPresenter taskEditPresenter) {
+    public void updateTaskField(Integer idWorkflowInstance, String path, Object value, boolean isEntity, final ITaskEditPresenter taskEditPresenter) {
 
-        ServiceModel.getInstance().taskService.getTags(searchText).enqueue(new Callback<List<HashMap<String, Object>>>() {
+        ServiceModel.getInstance().taskService.updateTaskField(idWorkflowInstance,path,value,isEntity).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
-                if (response.isSuccessful()) {
-                    taskEditPresenter.updateTags(response.body());
-                } else {
-                    taskEditPresenter.showErrorMsg("Can not reach Codefish");
-                }
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful())
+                {
 
+                }
             }
 
             @Override
-            public void onFailure(Call<List<HashMap<String, Object>>> call, Throwable t) {
-                taskEditPresenter.showErrorMsg("Can not reach Codefish");
+            public void onFailure(Call<String> call, Throwable t) {
+
             }
         });
 

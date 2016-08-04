@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.codefish.android.taskmanager.R;
+import com.codefish.android.taskmanager.component.userListView.SearchableOnlnListAdapter;
 import com.codefish.android.taskmanager.component.userListView.UserListAdapter;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
@@ -30,11 +31,9 @@ public class SearchTagEditText extends EditText implements IGenericCallBack {
 
 
     private ListView mListView;
-    private CharSequence mLabelField;
-    private String mBeanPath;
-    private UserListAdapter mSimpleAdapter;
+    private CharSequence mLabelField = "name";
+    private SearchableOnlnListAdapter mSimpleAdapter;
     private Context context;
-    private Integer mIdAppUser = LoginModel.getInstance().getUserBean().getId();
     private HashMap<String, Object> mSelectedItem;
     private boolean mIsProgramaticChange = false;
     public IGenericCallBack genericCallBack;
@@ -43,16 +42,18 @@ public class SearchTagEditText extends EditText implements IGenericCallBack {
     public SearchTagEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        initExtraAttributes(context, attrs);
-        addTextChangedListener(textChangeListener());
-        setOnFocusChangeListener(onFocusChangeListener());
-
+        if(!isInEditMode())
+        {
+            initExtraAttributes(context, attrs);
+            addTextChangedListener(textChangeListener());
+            setOnFocusChangeListener(onFocusChangeListener());
+        }
     }
 
     private void initExtraAttributes(Context context, AttributeSet attrs) {
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.SearchUserEditText);
-        mLabelField = arr.getString(R.styleable.SearchUserEditText_labelField);
-        mBeanPath = arr.getString(R.styleable.SearchUserEditText_beanPath);
+       /* mLabelField = arr.getString(R.styleable.SearchUserEditText_labelField);
+        mBeanPath = arr.getString(R.styleable.SearchUserEditText_beanPath);*/
     }
 
     public void initListView(ListView value,List<HashMap<String,Object>> values) {
@@ -60,7 +61,7 @@ public class SearchTagEditText extends EditText implements IGenericCallBack {
 
 
 
-        mSimpleAdapter = new UserListAdapter(context);
+        mSimpleAdapter = new SearchableOnlnListAdapter(context);
         mSimpleAdapter.mAllResults = values;
         // the drop down list is a list view
         //listView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
@@ -108,7 +109,7 @@ public class SearchTagEditText extends EditText implements IGenericCallBack {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 3 && !mIsProgramaticChange) {
+                if (s.length() > 2 && !mIsProgramaticChange) {
                     refreshList(s);
                 } else if (mListView.getVisibility() == VISIBLE) {
                     hideList();

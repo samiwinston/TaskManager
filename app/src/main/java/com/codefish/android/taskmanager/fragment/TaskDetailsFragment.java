@@ -6,15 +6,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import com.codefish.android.taskmanager.MyApplication;
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
 import com.codefish.android.taskmanager.component.smartDateView.SmartDateButton;
+import com.codefish.android.taskmanager.model.MobWorkflowForm;
+import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
 import com.codefish.android.taskmanager.utils.SmartDateFormatter;
@@ -50,6 +53,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     TextView initialsView;
     @Bind(R.id.task_details_layout_assignee)
     TextView assigneeView;
+    @Bind(R.id.task_details_layout_action_button)
+    Button actionButton;
     @Bind(R.id.task_details_description)
     TextView taskDescriptionView;
     TaskDetailsActivity taskDetailsActivity;
@@ -82,7 +87,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.task_details_layout, container, false);
         ButterKnife.bind(this, view);
-
+        Log.v("LOG", "Create Detail View");
         if (taskDetailsActivity.selectedTask != null) {
             UserTaskBean bean = taskDetailsActivity.selectedTask;
             taskTitleView.setText(bean.title);
@@ -95,6 +100,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
             }
 
         }
+        actionButton.setOnClickListener(onTakeActionClick());
         dueDateBtn.setOnClickListener(onDateClick());
 
         initToolBar();
@@ -103,12 +109,21 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         return view;
     }
 
+    private View.OnClickListener onTakeActionClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskDetailsPresenter.getWorkflowForm(taskDetailsActivity.selectedTask.idWorkflowInstance);
+            }
+        };
+    }
+
     private View.OnClickListener onDateClick() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(taskDetailsActivity.selectedTask.dueDate);
-                datePickerFragment.setTargetFragment(TaskDetailsFragment.this, getResources().getInteger(R.integer.REQUEST_DATE));
+                datePickerFragment.setTargetFragment(TaskDetailsFragment.this, TasksModel.REQUEST_DATE);
                 if (!datePickerFragment.isAdded()) {
                     datePickerFragment.show(getFragmentManager(), "dialog date");
                 }
@@ -139,15 +154,27 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.task_details_menu, menu);
-
+        Log.v("Log", "On Task Details Create Option Menu");
         if (taskDetailsActivity.selectedTask.importance == 1) {
             MenuItem menuItem = menu.findItem(R.id.menu_item_important);
             menuItem.setIcon(R.drawable.icon_task_details_topbar_heart_filled);
         }
-     /*   if (!taskDetailsActivity.selectedTask.isOpen) {
+
+
+        if (taskDetailsActivity.selectedTask.hasForm) {
+            MenuItem menuItemComplete = menu.findItem(R.id.menu_item_complete);
+            menuItemComplete.setVisible(false);
+            MenuItem menuItemEdit = menu.findItem(R.id.menu_item_edit);
+            menuItemEdit.setVisible(false);
+            MenuItem menuItemImportant = menu.findItem(R.id.menu_item_important);
+            menuItemImportant.setVisible(false);
+
+        } else if (!taskDetailsActivity.selectedTask.isOpen) {
             MenuItem menuItem = menu.findItem(R.id.menu_item_complete);
             menuItem.setIcon(R.drawable.icon_task_details_topbar_task_complete);
-        }*/
+        }
+
+
     }
 
     @Override
@@ -169,7 +196,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                     taskDetailsActivity.selectedTask.isOpen = true;
                     item.setIcon(R.drawable.icon_task_details_topbar_task);
                 }
-                //taskDetailsPresenter.changeState(taskDetailsActivity.selectedTask);
+                taskDetailsPresenter.changeState(taskDetailsActivity.selectedTask);
                 return true;
             case R.id.menu_item_important:
                 if (taskDetailsActivity.selectedTask.importance == 0) {
@@ -181,6 +208,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 }
                 taskDetailsPresenter.updateImportance(taskDetailsActivity.selectedTask.idTask, taskDetailsActivity.selectedTask.importance);
                 return true;
+            case R.id.menu_item_unfollow:
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -190,6 +219,9 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         Intent intent = new Intent();
         intent.putExtras(taskDetailsActivity.selectedTask.getBundle());
         intent.putExtra("hasNoFollowers", taskDetailsActivity.selectedTask.hasNoFollowers());
+        if (!taskDetailsActivity.selectedTask.isOpen) {
+            intent.putExtra("deleteThisTask", true);
+        }
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
     }
@@ -203,13 +235,23 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == getResources().getInteger(R.integer.REQUEST_DATE)) {
-            final Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            taskDetailsActivity.selectedTask.dueDate = date;
-            dueDateBtn.setDate(date);
 
-            taskDetailsPresenter.updateDueDate(taskDetailsActivity.selectedTask.idTask, date);
+        switch (requestCode) {
+            case TasksModel.REQUEST_DATE:
+                final Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+                taskDetailsActivity.selectedTask.dueDate = date;
+                dueDateBtn.setDate(date);
+                taskDetailsPresenter.updateDueDate(taskDetailsActivity.selectedTask.idTask, date);
+                break;
+            case TasksModel.REQUEST_TASK_UPDATE:
+                taskDetailsActivity.selectedTask = new UserTaskBean(data.getExtras());
+                goBackToList();
+                break;
+
+            default:
         }
+
+
     }
 
 
@@ -227,6 +269,12 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     @Override
     public void loadUserTaskBean(UserTaskBean userTaskBean) {
         this.taskDetailsActivity.selectedTask = userTaskBean;
+
+        if (taskDetailsActivity.selectedTask.hasForm) {
+            actionButton.setText(taskDetailsActivity.selectedTask.canTakeAction() ? "Take Action" : "View Details");
+            actionButton.setVisibility(View.VISIBLE);
+
+        }
     }
 
     @Override
@@ -237,5 +285,12 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     @Override
     public void updateImportanceCBH() {
 
+    }
+
+    @Override
+    public void loadWorkflowForm(MobWorkflowForm mobWorkflowForm) {
+        WorkflowFormFragment fragment = WorkflowFormFragment.newInstance(TaskDetailsFragment.this, TasksModel.REQUEST_TASK_UPDATE, mobWorkflowForm, taskDetailsActivity.selectedTask.idWorkflowInstance);
+        getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment)
+                .addToBackStack("Back To Parent").commit();
     }
 }

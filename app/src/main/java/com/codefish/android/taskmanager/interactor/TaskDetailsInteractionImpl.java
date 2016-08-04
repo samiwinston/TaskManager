@@ -1,11 +1,11 @@
 package com.codefish.android.taskmanager.interactor;
 
 import com.codefish.android.taskmanager.model.GetTaskParameter;
+import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
-import com.codefish.android.taskmanager.presenter.ITaskPresenter;
 
 import java.util.Date;
 
@@ -41,7 +41,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
     @Override
     public void getTask(GetTaskParameter params, final ITaskDetailsPresenter taskDetailsPresenter) {
 
-        params.idAppUser = 1;
+        //params.idAppUser = 1;
 
         // ITaskService taskService = retrofit.create(ITaskService.class);
         ServiceModel.getInstance().taskService.getTask(params).enqueue(new Callback<UserTaskBean>() {
@@ -102,6 +102,27 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
 
             }
         });
+    }
+
+    @Override
+    public void getWorkflowForm(Integer idAppUser,Integer idWorkflowInstance,final ITaskDetailsPresenter taskDetailsPresenter) {
+
+        ServiceModel.getInstance().taskService.getWorkflowForm(idAppUser,idWorkflowInstance).enqueue(new Callback<MobWorkflowForm>() {
+            @Override
+            public void onResponse(Call<MobWorkflowForm> call, Response<MobWorkflowForm> response) {
+                if (response.isSuccessful()) {
+                    taskDetailsPresenter.loadWorkflowForm(response.body());
+                } else {
+                    taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MobWorkflowForm> call, Throwable t) {
+                taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
+            }
+        });
+
     }
 
 }

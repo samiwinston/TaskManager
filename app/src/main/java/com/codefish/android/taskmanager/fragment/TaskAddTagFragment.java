@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,17 +12,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
 import com.codefish.android.taskmanager.component.IGenericCallBack;
 import com.codefish.android.taskmanager.component.SearchTagEditText;
-import com.codefish.android.taskmanager.component.SimpleAddItemSearchText;
+import com.codefish.android.taskmanager.model.TasksModel;
 
-import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,14 +39,13 @@ public class TaskAddTagFragment extends Fragment implements IGenericCallBack {
     @Bind(R.id.task_edit_tags_layout_search)
     SearchTagEditText searchText;
 
-    public final static int REQUEST_TAG = 1008;
     public final static String ARGS_VALUES = "argsvalues";
     public final static String ARGS_ITEM = "argsitem";
 
     public static TaskAddTagFragment newInstance(Fragment targetFragment)  {
 
         TaskAddTagFragment fragment = new TaskAddTagFragment();
-        fragment.setTargetFragment(targetFragment,REQUEST_TAG);
+        fragment.setTargetFragment(targetFragment, TasksModel.REQUEST_TAG);
 
         return fragment;
     }
@@ -61,7 +60,7 @@ public class TaskAddTagFragment extends Fragment implements IGenericCallBack {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.task_edit_tags_layout, container, false);
+        View view = inflater.inflate(R.layout.task_add_tag_layout, container, false);
         ButterKnife.bind(this, view);
         initToolBar();
 
@@ -116,8 +115,14 @@ public class TaskAddTagFragment extends Fragment implements IGenericCallBack {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             Intent intent = new Intent();
             intent.putExtra(ARGS_ITEM, item);
-            getTargetFragment().onActivityResult(REQUEST_TAG,Activity.RESULT_OK,intent);
+            getTargetFragment().onActivityResult(TasksModel.REQUEST_TAG,Activity.RESULT_OK,intent);
             getFragmentManager().popBackStack();
+
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 }

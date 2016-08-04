@@ -106,10 +106,10 @@
             android:layout_marginLeft="20dp"
             android:drawablePadding="5dp"
             android:textSize="14sp"
-            android:background="@color/colorWhite"
             android:drawableLeft="@drawable/ic_date_range_black_18dp"
             android:elevation="0dp"
-             />
+            android:background="?android:attr/selectableItemBackground"
+            />
 
 
         <Button

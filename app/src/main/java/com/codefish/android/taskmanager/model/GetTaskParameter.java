@@ -17,12 +17,5 @@ public class GetTaskParameter {
 		
 	}
 	
-	public GetTaskParameter(Integer idAppUser, Integer idWorkflowInstance, Integer taskFilter, Boolean showCompleted, Boolean getSubtasks,Integer idMileStone) {
-		this.idAppUser = idAppUser;
-		this.idWorkflowInstance = idWorkflowInstance;
-		this.taskFilter = taskFilter;
-		this.showCompleted = showCompleted;
-		this.idMileStone = idMileStone;
-		this.getSubtasks = getSubtasks;
-	}
+
 }

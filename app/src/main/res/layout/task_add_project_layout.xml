@@ -13,7 +13,7 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Followers" />
+        app:title="Select Project" />
 
     <com.codefish.android.taskmanager.component.userListView.ProjectsSearchText
         android:layout_width="match_parent"

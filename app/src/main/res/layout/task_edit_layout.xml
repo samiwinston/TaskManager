@@ -206,7 +206,7 @@
                 <RelativeLayout>
 
                     <TextView
-                        android:id="@+id/task_edit_attachments"
+                        android:id="@+id/task_edit_layout_add_attachmt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Add attachments"
@@ -217,7 +217,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.8dp"
-                        android:layout_below="@id/task_edit_attachments"
+                        android:layout_below="@id/task_edit_layout_add_attachmt"
                         android:background="@color/colorLightGrey" />
                 </RelativeLayout>
 
@@ -281,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
                     android:padding="15dp"
-                    android:src="@drawable/ic_menu_tag" />
+                    android:src="@drawable/icon_tag_small_light" />
 
 
                 <ViewSwitcher android:id="@+id/task_edit_layout_tag_switcher">
@@ -296,7 +296,7 @@
                             android:id="@+id/task_edit_layout_add_tag"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Move to project"
+                            android:hint="Add tag"
                             android:paddingBottom="22dp"
                             android:paddingTop="22dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />

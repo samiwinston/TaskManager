@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import com.codefish.android.taskmanager.R;
+import com.codefish.android.taskmanager.model.TasksModel;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -86,6 +87,6 @@ public class DatePickerFragment extends DialogFragment {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_DATE, date);
 
-        getTargetFragment().onActivityResult(getResources().getInteger(R.integer.REQUEST_DATE),resultOk,intent);
+        getTargetFragment().onActivityResult(TasksModel.REQUEST_DATE,resultOk,intent);
     }
 }

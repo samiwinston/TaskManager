@@ -41,7 +41,7 @@ public class TaskPresenterImpl implements ITaskPresenter {
             params.showOversight = true;
             params.showFollowing = true;
             params.filterTitle = null;
-            params.openTasksOnly = false;
+            params.openTasksOnly = true;
 
             taskInteraction.getUserTasks(params, this);
         } else {

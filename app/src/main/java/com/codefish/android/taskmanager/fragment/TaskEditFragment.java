@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
 import com.codefish.android.taskmanager.component.smartDateView.SmartDateTextView;
 import com.codefish.android.taskmanager.model.FollowerBean;
+import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskEditPresenter;
 
@@ -66,6 +68,8 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     TextView tagView;
     @Bind(R.id.task_edit_layout_add_tag)
     TextView addTagView;
+    @Bind(R.id.task_edit_layout_add_attachmt)
+    TextView addAttachmntView;
     @Bind(R.id.task_edit_layout_assignee_switcher)
     ViewSwitcher assigneeViewSwitcher;
     @Bind(R.id.task_edit_layout_project_switcher)
@@ -77,6 +81,8 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     Boolean isPossibleAssigneesLoaded;
     Boolean isProjectsLoaded;
     Boolean isTagsLoaded;
+
+
 
     private TaskDetailsActivity taskDetailsActivity;
     private UserTaskBean userTaskBean;
@@ -115,6 +121,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         followersTextView.setOnClickListener(onAddFollowerClick());
         addProjectView.setOnClickListener(onAddProjectClick());
         addTagView.setOnClickListener(onAddTagClick());
+        addAttachmntView.setOnClickListener(onAddAttachmentClick());
         taskTitleView.setOnClickListener(onTitleClick());
         taskDescView.setOnClickListener(onDescClick());
         deleteTextView.setOnClickListener(onDeleteClick());
@@ -128,10 +135,14 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 assigneeViewSwitcher.showNext();
             }
 
-            if(userTaskBean.groupName!=null)
-            {
+            if (userTaskBean.groupName != null) {
                 projectView.setText(userTaskBean.groupName);
                 projectViewSwitcher.showNext();
+            }
+
+            if (userTaskBean.categoryName != null) {
+                tagView.setText(userTaskBean.categoryName);
+                showTagView();
             }
 
             if (userTaskBean.followers != null && userTaskBean.followers.size() > 0) {
@@ -150,21 +161,24 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
 
     }
 
+    private View.OnClickListener onAddAttachmentClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                startActivityForResult(Intent.createChooser(intent, "Select File"), TasksModel.REQUEST_DOC);
+            }
+        };
+    }
+
     private View.OnClickListener onAddTagClick() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isProjectsLoaded)
-                {
-                    TaskAddTagFragment fragment = TaskAddTagFragment.newInstance(TaskEditFragment.this);
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
-                            .addToBackStack("Back To Parent").commit();
-                }
-                else
-                {
-                    showErrorMsg("Can not load tag");
-                }
-
+                TaskAddTagFragment fragment = TaskAddTagFragment.newInstance(TaskEditFragment.this);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
+                        .addToBackStack("Back To Parent").commit();
             }
         };
     }
@@ -173,14 +187,11 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isProjectsLoaded)
-                {
-                    TaskAddProjectFragment taskAddProjectFragment = TaskAddProjectFragment.newInstance(TaskEditFragment.this,myProjects);
+                if (isProjectsLoaded) {
+                    TaskAddProjectFragment taskAddProjectFragment = TaskAddProjectFragment.newInstance(TaskEditFragment.this, myProjects);
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, taskAddProjectFragment)
                             .addToBackStack("Back To Parent").commit();
-                }
-                else
-                {
+                } else {
                     showErrorMsg("Can not load project");
                 }
 
@@ -194,7 +205,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             @Override
             public void onClick(View v) {
                 MyDialogFragment dialogFragment = MyDialogFragment.newInstance();
-                dialogFragment.setTargetFragment(TaskEditFragment.this, getResources().getInteger(R.integer.REQUEST_REMOVE_TASK));
+                dialogFragment.setTargetFragment(TaskEditFragment.this, TasksModel.REQUEST_REMOVE_TASK);
                 if (!dialogFragment.isAdded()) {
                     dialogFragment.show(getFragmentManager(), "dialog date");
                 }
@@ -207,7 +218,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             @Override
             public void onClick(View v) {
                 TaskEditStrFieldFragment taskEditTitleFragment = TaskEditStrFieldFragment.newInstance(TaskEditFragment.this,
-                        getResources().getInteger(R.integer.REQUEST_CHANGE_DESC), "Edit Description", "description", userTaskBean.description);
+                        TasksModel.REQUEST_CHANGE_DESC, "Edit Description", "description", userTaskBean.description);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, taskEditTitleFragment)
                         .addToBackStack("Back To Parent").commit();
             }
@@ -219,7 +230,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             @Override
             public void onClick(View v) {
                 TaskEditStrFieldFragment taskEditTitleFragment = TaskEditStrFieldFragment.newInstance(TaskEditFragment.this,
-                        getResources().getInteger(R.integer.REQUEST_CHANGE_TITLE), "Edit Title", "title", userTaskBean.title);
+                        TasksModel.REQUEST_CHANGE_TITLE, "Edit Title", "title", userTaskBean.title);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, taskEditTitleFragment)
                         .addToBackStack("Back To Parent").commit();
             }
@@ -269,7 +280,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     public void deleteTaskCallBack() {
         Intent intent = new Intent();
         intent.putExtra("deleteThisTask", true);
-        getActivity().setResult(getResources().getInteger(R.integer.REQUEST_REMOVE_TASK), intent);
+        getActivity().setResult(TasksModel.REQUEST_REMOVE_TASK, intent);
         getActivity().finish();
     }
 
@@ -297,7 +308,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             @Override
             public void onClick(View v) {
                 DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(taskDetailsActivity.selectedTask.dueDate);
-                datePickerFragment.setTargetFragment(TaskEditFragment.this, getResources().getInteger(R.integer.REQUEST_DATE));
+                datePickerFragment.setTargetFragment(TaskEditFragment.this, TasksModel.REQUEST_DATE);
 
                 if (datePickerFragment.isAdded()) {
                     return;
@@ -348,52 +359,65 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == getResources().getInteger(R.integer.REQUEST_DATE)) {
-            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            if (date != null) {
-                userTaskBean.dueDate = taskDetailsActivity.selectedTask.dueDate = date;
-                dueDateTextView.setDate(date);
-                taskEditPresenter.updateDueDate(taskDetailsActivity.selectedTask.idTask, date);
-            }
-        } else if (requestCode == TaskAddAssigneeFragment.REQUEST_ASSIGNEE) {
-            HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
-            Double idReassignTo = (Double) item.get("id");
-            String assigneeName = item.get("name").toString();
-            taskDetailsActivity.selectedTask.ownerName = assigneeName;
-            taskEditPresenter.reassignTask(taskDetailsActivity.selectedTask.idTask, idReassignTo.intValue());
-        } else if(requestCode == TaskAddProjectFragment.REQUEST_PROJECT)
+
+        switch (requestCode)
         {
-            HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
-            Double idProject = (Double) item.get("id");
-            String groupName = item.get("title").toString();
-            taskDetailsActivity.selectedTask.groupName = groupName;
-            showProjectView();
-            taskEditPresenter.moveToProject(taskDetailsActivity.selectedTask.idWorkflowInstance,idProject.intValue());
+            case TasksModel.REQUEST_DATE:
+                Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+                if (date != null) {
+                    userTaskBean.dueDate = taskDetailsActivity.selectedTask.dueDate = date;
+                    dueDateTextView.setDate(date);
+                    taskEditPresenter.updateDueDate(taskDetailsActivity.selectedTask.idTask, date);
+                }
+                break;
+            case TasksModel.REQUEST_ASSIGNEE:
+                HashMap<String, Object> assignee = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
+                Double idReassignTo = (Double) assignee.get("id");
+                String assigneeName = assignee.get("name").toString();
+                taskDetailsActivity.selectedTask.ownerName = assigneeName;
+                taskEditPresenter.reassignTask(taskDetailsActivity.selectedTask.idTask, idReassignTo.intValue());
+                break;
+            case TasksModel.REQUEST_PROJECT:
+                HashMap<String, Object> project = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
+                Double idProject = (Double) project.get("id");
+                String groupName = project.get("title").toString();
+                taskDetailsActivity.selectedTask.groupName = groupName;
+                showProjectView();
+                taskEditPresenter.moveToProject(taskDetailsActivity.selectedTask.idWorkflowInstance, idProject.intValue());
+                break;
+            case TasksModel.REQUEST_TAG:
+                HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
+                Integer idTag = ((Double) item.get("id")).intValue();
+                String categoryName = item.get("name").toString();
+                taskDetailsActivity.selectedTask.categoryName = categoryName;
+                showProjectView();
+                taskEditPresenter.updateTaskField(taskDetailsActivity.selectedTask.idWorkflowInstance, "category", idTag, true);
+                break;
+            case TasksModel.UPDATE_FOLLOWERS:
+                List<FollowerBean> followers = (List<FollowerBean>) data.getSerializableExtra(TaskAddFollowersFragment.ARGS_VALUES);
+                taskDetailsActivity.selectedTask.followers = followers;
+                break;
+            case TasksModel.REQUEST_CHANGE_TITLE:
+                taskDetailsActivity.selectedTask.title = data.getStringExtra(TaskEditStrFieldFragment.ARGS_ITEM);
+                break;
+            case TasksModel.REQUEST_CHANGE_DESC:
+                taskDetailsActivity.selectedTask.description = data.getStringExtra(TaskEditStrFieldFragment.ARGS_ITEM);
+                break;
+            case TasksModel.REQUEST_REMOVE_TASK:
+                taskEditPresenter.deleteTask(userTaskBean.idWorkflowInstance);
+                break;
+            case TasksModel.REQUEST_DOC:
+                break;
+            default:
         }
-        else if(requestCode == TaskAddTagFragment.REQUEST_TAG)
-        {
-            HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
-            Double idProject = (Double) item.get("id");
-            String groupName = item.get("name").toString();
-            taskDetailsActivity.selectedTask.groupName = groupName;
-            showProjectView();
-        }
-        else if (requestCode == TaskFollowersFragment.UPDATE_FOLLOWERS) {
-            List<FollowerBean> followers = (List<FollowerBean>) data.getSerializableExtra(TaskAddFollowersFragment.ARGS_VALUES);
-            taskDetailsActivity.selectedTask.followers = followers;
-        } else if (requestCode == getResources().getInteger(R.integer.REQUEST_CHANGE_TITLE)) {
-            taskDetailsActivity.selectedTask.title = data.getStringExtra(TaskEditStrFieldFragment.ARGS_ITEM);
-        } else if (requestCode == getResources().getInteger(R.integer.REQUEST_CHANGE_DESC)) {
-            taskDetailsActivity.selectedTask.description = data.getStringExtra(TaskEditStrFieldFragment.ARGS_ITEM);
-        } else if (requestCode == getResources().getInteger(R.integer.REQUEST_REMOVE_TASK)) {
-            taskEditPresenter.deleteTask(userTaskBean.idWorkflowInstance);
-        }
+
+
     }
 
     @Override
     public void updateMyProjects(List<HashMap<String, Object>> result) {
         this.myProjects = result;
-        isProjectsLoaded=true;
+        isProjectsLoaded = true;
     }
 
 
@@ -406,9 +430,13 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     }
 
     private void hideProjectView() {
-        assigneeViewSwitcher.showPrevious();
+        projectViewSwitcher.showPrevious();
     }
+
     private void showProjectView() {
-        assigneeViewSwitcher.showNext();
+        projectViewSwitcher.showNext();
+    }
+    private void showTagView() {
+        tagViewSwitcher.showNext();
     }
 }

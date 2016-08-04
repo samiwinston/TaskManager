@@ -3,6 +3,7 @@ package com.codefish.android.taskmanager.presenter;
 
 import com.codefish.android.taskmanager.fragment.ITaskDetailsView;
 import com.codefish.android.taskmanager.fragment.TaskDetailsFragment;
+import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 
 import java.util.Date;
@@ -25,4 +26,6 @@ public interface ITaskDetailsPresenter {
     void showErrorMsg(String s);
     void loadUserTaskBean(UserTaskBean bean);
     void changeStateCBH();
+    void getWorkflowForm(Integer idWorkflowInstance);
+    void loadWorkflowForm(MobWorkflowForm mobWorkflowForm);
 }

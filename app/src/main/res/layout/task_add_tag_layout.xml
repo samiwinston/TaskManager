@@ -13,12 +13,12 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Select Assignee" />
+        app:title="Select Tag" />
 
     <com.codefish.android.taskmanager.component.SearchTagEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Anyone"
+        android:hint="Search for tags"
         android:padding="22dp"
         android:id="@+id/task_edit_tags_layout_search"/>
 

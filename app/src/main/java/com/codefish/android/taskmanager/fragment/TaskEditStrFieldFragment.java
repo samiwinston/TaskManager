@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,15 +41,16 @@ public class TaskEditStrFieldFragment extends Fragment {
     Toolbar toolbar;
     @Bind(R.id.task_edit_title_layout_title)
     EditText editField;
+
     private Menu menu;
     private TaskDetailsActivity taskDetailsActivity;
-    public final static int REQUEST_FOLLOWER = 1006;
     public final static String ARGS_VALUES = "argsvalues";
     private String path;
     private String title;
     private Integer requestCode;
+    private boolean isSaveVisible;
 
-    public static TaskEditStrFieldFragment newInstance(Fragment targetFragment,Integer requestCode,String title ,String path, String value) {
+    public static TaskEditStrFieldFragment newInstance(Fragment targetFragment, Integer requestCode, String title, String path, String value) {
 
         TaskEditStrFieldFragment fragment = new TaskEditStrFieldFragment();
         fragment.setTargetFragment(targetFragment, requestCode);
@@ -93,11 +95,8 @@ public class TaskEditStrFieldFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
-                    showSaveOption();
-                } else {
-                    hideSaveOption();
-                }
+                isSaveVisible = s.length() > 0;
+                getActivity().invalidateOptionsMenu();
             }
 
             @Override
@@ -131,12 +130,24 @@ public class TaskEditStrFieldFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if(isSaveVisible)
+        {
+            showSaveOption();
+        }
+        else
+        {
+            hideSaveOption();
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.task_edit_title, menu);
         this.menu = menu;
-
     }
+
 
     private void hideSaveOption() {
         MenuItem item = menu.findItem(R.id.menu_item_save);
@@ -161,7 +172,7 @@ public class TaskEditStrFieldFragment extends Fragment {
                 updateTaskField();
                 View view = getActivity().getCurrentFocus();
                 if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
                 return true;
@@ -173,27 +184,25 @@ public class TaskEditStrFieldFragment extends Fragment {
     private void updateTaskField() {
 
         if (editField.getText().length() > 0) {
-            ServiceModel.getInstance().taskService.updateTaskField(taskDetailsActivity.selectedTask.idWorkflowInstance, path, editField.getText().toString()).enqueue(new Callback<String>() {
+            ServiceModel.getInstance().taskService.updateTaskField(taskDetailsActivity.selectedTask.idWorkflowInstance, path, editField.getText().toString(), false).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     if (response.isSuccessful()) {
                         if (getFragmentManager().getBackStackEntryCount() > 0) {
                             Intent intent = new Intent();
                             intent.putExtra(ARGS_ITEM, editField.getText().toString());
-                            getTargetFragment().onActivityResult(requestCode,Activity.RESULT_OK,intent);
+                            getTargetFragment().onActivityResult(requestCode, Activity.RESULT_OK, intent);
                             getFragmentManager().popBackStack();
                         }
-                    }
-                    else
-                    {
-                        Toast.makeText(getContext(),"Can not reach CodeFish",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "Can not reach CodeFish", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     t.printStackTrace();
-                    Toast.makeText(getContext(),"Can not reach CodeFish",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Can not reach CodeFish", Toast.LENGTH_LONG).show();
                 }
             });
 

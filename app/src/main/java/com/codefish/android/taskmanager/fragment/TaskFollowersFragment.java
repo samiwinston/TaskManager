@@ -24,6 +24,7 @@ import com.codefish.android.taskmanager.component.userListView.IFollowerCallBack
 import com.codefish.android.taskmanager.model.FollowerBean;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
+import com.codefish.android.taskmanager.model.TasksModel;
 
 import org.w3c.dom.Text;
 
@@ -42,7 +43,7 @@ import retrofit2.Response;
  */
 public class TaskFollowersFragment extends Fragment {
 
-    public static final int UPDATE_FOLLOWERS = 1007;
+
     @Bind(R.id.my_toolbar)
     Toolbar toolbar;
     @Bind(R.id.task_followers_layout_followers)
@@ -50,18 +51,18 @@ public class TaskFollowersFragment extends Fragment {
     @Bind(R.id.task_followers_layout_add_follower_group)
     RelativeLayout addFollowerGroup;
     private TaskDetailsActivity taskDetailsActivity;
-    public final static int REQUEST_FOLLOWER = 1006;
+    
     public final static String ARGS_VALUES = "argsvalues";
     public final static String ARGS_ITEM = "argsitem";
     TaskAddFollowersFragment taskAddFollowersFragment;
 
-    public static TaskFollowersFragment newInstance(Fragment targetFragment, Integer idUserTask, List<FollowerBean> values) {
+    public static TaskFollowersFragment newInstance(Fragment targetFragment, Integer idWorkflowInstance, List<FollowerBean> values) {
 
         TaskFollowersFragment fragment = new TaskFollowersFragment();
-        fragment.setTargetFragment(targetFragment, REQUEST_FOLLOWER);
+        fragment.setTargetFragment(targetFragment,TasksModel.REQUEST_FOLLOWER);
         Bundle args = new Bundle();
         args.putSerializable(ARGS_VALUES, (Serializable) values);
-        args.putInt("idUserTask", idUserTask);
+        args.putInt("idWorkflowInstance", idWorkflowInstance);
         fragment.setArguments(args);
 
         return fragment;
@@ -83,8 +84,7 @@ public class TaskFollowersFragment extends Fragment {
         initToolBar();
 
         List<FollowerBean> values = (List<FollowerBean>) getArguments().getSerializable(ARGS_VALUES);
-        Integer idUserTask = getArguments().getInt("idUserTask");
-        followersListView.init(idUserTask, values);
+        followersListView.init(taskDetailsActivity.selectedTask.idWorkflowInstance, values);
         addFollowerGroup.setOnClickListener(onAddFollowerClick());
         return view;
     }
@@ -108,12 +108,12 @@ public class TaskFollowersFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_FOLLOWER) {
+        if (requestCode == TasksModel.REQUEST_FOLLOWER) {
             FollowerBean bean = new FollowerBean(data.getExtras());
             followersListView.addFollower(bean);
 
             ServiceModel.getInstance()
-                    .taskService.addFollower("WorkflowInstance", taskDetailsActivity.selectedTask.idTask
+                    .taskService.addFollower("WorkflowInstance", taskDetailsActivity.selectedTask.idWorkflowInstance
                     , LoginModel.getInstance().getUserBean().getId(), bean.getIdAppUser(), false, true).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
@@ -156,7 +156,7 @@ public class TaskFollowersFragment extends Fragment {
                     Bundle args = new Bundle();
                     args.putSerializable(ARGS_VALUES, (Serializable) followersListView.getAdapterList());
                     intent.putExtras(args);
-                    getTargetFragment().onActivityResult(UPDATE_FOLLOWERS, Activity.RESULT_OK, intent);
+                    getTargetFragment().onActivityResult(TasksModel.UPDATE_FOLLOWERS, Activity.RESULT_OK, intent);
                     getFragmentManager().popBackStack();
                 }
                 return true;

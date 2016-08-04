@@ -33,15 +33,14 @@
                     android:text="AS"
                     android:textSize="10sp" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/tasks_list_layout_open_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:background="@color/colorWhite"
                     android:layout_toRightOf="@id/tasks_list_layout_user_widget"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="25dp"
-                    android:text="∨"
-                    android:textSize="10sp" />
+                    android:src="@drawable/icon_caret_down_small_gray" />
 
 
                 <android.support.v7.widget.AppCompatImageButton

@@ -75,7 +75,7 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
 
     @Override
     public void deleteTask(int idTask) {
-        taskEditInteraction.deleteTask(LoginModel.getInstance().getUserBean().getId(),idTask,this);
+        taskEditInteraction.deleteTask(LoginModel.getInstance().getUserBean().getId(), idTask, this);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
 
     @Override
     public void moveToProject(int idWorkflowInstance, int idProject) {
-        taskEditInteraction.moveToProject(idWorkflowInstance,idProject,LoginModel.getInstance().getUserBean().getId(),this);
+        taskEditInteraction.moveToProject(idWorkflowInstance, idProject, LoginModel.getInstance().getUserBean().getId(), this);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
 
     @Override
     public void getMyProjects() {
-        taskEditInteraction.getMyProjects(LoginModel.getInstance().getUserBean().getId(),false,false,this);
+        taskEditInteraction.getMyProjects(LoginModel.getInstance().getUserBean().getId(), false, false, this);
     }
 
     @Override
@@ -114,7 +114,8 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     }
 
     @Override
-    public void updateTags(List<HashMap<String, Object>> body) {
-        taskEditView.updateTags(body);
+    public void updateTaskField(Integer idWorkflowInstance, String path, Object value, boolean isEntity) {
+        taskEditInteraction.updateTaskField(idWorkflowInstance, path, value, isEntity,this);
     }
+
 }

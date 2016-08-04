@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 
 import com.codefish.android.taskmanager.R;
@@ -19,6 +21,7 @@ import com.codefish.android.taskmanager.component.AssigneesSearchText;
 import com.codefish.android.taskmanager.component.IGenericCallBack;
 import com.codefish.android.taskmanager.component.SimpleAddItemSearchText;
 import com.codefish.android.taskmanager.component.userListView.ProjectsSearchText;
+import com.codefish.android.taskmanager.model.TasksModel;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -40,14 +43,13 @@ public class TaskAddProjectFragment extends Fragment implements IGenericCallBack
     @Bind(R.id.task_add_project_search_text)
     ProjectsSearchText searchText;
 
-    public final static int REQUEST_PROJECT = 1006;
     public final static String ARGS_VALUES = "argsvalues";
     public final static String ARGS_ITEM = "argsitem";
 
     public static TaskAddProjectFragment newInstance(Fragment targetFragment, List<HashMap<String, Object>> values)  {
 
         TaskAddProjectFragment fragment = new TaskAddProjectFragment();
-        fragment.setTargetFragment(targetFragment,REQUEST_PROJECT);
+        fragment.setTargetFragment(targetFragment, TasksModel.REQUEST_PROJECT);
         Bundle args = new Bundle();
         args.putSerializable(ARGS_VALUES, (Serializable) values);
         fragment.setArguments(args);
@@ -118,8 +120,15 @@ public class TaskAddProjectFragment extends Fragment implements IGenericCallBack
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             Intent intent = new Intent();
             intent.putExtra(ARGS_ITEM, item);
-            getTargetFragment().onActivityResult(REQUEST_PROJECT,Activity.RESULT_OK,intent);
+            getTargetFragment().onActivityResult(TasksModel.REQUEST_PROJECT,Activity.RESULT_OK,intent);
             getFragmentManager().popBackStack();
+
+
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 }

@@ -54,7 +54,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     @Bind(R.id.tasks_list_layout_user_widget)
     TextView userWidget;
     @Bind(R.id.tasks_list_layout_open_profile)
-    TextView openProfileView;
+    AppCompatImageButton openProfileBtn;
     @Bind(R.id.tasks_list_layout_project_title)
     TextView projectTitleView;
     @Bind(R.id.tasks_list_view_projects)
@@ -98,7 +98,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         MyApplication.getAppComponent().inject(this);
         taskPresenter.setLoginView(this);
         userWidget.setOnClickListener(onWidgetCick());
-        openProfileView.setOnClickListener(onWidgetCick());
+        openProfileBtn.setOnClickListener(onWidgetCick());
         micBtn.setOnClickListener(onMicClick());
         projectsBtn.setOnClickListener(onProjectsClick());
         addNewTaskBtn.setOnClickListener(this);
@@ -280,7 +280,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-        }, 1000);
+        }, 0);
     }
 
     @Override

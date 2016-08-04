@@ -6,6 +6,7 @@ import com.codefish.android.taskmanager.fragment.ITaskDetailsView;
 import com.codefish.android.taskmanager.interactor.ITaskDetailsInteraction;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 
@@ -50,7 +51,7 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
         SubmitActionParam submitParams= new SubmitActionParam();
         submitParams.idWorkflowInstance = userTaskBean.idWorkflowInstance;
         submitParams.actionName = "_action0";
-        submitParams.idWorkflowForm = userTaskBean.idWorkflowInstance;
+        submitParams.idWorkflowForm = userTaskBean.idTask;
         submitParams.idAppUser = LoginModel.getInstance().getUserBean().getId();
         submitParams.returnWorkflowBean = false;
 
@@ -65,11 +66,11 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
 
 
     @Override
-    public void getTask(Integer idTask) {
+    public void getTask(Integer idWorkflowInstance) {
 
         GetTaskParameter param = new GetTaskParameter();
         param.idAppUser = LoginModel.getInstance().getUserBean().getId();
-        param.idWorkflowInstance = idTask;
+        param.idWorkflowInstance = idWorkflowInstance;
         param.showCompleted = true;
         param.getSubtasks = true;
 
@@ -91,6 +92,17 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     @Override
     public void changeStateCBH() {
         taskDetailsView.changeStateCBH();
+    }
+
+    @Override
+    public void getWorkflowForm(Integer idWorkflowInstance) {
+        taskDetailsInteraction.getWorkflowForm(LoginModel.getInstance().getUserBean().getId(),idWorkflowInstance,this);
+    }
+
+
+    @Override
+    public void loadWorkflowForm(MobWorkflowForm mobWorkflowForm) {
+        taskDetailsView.loadWorkflowForm(mobWorkflowForm);
     }
 
 

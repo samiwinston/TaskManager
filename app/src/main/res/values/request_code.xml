@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="REQUEST_ADD_NEW_ITEM">1</integer>
-    <integer name="REQUEST_DATE">2</integer>
-    <integer name="REQUEST_REMOVE_TASK">3</integer>
-    <integer name="REQUEST_CHANGE_TITLE">4</integer>
-    <integer name="REQUEST_CHANGE_DESC">5</integer>
-</resources>

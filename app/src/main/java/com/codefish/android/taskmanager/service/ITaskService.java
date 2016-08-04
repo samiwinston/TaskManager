@@ -4,6 +4,7 @@ package com.codefish.android.taskmanager.service;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.GetUserTasksParameter;
 import com.codefish.android.taskmanager.model.MobUserTaskBean;
+import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.SaveEntityAction;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.TaskListBean;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -33,7 +36,7 @@ public interface ITaskService {
                                                      ,@Query("closedProjects") Boolean closedProjects);
 
     @GET("getTags")
-    Call<List<HashMap<String,Object>>> getTags(String searchText);
+    Call<List<HashMap<String,Object>>> getTags(@Query("searchText") String searchText);
 
     @POST("getTask")
     Call<UserTaskBean> getTask(@Body GetTaskParameter params);
@@ -52,13 +55,23 @@ public interface ITaskService {
                                  @Query("idTask") Integer idTask,
                                  @Query("score") Integer score);
 
+    @GET("getWorkflowForm")
+    Call<MobWorkflowForm> getWorkflowForm(@Query("idAppUser") Integer idAppUser,
+                                          @Query("idWorkflowInstance") Integer idWorkflowInstance);
+
+    @GET("submitWorkflowAction")
+    Call<UserTaskBean> submitWorkflowAction(@Query("idAppUser") Integer idAppUser,
+                                            @Query("idWorkflowInstance") Integer idWorkflowInstance,
+                                            @Query("action") String action);
+
     @POST("changeState")
     Call<String> changeState(@Body SubmitActionParam params);
 
     @GET("updateTaskField")
-    Call<String> updateTaskField(@Query("idUserTask") Integer idUserTask,
+    Call<String> updateTaskField(@Query("idWorkflowInstance") Integer idWorkflowInstance,
                                  @Query("path") String path,
-                                 @Query("value") String value);
+                                 @Query("value") Object value,
+                                 @Query("isEntity") boolean isEntity);
 
     @GET("updateImportance")
     Call<String> updateImportance(@Query("idAppUser") Integer idAppUser,
@@ -77,18 +90,24 @@ public interface ITaskService {
                               @Query("idUserTask") Integer idUserTask);
 
     @GET("moveToProject")
-    Call<String> updateTaskProject(@Query("idInstance") Integer idInstance,
-                                   @Query("idGroup") Integer idGroup,
+    Call<String> moveToProject(@Query("idWorkflowInstance") Integer idWorkflowInstance,
+                                   @Query("idProject") Integer idProject,
                                    @Query("idAppUser") Integer idAppUser);
 
     @GET("addFollower")
-    Call<String> addFollower(@Query("topicName")  String topicName,@Query("idUserTask")  Integer idUserTask,
+    Call<String> addFollower(@Query("topicName")  String topicName,
+                             @Query("subTopic")  Integer subTopic,
                                 @Query("idAppUser")Integer  idAppUser,
                                 @Query("idFollower")Integer  idFollower,
-                                @Query("idSup")Boolean isSup,@Query("sendNotification")Boolean sendNotification);
+                                @Query("idSup")Boolean isSup,
+                             @Query("sendNotification")Boolean sendNotification);
 
     @GET("removeFollower")
-    Call<String> removeFollower(@Query("idUserTask") Integer idUserTask,
-                              @Query("idAppUser") Integer idAppUser,@Query("followerIdAppUser") Integer followerIdAppUser);
+    Call<String> removeFollower(@Query("idAppUser") Integer idAppUser,
+                                @Query("idWorkflowInstance") Integer idWorkflowInstance,@Query("followerIdAppUser") Integer followerIdAppUser);
+
+    @GET("unfollowTask")
+    Call<String> unfollowTask(@Query("topicName") String topicName,
+                                @Query("subTopic") Integer subTopic,@Query("idAppUser") Integer idAppUser);
 
 }

@@ -12,13 +12,11 @@
         android:layout_centerVertical="true"
         android:background="@drawable/circular_label"
         android:gravity="center"
-        android:text="AH"
         android:textSize="10sp" />
 
     <TextView android:id="@+id/follower_item_layout_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Abed El Chmaytilli"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/follower_item_layout_initials"
         />
@@ -30,7 +28,7 @@
         android:layout_marginLeft="5dp"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:text="ashmaitelli@gmail.com" />
+        />
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/follower_item_layout_remove"
@@ -38,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@color/colorWhite"
+        android:background="@color/colorClearGrey"
         android:src="@drawable/ic_menu_remove" />
 
 </RelativeLayout>

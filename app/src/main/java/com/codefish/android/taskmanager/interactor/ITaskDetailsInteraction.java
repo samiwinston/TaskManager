@@ -15,7 +15,7 @@ public interface ITaskDetailsInteraction {
     void updateDueDate(Integer idTask, Date date, Integer idAppUser, ITaskDetailsPresenter taskDetailsPresenter);
     void getTask(GetTaskParameter param, ITaskDetailsPresenter taskDetailsPresenter);
     void changeState(SubmitActionParam submitParams, ITaskDetailsPresenter taskDetailsPresenter);
-
     void updateImportance(Integer idAppUser, Integer idUserTask, Integer importance, ITaskDetailsPresenter taskDetailsPresenter);
+    void getWorkflowForm(Integer idAppUser, Integer idWorkflowInstance,ITaskDetailsPresenter taskDetailsPresenter);
 }
 

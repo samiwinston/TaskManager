@@ -1,5 +1,6 @@
 package com.codefish.android.taskmanager.fragment;
 
+import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 
 import java.util.Date;
@@ -13,5 +14,6 @@ public interface ITaskDetailsView {
     void loadUserTaskBean(UserTaskBean userTaskBean);
     void changeStateCBH();
     void updateImportanceCBH();
+    void loadWorkflowForm(MobWorkflowForm mobWorkflowForm);
 }
 

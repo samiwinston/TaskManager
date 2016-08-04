@@ -17,6 +17,7 @@ import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
 import com.codefish.android.taskmanager.component.AssigneesSearchText;
 import com.codefish.android.taskmanager.component.IGenericCallBack;
+import com.codefish.android.taskmanager.model.TasksModel;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -38,14 +39,13 @@ public class TaskAddAssigneeFragment extends Fragment implements IGenericCallBac
     @Bind(R.id.task_edit_assignee_layout_search)
     AssigneesSearchText assigneesSearchText;
 
-    public final static int REQUEST_ASSIGNEE = 1005;
     public final static String ARGS_VALUES = "argsvalues";
     public final static String ARGS_ITEM = "argsitem";
 
     public static TaskAddAssigneeFragment newInstance(Fragment targetFragment, List<HashMap<String, Object>> values)  {
 
         TaskAddAssigneeFragment fragment = new TaskAddAssigneeFragment();
-        fragment.setTargetFragment(targetFragment,REQUEST_ASSIGNEE);
+        fragment.setTargetFragment(targetFragment, TasksModel.REQUEST_ASSIGNEE);
         Bundle args = new Bundle();
         args.putSerializable(ARGS_VALUES, (Serializable) values);
         fragment.setArguments(args);
@@ -84,7 +84,7 @@ public class TaskAddAssigneeFragment extends Fragment implements IGenericCallBac
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_ASSIGNEE) {
+        if (requestCode == TasksModel.REQUEST_ASSIGNEE) {
 
         }
     }
@@ -121,7 +121,7 @@ public class TaskAddAssigneeFragment extends Fragment implements IGenericCallBac
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             Intent intent = new Intent();
             intent.putExtra(ARGS_ITEM, item);
-            getTargetFragment().onActivityResult(REQUEST_ASSIGNEE,Activity.RESULT_OK,intent);
+            getTargetFragment().onActivityResult(TasksModel.REQUEST_ASSIGNEE,Activity.RESULT_OK,intent);
             getFragmentManager().popBackStack();
         }
     }

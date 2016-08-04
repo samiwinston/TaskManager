@@ -18,6 +18,7 @@ import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
 import com.codefish.android.taskmanager.component.IGenericCallBack;
 import com.codefish.android.taskmanager.component.SearchUserEditText;
 import com.codefish.android.taskmanager.model.FollowerBean;
+import com.codefish.android.taskmanager.model.TasksModel;
 
 import java.util.HashMap;
 
@@ -37,14 +38,12 @@ public class TaskAddFollowersFragment extends Fragment implements IGenericCallBa
     @Bind(R.id.task_add_followers_search_text)
     SearchUserEditText searchUsersInput;
 
-    private static final int REQUEST_FOLLOWER = 1006;
     public final static String ARGS_VALUES = "argsvalues";
-    public final static String ARGS_ITEM = "argsitem";
 
     public static TaskAddFollowersFragment newInstance(Fragment targetFragment)  {
 
         TaskAddFollowersFragment fragment = new TaskAddFollowersFragment();
-        fragment.setTargetFragment(targetFragment,REQUEST_FOLLOWER);
+        fragment.setTargetFragment(targetFragment, TasksModel.REQUEST_FOLLOWER);
 
 
         return fragment;
@@ -78,12 +77,6 @@ public class TaskAddFollowersFragment extends Fragment implements IGenericCallBa
         taskDetailsActivity = (TaskDetailsActivity) activity;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_FOLLOWER) {
-
-        }
-    }
 
 
     private void initToolBar() {
@@ -119,7 +112,7 @@ public class TaskAddFollowersFragment extends Fragment implements IGenericCallBa
             FollowerBean followerBean = new FollowerBean();
             Intent intent = new Intent();
             intent.putExtras(followerBean.getBundle(item));
-            getTargetFragment().onActivityResult(REQUEST_FOLLOWER,Activity.RESULT_OK,intent);
+            getTargetFragment().onActivityResult(TasksModel.REQUEST_FOLLOWER,Activity.RESULT_OK,intent);
             getFragmentManager().popBackStack();
         }
     }

@@ -12,7 +12,6 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskPresenter;
 import com.codefish.android.taskmanager.utils.SmartDateFormatter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -49,14 +48,16 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
         public UserTaskBean bean;
-        public TextView titleView;
+        public TextView taskTitleView;
+        public TextView currentStateView;
         public SmartDateTextView dueDateView;
         private ItemClickListener clickListener;
 
         public ViewHolder(View v) {
             super(v);
-            titleView = (TextView) v.findViewById(R.id.textView);
-            dueDateView = (SmartDateTextView) v.findViewById(R.id.dueDateView);
+            taskTitleView = (TextView) v.findViewById(R.id.task_item_layout_task_title);
+            currentStateView = (TextView) v.findViewById(R.id.task_item_layout_current_state);
+            dueDateView = (SmartDateTextView) v.findViewById(R.id.task_item_layout_task_due_date);
             itemView.setOnClickListener(this);
 
 
@@ -98,7 +99,15 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         UserTaskBean bean = dataSet.get(position);
         holder.bean = bean;
-        holder.titleView.setText(bean.title);
+        holder.taskTitleView.setText(bean.title);
+        if (bean.currentState != null && !bean.currentState.equals("Open")) {
+            holder.currentStateView.setText(bean.currentState);
+            holder.currentStateView.setVisibility(View.VISIBLE);
+        } else {
+            holder.currentStateView.setVisibility(View.GONE);
+
+        }
+
         if (bean.dueDate != null) {
             holder.dueDateView.setDate(bean.dueDate);
             holder.dueDateView.setVisibility(View.VISIBLE);
@@ -106,10 +115,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             holder.dueDateView.setVisibility(View.GONE);
         }
 
-       /* if (bean.dueDate != null) {
-            holder.dueDateView.setVisibility(View.VISIBLE);
-            holder.dueDateView.setText("20 May");
-        }*/
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position) {

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 
 import com.codefish.android.taskmanager.R;
+import com.codefish.android.taskmanager.model.TasksModel;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -59,7 +60,7 @@ public class MyDialogFragment extends DialogFragment {
     private void sendResult(int resultOk) {
         if (getTargetFragment() == null)
             return;
-        getTargetFragment().onActivityResult(getResources().getInteger(R.integer.REQUEST_REMOVE_TASK), resultOk, null);
+        getTargetFragment().onActivityResult(TasksModel.REQUEST_REMOVE_TASK, resultOk, null);
     }
 }
 
