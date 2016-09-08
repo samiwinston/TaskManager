@@ -130,6 +130,7 @@ public class TaskNewFragment extends Fragment implements View.OnClickListener {
     public void submitNewTask() {
         if(taskNameInput.getText().length()>0)
         {
+            createNewTask.setEnabled(false);
             taskListBean.name = taskNameInput.getText().toString();
             taskListBean.idSubmittedBy = LoginModel.getInstance().getUserBean().getId();;
             taskListBean.idOwner =searchUsersInput.getIdSelectedItem();

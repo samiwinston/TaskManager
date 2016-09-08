@@ -1,7 +1,9 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -91,8 +93,14 @@ public class UserProfileDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Intent toLogin = new Intent(getContext(), LoginActivity.class);
+                toLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 getActivity().startActivity(toLogin);
                 getActivity().finish();
+
+                SharedPreferences sharedpreferences = getActivity().getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.clear();
+                editor.commit();
             }
         };
     }

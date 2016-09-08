@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
@@ -70,14 +71,20 @@ public class WorkflowFormFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.workflow_form_layout, container, false);
         ButterKnife.bind(this, view);
-        webView.loadData(mobWorkflowForm.htmlForm, "text/html; charset=UTF-8", null);
 
-        for (WorkflowActionBean actionBean : mobWorkflowForm.actionBeans) {
-            WorkflowActionButton button = new WorkflowActionButton(getContext(), null);
-            button.setWorkflowActionBean(actionBean);
-            button.setOnClickListener(onActionClick());
-            actionBtnGroup.addView(button);
+        if (mobWorkflowForm.htmlForm!=null && mobWorkflowForm.htmlForm.length() >0)
+        {
+            webView.loadData(mobWorkflowForm.htmlForm, "text/html; charset=UTF-8", null);
+
+            for (WorkflowActionBean actionBean : mobWorkflowForm.actionBeans) {
+                WorkflowActionButton button = new WorkflowActionButton(getContext(), null);
+                button.setWorkflowActionBean(actionBean);
+                button.setOnClickListener(onActionClick());
+                actionBtnGroup.addView(button);
+            }
         }
+        else Toast.makeText(getContext(), "Can not load form, please contact admin!!", Toast.LENGTH_SHORT).show();
+
 
 
         return view;

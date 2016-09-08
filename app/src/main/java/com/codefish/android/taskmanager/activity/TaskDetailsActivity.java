@@ -20,12 +20,15 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 public class TaskDetailsActivity extends SingleFragmentActivity implements ITaskDetailsActivity {
 
     public static final String USER_TASK_BEAN = "UserTaskBean";
+    public static final String SELECTED_PROJECT = "SelectedProject";
     public UserTaskBean selectedTask;
+    public Integer idSelectedProject;
     TaskDetailsFragment taskDetailsFragment;
 
-    public static Intent newInstance(Context context, UserTaskBean userTaskBean) {
+    public static Intent newInstance(Context context, UserTaskBean userTaskBean,Integer idSelectedProject) {
 
         Intent intent = new Intent(context, TaskDetailsActivity.class);
+        intent.putExtra(SELECTED_PROJECT,idSelectedProject);
         intent.putExtra(USER_TASK_BEAN, userTaskBean.getBundle());
         return intent;
 
@@ -49,7 +52,7 @@ public class TaskDetailsActivity extends SingleFragmentActivity implements ITask
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         selectedTask = new UserTaskBean(getIntent().getExtras().getBundle(TaskDetailsActivity.USER_TASK_BEAN));
-
+        idSelectedProject = getIntent().getIntExtra(SELECTED_PROJECT,0);
     }
 
 

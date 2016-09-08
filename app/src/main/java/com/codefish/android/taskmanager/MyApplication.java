@@ -15,7 +15,7 @@ import okhttp3.OkHttpClient;
  */
 public class MyApplication extends Application {
 
-    private Boolean mock = true;
+    private Boolean mock = false;
 
     private static AppComponent appComponent;
 
@@ -29,8 +29,8 @@ public class MyApplication extends Application {
     private void initializeInjector() {
 
         appComponent = DaggerAppComponent.builder()
-                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlDev):
-                        getResources().getString(R.string.baseUrlProd),new OkHttpClient()))
+                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlAchDev):
+                        getResources().getString(R.string.baseUrlAcHTest),new OkHttpClient()))
                 .build();
     }
 

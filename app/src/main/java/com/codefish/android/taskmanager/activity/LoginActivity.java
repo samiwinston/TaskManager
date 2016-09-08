@@ -1,6 +1,8 @@
 package com.codefish.android.taskmanager.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +25,9 @@ public class LoginActivity extends SingleFragmentActivity {
     private LoginFragment fragment;
     private boolean mock = false;
 
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    SharedPreferences sharedpreferences;
+
     @Override
     protected Fragment createFragment() {
         fragment = new LoginFragment();
@@ -32,6 +37,8 @@ public class LoginActivity extends SingleFragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
     }
 
 
@@ -76,6 +83,12 @@ public class LoginActivity extends SingleFragmentActivity {
                         LoginModel.getInstance().setUserBean(user);
                         navigateToTasksView();
                         finish();
+
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                        editor.putString("userName", user.getUsername());
+                        editor.putString("password", password);
+                        editor.commit();
                     } else {
                         fragment.showToast("Can not login, please check your username or password");
                     }
@@ -99,4 +112,17 @@ public class LoginActivity extends SingleFragmentActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String userName = sharedpreferences.getString("userName","");
+        String password = sharedpreferences.getString("password","");
+
+        if(userName !=null && userName.length()>0 && password !=null && password.length()>0)
+        {
+            getUser(userName,password);
+        }
+
+    }
 }

@@ -64,11 +64,12 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     SmartDateFormatter smartDateFormatter;
 
     TaskEditFragment taskEditFragment;
+    private MobWorkflowForm loadedWorkflowForm = null;
 
-    public static TaskDetailsFragment newInstance() {
+  /*  public static TaskDetailsFragment newInstance() {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
         return taskDetailsFragment;
-    }
+    }*/
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,7 +88,6 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.task_details_layout, container, false);
         ButterKnife.bind(this, view);
-        Log.v("LOG", "Create Detail View");
         if (taskDetailsActivity.selectedTask != null) {
             UserTaskBean bean = taskDetailsActivity.selectedTask;
             taskTitleView.setText(bean.title);
@@ -113,7 +113,11 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                taskDetailsPresenter.getWorkflowForm(taskDetailsActivity.selectedTask.idWorkflowInstance);
+                if (loadedWorkflowForm != null) {
+                    loadWorkflowForm(loadedWorkflowForm);
+                } else {
+                    taskDetailsPresenter.getWorkflowForm(taskDetailsActivity.selectedTask.idWorkflowInstance);
+                }
             }
         };
     }
@@ -154,7 +158,6 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.task_details_menu, menu);
-        Log.v("Log", "On Task Details Create Option Menu");
         if (taskDetailsActivity.selectedTask.importance == 1) {
             MenuItem menuItem = menu.findItem(R.id.menu_item_important);
             menuItem.setIcon(R.drawable.icon_task_details_topbar_heart_filled);
@@ -219,7 +222,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         Intent intent = new Intent();
         intent.putExtras(taskDetailsActivity.selectedTask.getBundle());
         intent.putExtra("hasNoFollowers", taskDetailsActivity.selectedTask.hasNoFollowers());
-        if (!taskDetailsActivity.selectedTask.isOpen) {
+        if (!taskDetailsActivity.selectedTask.isOpen || ( taskDetailsActivity.idSelectedProject!=0 && (!taskDetailsActivity.selectedTask.idGroup.equals(taskDetailsActivity.idSelectedProject)))) {
+
             intent.putExtra("deleteThisTask", true);
         }
         getActivity().setResult(Activity.RESULT_OK, intent);
@@ -292,5 +296,6 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         WorkflowFormFragment fragment = WorkflowFormFragment.newInstance(TaskDetailsFragment.this, TasksModel.REQUEST_TASK_UPDATE, mobWorkflowForm, taskDetailsActivity.selectedTask.idWorkflowInstance);
         getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment)
                 .addToBackStack("Back To Parent").commit();
+        loadedWorkflowForm = mobWorkflowForm;
     }
 }

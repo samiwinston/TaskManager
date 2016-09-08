@@ -22,30 +22,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <GridLayout
+            <!-- <GridLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:columnCount="2"
+                 android:columnOrderPreserved="true">-->
+
+            <TextView
+                android:id="@+id/task_edit_layout_task_title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:columnCount="2"
-                android:columnOrderPreserved="true">
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:ellipsize="end"
+                android:lines="1"
+                android:padding="17dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                <TextView
-                    android:id="@+id/task_edit_layout_task_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_columnSpan="2"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:padding="17dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_columnSpan="2"
+                android:background="@color/colorLightGrey" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.8dp"
-                    android:layout_columnSpan="2"
-                    android:background="@color/colorLightGrey" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
@@ -54,7 +59,10 @@
                     android:padding="15dp"
                     android:src="@drawable/ic_menu_user" />
 
-                <ViewSwitcher android:id="@+id/task_edit_layout_assignee_switcher">
+                <ViewSwitcher
+                    android:id="@+id/task_edit_layout_assignee_switcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
 
                     <RelativeLayout
@@ -106,8 +114,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:layout_toRightOf="@id/task_edit_layout_assignee"
                             android:background="@color/colorWhite"
+                            android:paddingRight="15dp"
                             android:src="@drawable/ic_menu_remove" />
 
                         <View
@@ -118,6 +126,13 @@
                     </RelativeLayout>
                 </ViewSwitcher>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -125,7 +140,9 @@
                     android:padding="15dp"
                     android:src="@drawable/ic_menu_follower" />
 
-                <RelativeLayout android:layout_width="match_parent">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/task_edit_layout_followers"
@@ -133,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Add a follower"
                         android:paddingBottom="22dp"
-                        android:paddingTop="22dp"
+                        android:paddingTop="20dp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                     <View
@@ -143,6 +160,13 @@
                         android:background="@color/colorLightGrey" />
                 </RelativeLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -150,7 +174,9 @@
                     android:padding="15dp"
                     android:src="@drawable/ic_menu_date" />
 
-                <RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <com.codefish.android.taskmanager.component.smartDateView.SmartDateTextView
                         android:id="@+id/task_edit_layout_due_date"
@@ -168,6 +194,13 @@
                         android:background="@color/colorLightGrey" />
                 </RelativeLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,7 +208,10 @@
                     android:padding="15dp"
                     android:src="@drawable/ic_menu_description" />
 
-                <RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/task_edit_layout_description"
@@ -195,6 +231,12 @@
                         android:background="@color/colorLightGrey" />
                 </RelativeLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
@@ -203,7 +245,10 @@
                     android:padding="15dp"
                     android:src="@drawable/ic_menu_attachment" />
 
-                <RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/task_edit_layout_add_attachmt"
@@ -221,6 +266,12 @@
                         android:background="@color/colorLightGrey" />
                 </RelativeLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
@@ -229,7 +280,11 @@
                     android:padding="15dp"
                     android:src="@drawable/ic_menu_project" />
 
-                <ViewSwitcher android:id="@+id/task_edit_layout_project_switcher">
+
+                <ViewSwitcher
+                    android:id="@+id/task_edit_layout_project_switcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
 
                     <RelativeLayout
@@ -253,6 +308,7 @@
                             android:background="@color/colorLightGrey" />
                     </RelativeLayout>
 
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -260,12 +316,22 @@
 
                         <TextView
                             android:id="@+id/task_edit_layout_project"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Move to project"
                             android:paddingBottom="22dp"
                             android:paddingTop="22dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                        <android.support.v7.widget.AppCompatImageButton
+                            android:id="@+id/task_edit_layout_remove_project"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@color/colorWhite"
+                            android:paddingRight="15dp"
+                            android:src="@drawable/ic_menu_remove" />
+
 
                         <View
                             android:layout_width="match_parent"
@@ -275,16 +341,25 @@
                     </RelativeLayout>
 
                 </ViewSwitcher>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/colorWhite"
-                    android:padding="15dp"
-                    android:src="@drawable/icon_tag_small_light" />
+                    android:padding="19dp"
+                    android:src="@drawable/icon_tag_small_medium" />
 
 
-                <ViewSwitcher android:id="@+id/task_edit_layout_tag_switcher">
+                <ViewSwitcher
+                    android:id="@+id/task_edit_layout_tag_switcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
 
                     <RelativeLayout
@@ -296,7 +371,7 @@
                             android:id="@+id/task_edit_layout_add_tag"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Add tag"
+                            android:hint="Tag it!"
                             android:paddingBottom="22dp"
                             android:paddingTop="22dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
@@ -308,6 +383,7 @@
                             android:background="@color/colorLightGrey" />
                     </RelativeLayout>
 
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -315,12 +391,22 @@
 
                         <TextView
                             android:id="@+id/task_edit_layout_tag"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Move to project"
                             android:paddingBottom="22dp"
                             android:paddingTop="22dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                        <android.support.v7.widget.AppCompatImageButton
+                            android:id="@+id/task_edit_layout_remove_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@color/colorWhite"
+                            android:paddingRight="15dp"
+                            android:src="@drawable/ic_menu_remove" />
+
 
                         <View
                             android:layout_width="match_parent"
@@ -330,9 +416,8 @@
                     </RelativeLayout>
 
                 </ViewSwitcher>
-
-
-            </GridLayout>
+            </LinearLayout>
+            <!-- </GridLayout>-->
 
             <TextView
                 android:id="@+id/task_edit_layout_delete"

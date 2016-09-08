@@ -92,7 +92,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
     public void onItemSelected(UserTaskBean bean) {
         // open second view
         if (bean != null) {
-            Intent navToDetails = TaskDetailsActivity.newInstance(this, bean);
+            Intent navToDetails = TaskDetailsActivity.newInstance(this, bean,tasksListFragment.idSelectedProject);
             startActivityForResult(navToDetails, TaskDetailsFragment.REQUEST_TASK_BEAN);
         }
 

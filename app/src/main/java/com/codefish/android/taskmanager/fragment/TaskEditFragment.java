@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +45,10 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     SmartDateTextView dueDateTextView;
     @Bind(R.id.task_edit_layout_remove_assignee)
     AppCompatImageButton removeAssigneeBtn;
+    @Bind(R.id.task_edit_layout_remove_tag)
+    AppCompatImageButton removeTagBtn;
+    @Bind(R.id.task_edit_layout_remove_project)
+    AppCompatImageButton removeProjectBtn;
     @Bind(R.id.task_edit_layout_add_assignee)
     TextView addAssigneeView;
     @Bind(R.id.task_edit_layout_assignee)
@@ -116,7 +119,6 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         ButterKnife.bind(this, view);
 
         dueDateTextView.setOnClickListener(onDateClick());
-        removeAssigneeBtn.setOnClickListener(onRemoveAssigneeClick());
         addAssigneeView.setOnClickListener(onAddAssigneeClick());
         followersTextView.setOnClickListener(onAddFollowerClick());
         addProjectView.setOnClickListener(onAddProjectClick());
@@ -132,16 +134,19 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             if (userTaskBean.ownerName != null) {
                 assigneeView.setText(userTaskBean.ownerName);
                 assigneeInitials.setText(userTaskBean.getOwnerInitals());
-                assigneeViewSwitcher.showNext();
+                removeAssigneeBtn.setOnClickListener(onRemoveAssigneeClick());
+                showAssigneeView();
             }
 
             if (userTaskBean.groupName != null) {
                 projectView.setText(userTaskBean.groupName);
-                projectViewSwitcher.showNext();
+                removeProjectBtn.setOnClickListener(onRemoveProjectClick());
+                showProjectView();
             }
 
             if (userTaskBean.categoryName != null) {
                 tagView.setText(userTaskBean.categoryName);
+                removeTagBtn.setOnClickListener(onRemoveTagClick());
                 showTagView();
             }
 
@@ -159,6 +164,12 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         initForm();
         return view;
 
+    }
+
+
+
+    private void showAssigneeView() {
+        assigneeViewSwitcher.showNext();
     }
 
     private View.OnClickListener onAddAttachmentClick() {
@@ -271,7 +282,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
 
     @Override
     public void unassignTaskCallBack() {
-        hideAssigneeView();
+        showAddAssigneeView();
         taskDetailsActivity.selectedTask.ownerName = null;
         taskDetailsActivity.selectedTask.idOwner = 0;
     }
@@ -286,8 +297,30 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
 
     @Override
     public void moveToProjectCallBack() {
-        //showProjectView();
     }
+
+    public View.OnClickListener onRemoveTagClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddTagView();
+                taskEditPresenter.updateTaskField(taskDetailsActivity.selectedTask.idWorkflowInstance, "category", 0, true);
+            }
+        };
+    }
+
+    private View.OnClickListener onRemoveProjectClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddProjectView();
+                taskDetailsActivity.selectedTask.groupName = null;
+                taskDetailsActivity.selectedTask.idGroup= 0;
+                taskEditPresenter.moveToProject(taskDetailsActivity.selectedTask.idWorkflowInstance, 0);
+            }
+        };
+    }
+
 
     public View.OnClickListener onRemoveAssigneeClick() {
         return new View.OnClickListener() {
@@ -298,9 +331,6 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         };
     }
 
-    private void hideAssigneeView() {
-        assigneeViewSwitcher.showPrevious();
-    }
 
 
     public View.OnClickListener onDateClick() {
@@ -382,7 +412,6 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 Double idProject = (Double) project.get("id");
                 String groupName = project.get("title").toString();
                 taskDetailsActivity.selectedTask.groupName = groupName;
-                showProjectView();
                 taskEditPresenter.moveToProject(taskDetailsActivity.selectedTask.idWorkflowInstance, idProject.intValue());
                 break;
             case TasksModel.REQUEST_TAG:
@@ -390,7 +419,6 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 Integer idTag = ((Double) item.get("id")).intValue();
                 String categoryName = item.get("name").toString();
                 taskDetailsActivity.selectedTask.categoryName = categoryName;
-                showProjectView();
                 taskEditPresenter.updateTaskField(taskDetailsActivity.selectedTask.idWorkflowInstance, "category", idTag, true);
                 break;
             case TasksModel.UPDATE_FOLLOWERS:
@@ -429,7 +457,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     public void updateTags(List<HashMap<String, Object>> body) {
     }
 
-    private void hideProjectView() {
+    private void showAddProjectView() {
         projectViewSwitcher.showPrevious();
     }
 
@@ -438,5 +466,14 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     }
     private void showTagView() {
         tagViewSwitcher.showNext();
+    }
+
+
+    private void showAddTagView() {
+        tagViewSwitcher.showPrevious();
+    }
+
+    private void showAddAssigneeView() {
+        assigneeViewSwitcher.showPrevious();
     }
 }
