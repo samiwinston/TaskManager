@@ -3,6 +3,7 @@ package com.codefish.android.taskmanager.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageButton;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codefish.android.taskmanager.MyApplication;
 import com.codefish.android.taskmanager.R;
@@ -28,6 +30,7 @@ import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.utils.SmartDateFormatter;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -113,38 +116,51 @@ public class TaskNewFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == TasksModel.REQUEST_DATE)
-        {
+        if (requestCode == TasksModel.REQUEST_DATE) {
             taskListBean.dueDate = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             updateDateLabel(taskListBean.dueDate);
         }
     }
 
     private void updateDateLabel(Date dueDate) {
-        if(dueDate!=null)
-        {
+        if (dueDate != null) {
             dateBtn.setDate(dueDate);
         }
     }
 
     public void submitNewTask() {
-        if(taskNameInput.getText().length()>0)
-        {
+        if (taskNameInput.getText().length() > 0) {
             createNewTask.setEnabled(false);
             taskListBean.name = taskNameInput.getText().toString();
-            taskListBean.idSubmittedBy = LoginModel.getInstance().getUserBean().getId();;
-            taskListBean.idOwner =searchUsersInput.getIdSelectedItem();
-            taskListBean.idGroup =searchProjectsInput.getIdSelectedItem();
+            taskListBean.idSubmittedBy = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0);
+            taskListBean.idOwner = searchUsersInput.getIdSelectedItem();
+            taskListBean.idGroup = searchProjectsInput.getIdSelectedItem();
             taskListBean.description = descriptionEditText.getText().toString();
 
             ServiceModel.getInstance().taskService.createTask(taskListBean).enqueue(new Callback<UserTaskBean>() {
                 @Override
                 public void onResponse(Call<UserTaskBean> call, Response<UserTaskBean> response) {
-                    UserTaskBean newTaskBean = response.body();
-                    if(newTaskBean!=null)
-                    {
-                        taskNewActivity.submitNewTask(newTaskBean);
+                    if (response.isSuccessful()) {
+                        UserTaskBean newTaskBean = response.body();
+                        if (newTaskBean != null) {
+                            taskNewActivity.submitNewTask(newTaskBean);
+                        } else {
+                            Toast.makeText(getContext(), getContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG);
+                        }
+
+                    } else {
+                        try {
+                            if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                                Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG);
+                            } else {
+                                throw new Exception();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), getContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG);
+                        }
                     }
+
                 }
 
                 @Override

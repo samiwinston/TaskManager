@@ -1,13 +1,17 @@
 package com.codefish.android.taskmanager.interactor;
 
+import android.widget.Toast;
+
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.presenter.ITaskEditPresenter;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,25 +24,33 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
     @Override
     public void reassignTask(Integer idTask, Integer idAppUser, final Integer reassignTo, final ITaskEditPresenter taskEditPresenter) {
 
-        ServiceModel.getInstance().taskService.reassignTask(idTask, idAppUser, reassignTo).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.reassignTask(idTask, idAppUser, reassignTo).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (!response.isSuccessful()) {
-                    taskEditPresenter.showErrorMsg("Can not reach Codefish");
-                    return;
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    if (reassignTo == 0) {
+                        taskEditPresenter.unassignTaskCallBack();
+                    } else {
+                        taskEditPresenter.reassignTaskCallBack();
+                    }
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskEditPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                    }
                 }
-                if (reassignTo == 0) {
-                    taskEditPresenter.unassignTaskCallBack();
-                }
-                else
-                {
-                    taskEditPresenter.reassignTaskCallBack();
-                }
+
 
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 taskEditPresenter.showErrorMsg("Can not reach Codefish");
                 t.printStackTrace();
             }
@@ -48,21 +60,27 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
 
     @Override
     public void deleteTask(Integer idAppUser, int idTask, final ITaskEditPresenter taskEditPresenter) {
-        ServiceModel.getInstance().taskService.deleteTask(idAppUser,idTask).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.deleteTask(idAppUser, idTask).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if(response.isSuccessful())
-                {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
                     taskEditPresenter.deleteTaskCallBack();
-                }
-                else
-                {
-                    taskEditPresenter.showErrorMsg("Can not reach Codefish");
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskEditPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
                 taskEditPresenter.showErrorMsg("Can not reach Codefish");
             }
@@ -71,21 +89,27 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
 
     @Override
     public void moveToProject(int idWorkflowInstance, int idProject, int idAppUser, final ITaskEditPresenter taskEditPresenter) {
-        ServiceModel.getInstance().taskService.moveToProject(idWorkflowInstance,idProject,idAppUser).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.moveToProject(idWorkflowInstance, idProject, idAppUser).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if(response.isSuccessful())
-                {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
                     taskEditPresenter.moveToProjectCallBack();
-                }
-                else
-                {
-                    taskEditPresenter.showErrorMsg("Can not reach Codefish");
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskEditPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 taskEditPresenter.showErrorMsg("Can not reach Codefish");
             }
         });
@@ -94,17 +118,29 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
     @Override
     public void updateDueDate(Integer idTask, final Date date, Integer idAppUser, final ITaskEditPresenter taskEditPresenter) {
 
-        ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, date).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, date).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     taskEditPresenter.updateDueCallBack(date);
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskEditPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
+                taskEditPresenter.showErrorMsg("Can not reach CodeFish");
             }
         });
 
@@ -119,12 +155,24 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
             public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
                 if (response.isSuccessful()) {
                     taskEditPresenter.updatePossibleAssignees(response.body());
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskEditPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<HashMap<String, Object>>> call, Throwable t) {
                 t.printStackTrace();
+                taskEditPresenter.showErrorMsg("Can not reach CodeFish");
             }
         });
 
@@ -132,16 +180,25 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
     }
 
     @Override
-    public void getMyProjects(Integer idAppUser,boolean getStats,boolean closedProjects,final ITaskEditPresenter taskEditPresenter) {
+    public void getMyProjects(Integer idAppUser, boolean getStats, boolean closedProjects, final ITaskEditPresenter taskEditPresenter) {
 
 
-        ServiceModel.getInstance().taskService.getMyProjects(LoginModel.getInstance().getUserBean().getId(), false, false).enqueue(new Callback<List<HashMap<String, Object>>>() {
+        ServiceModel.getInstance().taskService.getMyProjects(idAppUser, false, false).enqueue(new Callback<List<HashMap<String, Object>>>() {
             @Override
             public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
                 if (response.isSuccessful()) {
                     taskEditPresenter.updateMyProjects(response.body());
                 } else {
-                    taskEditPresenter.showErrorMsg("Can not reach Codefish");
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskEditPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskEditPresenter.showErrorMsg("Can not reach Codefish");
+                    }
                 }
 
             }
@@ -156,22 +213,31 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
     }
 
 
-
-
     @Override
     public void updateTaskField(Integer idWorkflowInstance, String path, Object value, boolean isEntity, final ITaskEditPresenter taskEditPresenter) {
 
-        ServiceModel.getInstance().taskService.updateTaskField(idWorkflowInstance,path,value,isEntity).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.updateTaskField(idWorkflowInstance, path, value, isEntity).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if(response.isSuccessful())
-                {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
 
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskEditPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin!!");
+                    }
                 }
+
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
             }
         });

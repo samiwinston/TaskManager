@@ -3,6 +3,7 @@ package com.codefish.android.taskmanager.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -28,12 +29,14 @@ import com.codefish.android.taskmanager.model.TasksModel;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,7 +54,7 @@ public class TaskFollowersFragment extends Fragment {
     @Bind(R.id.task_followers_layout_add_follower_group)
     RelativeLayout addFollowerGroup;
     private TaskDetailsActivity taskDetailsActivity;
-    
+
     public final static String ARGS_VALUES = "argsvalues";
     public final static String ARGS_ITEM = "argsitem";
     TaskAddFollowersFragment taskAddFollowersFragment;
@@ -59,7 +62,7 @@ public class TaskFollowersFragment extends Fragment {
     public static TaskFollowersFragment newInstance(Fragment targetFragment, Integer idWorkflowInstance, List<FollowerBean> values) {
 
         TaskFollowersFragment fragment = new TaskFollowersFragment();
-        fragment.setTargetFragment(targetFragment,TasksModel.REQUEST_FOLLOWER);
+        fragment.setTargetFragment(targetFragment, TasksModel.REQUEST_FOLLOWER);
         Bundle args = new Bundle();
         args.putSerializable(ARGS_VALUES, (Serializable) values);
         args.putInt("idWorkflowInstance", idWorkflowInstance);
@@ -114,20 +117,30 @@ public class TaskFollowersFragment extends Fragment {
 
             ServiceModel.getInstance()
                     .taskService.addFollower("WorkflowInstance", taskDetailsActivity.selectedTask.idWorkflowInstance
-                    , LoginModel.getInstance().getUserBean().getId(), bean.getIdAppUser(), false, true).enqueue(new Callback<String>() {
+                    , PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0), bean.getIdAppUser(), false, true).enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
 
                     } else {
-                        Toast.makeText(getContext(), "Can no reach CodeFish", Toast.LENGTH_LONG).show();
+                        try {
+                            if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                                Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
+                            } else {
+                                throw new Exception();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), getContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();
+
+                        }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     t.printStackTrace();
-                    Toast.makeText(getContext(), "Can no reach CodeFish", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.network_error), Toast.LENGTH_LONG).show();
 
                 }
             });

@@ -24,6 +24,9 @@
         <activity android:name=".activity.TaskDetailsActivity"  android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden"  />
         <activity android:name=".activity.TaskNewActivity" android:windowSoftInputMode="adjustResize" android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="d2802556c13c1fec61daacd961f0ca857012d70b" />
     </application>
 
 </manifest>

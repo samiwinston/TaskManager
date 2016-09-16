@@ -25,8 +25,11 @@ import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
 import com.codefish.android.taskmanager.model.ServiceModel;
 
+import java.io.IOException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -184,9 +187,9 @@ public class TaskEditStrFieldFragment extends Fragment {
     private void updateTaskField() {
 
         if (editField.getText().length() > 0) {
-            ServiceModel.getInstance().taskService.updateTaskField(taskDetailsActivity.selectedTask.idWorkflowInstance, path, editField.getText().toString(), false).enqueue(new Callback<String>() {
+            ServiceModel.getInstance().taskService.updateTaskField(taskDetailsActivity.selectedTask.idWorkflowInstance, path, editField.getText().toString(), false).enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
                         if (getFragmentManager().getBackStackEntryCount() > 0) {
                             Intent intent = new Intent();
@@ -195,12 +198,24 @@ public class TaskEditStrFieldFragment extends Fragment {
                             getFragmentManager().popBackStack();
                         }
                     } else {
-                        Toast.makeText(getContext(), "Can not reach CodeFish", Toast.LENGTH_LONG).show();
+                        try {
+                            if(response.code()==404 && response.errorBody().contentLength()<200)
+                            {
+                                Toast.makeText(getContext(),  response.errorBody().string(), Toast.LENGTH_LONG).show();
+                            }
+                            else
+                            {
+                                throw new Exception();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Illegal error, please contact the admin", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     t.printStackTrace();
                     Toast.makeText(getContext(), "Can not reach CodeFish", Toast.LENGTH_LONG).show();
                 }

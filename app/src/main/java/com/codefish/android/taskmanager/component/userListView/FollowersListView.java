@@ -2,17 +2,21 @@ package com.codefish.android.taskmanager.component.userListView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.component.IGenericCallBack;
 import com.codefish.android.taskmanager.model.FollowerBean;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
 
+import java.io.IOException;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,32 +48,45 @@ public class FollowersListView extends ListView implements IFollowerCallBack {
         return listAdapter.mAllResults;
     }
 
-    public void addFollower(FollowerBean bean ) {
-        listAdapter.mAllResults.add(0,bean);
+    public void addFollower(FollowerBean bean) {
+        listAdapter.mAllResults.add(0, bean);
         listAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void itemClicked(FollowerBean followerBean) {
+
+        Integer idAppUser = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0);
+
+
         ServiceModel.getInstance()
                 .taskService
-                .removeFollower(LoginModel.getInstance().getUserBean().getId(),idWorkflowInstance,  followerBean.getIdAppUser())
-                .enqueue(new Callback<String>() {
+                .removeFollower(idAppUser, idWorkflowInstance, followerBean.getIdAppUser())
+                .enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
 
                         } else {
-                            Toast.makeText(getContext(), "Can not reach CodeFish", Toast.LENGTH_LONG).show();
+                            try {
+                                if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                                    Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
+                                } else {
+                                    throw new Exception();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Toast.makeText(getContext(), getContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();
+
+                            }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getContext(), "Can not reach CodeFish", Toast.LENGTH_LONG).show();
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(getContext(), getContext().getString(R.string.network_error), Toast.LENGTH_LONG).show();
                     }
                 });
-
 
 
     }

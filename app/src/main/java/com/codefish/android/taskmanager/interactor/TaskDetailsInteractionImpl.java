@@ -1,5 +1,8 @@
 package com.codefish.android.taskmanager.interactor;
 
+import android.widget.Toast;
+
+import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.ServiceModel;
@@ -7,8 +10,10 @@ import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
 
+import java.io.IOException;
 import java.util.Date;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,17 +27,29 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
     @Override
     public void updateDueDate(Integer idTask, final Date date, Integer idAppUser, final ITaskDetailsPresenter taskDetailsPresenter) {
 
-        ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, date).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, date).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     taskDetailsPresenter.updateDueCallBack(date);
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskDetailsPresenter.showErrorMsg("Illegal error, please contact the admin");
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
+                taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
             }
         });
 
@@ -50,6 +67,17 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                 if (response.isSuccessful()) {
                     UserTaskBean bean = response.body();
                     taskDetailsPresenter.loadUserTaskBean(bean);
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskDetailsPresenter.showErrorMsg("Illegal error, please contact the admin");
+                    }
                 }
             }
 
@@ -65,18 +93,27 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
     @Override
     public void changeState(SubmitActionParam submitParams, final ITaskDetailsPresenter taskDetailsPresenter) {
 
-        ServiceModel.getInstance().taskService.changeState(submitParams).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.changeState(submitParams).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     taskDetailsPresenter.changeStateCBH();
                 } else {
-                    taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskDetailsPresenter.showErrorMsg("Can not reach Codefish, please contact the admin");
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
             }
         });
@@ -86,18 +123,28 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
     @Override
     public void updateImportance(Integer idAppUser, Integer idUserTask, Integer importance, final ITaskDetailsPresenter taskDetailsPresenter) {
 
-        ServiceModel.getInstance().taskService.updateImportance(idAppUser, idUserTask, importance).enqueue(new Callback<String>() {
+        ServiceModel.getInstance().taskService.updateImportance(idAppUser, idUserTask, importance).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     taskDetailsPresenter.updateImportanceCBH();
                 } else {
-                    taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskDetailsPresenter.showErrorMsg("Illegal error, please contact the admin");
+
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
 
             }
@@ -105,15 +152,24 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
     }
 
     @Override
-    public void getWorkflowForm(Integer idAppUser,Integer idWorkflowInstance,final ITaskDetailsPresenter taskDetailsPresenter) {
+    public void getWorkflowForm(Integer idAppUser, Integer idWorkflowInstance, final ITaskDetailsPresenter taskDetailsPresenter) {
 
-        ServiceModel.getInstance().taskService.getWorkflowForm(idAppUser,idWorkflowInstance).enqueue(new Callback<MobWorkflowForm>() {
+        ServiceModel.getInstance().taskService.getWorkflowForm(idAppUser, idWorkflowInstance).enqueue(new Callback<MobWorkflowForm>() {
             @Override
             public void onResponse(Call<MobWorkflowForm> call, Response<MobWorkflowForm> response) {
                 if (response.isSuccessful()) {
                     taskDetailsPresenter.loadWorkflowForm(response.body());
                 } else {
-                    taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskDetailsPresenter.showErrorMsg("Illegal error, please contact the admin");
+                    }
                 }
             }
 

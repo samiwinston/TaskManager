@@ -1,5 +1,7 @@
 package com.codefish.android.taskmanager.presenter;
 
+import android.preference.PreferenceManager;
+
 import com.codefish.android.taskmanager.activity.ITasksView;
 import com.codefish.android.taskmanager.interactor.ITaskInteraction;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
@@ -28,11 +30,11 @@ public class TaskPresenterImpl implements ITaskPresenter {
 
 
     @Override
-    public void getUserTasks(Integer idSelectedProject) {
+    public void getUserTasks(Integer idAppUser,Integer idSelectedProject) {
 
-        Integer idAppUser = LoginModel.getInstance().getUserBean().getId();
+        //Integer idAppUser = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0)
 
-        if (idSelectedProject == null) {
+        if (idSelectedProject == 0) {
             GetUserTasksParameter params = new GetUserTasksParameter();
             params.idAppUser = idAppUser;
             params.getArchived = false;
@@ -46,7 +48,7 @@ public class TaskPresenterImpl implements ITaskPresenter {
             taskInteraction.getUserTasks(params, this);
         } else {
             GetTaskParameter param = new GetTaskParameter();
-            param.idAppUser = LoginModel.getInstance().getUserBean().getId();
+            param.idAppUser = idAppUser;
             param.idWorkflowInstance = idSelectedProject;
             param.showCompleted = false;
             param.getSubtasks = true;

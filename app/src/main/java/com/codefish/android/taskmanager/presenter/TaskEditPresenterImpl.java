@@ -1,5 +1,7 @@
 package com.codefish.android.taskmanager.presenter;
 
+import android.content.Context;
+
 import com.codefish.android.taskmanager.fragment.ITaskDetailsView;
 import com.codefish.android.taskmanager.fragment.ITaskEditView;
 import com.codefish.android.taskmanager.interactor.ITaskEditInteraction;
@@ -24,18 +26,18 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     }
 
     @Override
-    public void updateDueDate(Integer idTask, Date date) {
-        taskEditInteraction.updateDueDate(idTask, date, LoginModel.getInstance().getUserBean().getId(), this);
+    public void updateDueDate(Integer idAppUser,Integer idTask, Date date) {
+        taskEditInteraction.updateDueDate(idTask, date, idAppUser, this);
     }
 
     @Override
-    public void unassignTask(Integer idTask) {
-        taskEditInteraction.reassignTask(idTask, LoginModel.getInstance().getUserBean().getId(), 0, this);
+    public void unassignTask(Integer idAppUser,Integer idTask) {
+        taskEditInteraction.reassignTask(idTask, idAppUser, 0, this);
     }
 
     @Override
-    public void reassignTask(Integer idTask, Integer reassignTo) {
-        taskEditInteraction.reassignTask(idTask, LoginModel.getInstance().getUserBean().getId(), reassignTo, this);
+    public void reassignTask(Integer idAppUser,Integer idTask, Integer reassignTo) {
+        taskEditInteraction.reassignTask(idTask, idAppUser, reassignTo, this);
     }
 
     @Override
@@ -74,8 +76,8 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     }
 
     @Override
-    public void deleteTask(int idTask) {
-        taskEditInteraction.deleteTask(LoginModel.getInstance().getUserBean().getId(), idTask, this);
+    public void deleteTask(Integer idAppUser,int idTask) {
+        taskEditInteraction.deleteTask(idAppUser, idTask, this);
     }
 
     @Override
@@ -84,8 +86,8 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     }
 
     @Override
-    public void moveToProject(int idWorkflowInstance, int idProject) {
-        taskEditInteraction.moveToProject(idWorkflowInstance, idProject, LoginModel.getInstance().getUserBean().getId(), this);
+    public void moveToProject(Integer idAppUser,int idWorkflowInstance, int idProject) {
+        taskEditInteraction.moveToProject(idWorkflowInstance, idProject, idAppUser, this);
     }
 
     @Override
@@ -99,8 +101,8 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     }
 
     @Override
-    public void getMyProjects() {
-        taskEditInteraction.getMyProjects(LoginModel.getInstance().getUserBean().getId(), false, false, this);
+    public void getMyProjects(Integer idAppUser) {
+        taskEditInteraction.getMyProjects(idAppUser, false, false, this);
     }
 
     @Override

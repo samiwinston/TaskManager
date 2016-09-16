@@ -65,37 +65,37 @@ public interface ITaskService {
                                             @Query("action") String action);
 
     @POST("changeState")
-    Call<String> changeState(@Body SubmitActionParam params);
+    Call<ResponseBody> changeState(@Body SubmitActionParam params);
 
     @GET("updateTaskField")
-    Call<String> updateTaskField(@Query("idWorkflowInstance") Integer idWorkflowInstance,
+    Call<ResponseBody> updateTaskField(@Query("idWorkflowInstance") Integer idWorkflowInstance,
                                  @Query("path") String path,
                                  @Query("value") Object value,
                                  @Query("isEntity") boolean isEntity);
 
     @GET("updateImportance")
-    Call<String> updateImportance(@Query("idAppUser") Integer idAppUser,
+    Call<ResponseBody> updateImportance(@Query("idAppUser") Integer idAppUser,
                                  @Query("idUserTask") Integer idUserTask,
                                  @Query("importance") Integer importance);
 
     @GET("updateDueDate")
-    Call<String> updateDueDate(@Query("idUserTask") Integer idUserTask,
+    Call<ResponseBody> updateDueDate(@Query("idUserTask") Integer idUserTask,
                                @Query("idAppUser") Integer idAppUser,@Query("dueDate") Date dueDate);
     @GET("reassignTask")
-    Call<String> reassignTask(@Query("idUserTask") Integer idUserTask,
+    Call<ResponseBody> reassignTask(@Query("idUserTask") Integer idUserTask,
                                @Query("idAppUser") Integer idAppUser,@Query("reassignTo") Integer reassignTo);
 
     @GET("deleteTask")
-    Call<String> deleteTask(@Query("idAppUser") Integer idAppUser,
+    Call<ResponseBody> deleteTask(@Query("idAppUser") Integer idAppUser,
                               @Query("idUserTask") Integer idUserTask);
 
     @GET("moveToProject")
-    Call<String> moveToProject(@Query("idWorkflowInstance") Integer idWorkflowInstance,
+    Call<ResponseBody> moveToProject(@Query("idWorkflowInstance") Integer idWorkflowInstance,
                                    @Query("idProject") Integer idProject,
                                    @Query("idAppUser") Integer idAppUser);
 
     @GET("addFollower")
-    Call<String> addFollower(@Query("topicName")  String topicName,
+    Call<ResponseBody> addFollower(@Query("topicName")  String topicName,
                              @Query("subTopic")  Integer subTopic,
                                 @Query("idAppUser")Integer  idAppUser,
                                 @Query("idFollower")Integer  idFollower,
@@ -103,7 +103,7 @@ public interface ITaskService {
                              @Query("sendNotification")Boolean sendNotification);
 
     @GET("removeFollower")
-    Call<String> removeFollower(@Query("idAppUser") Integer idAppUser,
+    Call<ResponseBody> removeFollower(@Query("idAppUser") Integer idAppUser,
                                 @Query("idWorkflowInstance") Integer idWorkflowInstance,@Query("followerIdAppUser") Integer followerIdAppUser);
 
     @GET("unfollowTask")

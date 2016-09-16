@@ -3,6 +3,7 @@ package com.codefish.android.taskmanager.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -65,6 +66,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
 
     TaskEditFragment taskEditFragment;
     private MobWorkflowForm loadedWorkflowForm = null;
+    private boolean workflowButtonIsLoaded=false;
 
   /*  public static TaskDetailsFragment newInstance() {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -79,7 +81,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         taskDetailsPresenter.setTaskDetailsView(this);
         taskEditFragment = TaskEditFragment.newInstance(TaskDetailsFragment.this);
         if (taskDetailsActivity.selectedTask != null)
-            taskDetailsPresenter.getTask(taskDetailsActivity.selectedTask.idWorkflowInstance);
+            taskDetailsPresenter.getTask(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                    taskDetailsActivity.selectedTask.idWorkflowInstance);
     }
 
 
@@ -98,13 +101,18 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 initialsView.setText(bean.getOwnerInitals());
                 assigneeView.setText(bean.ownerName);
             }
-
+            if(workflowButtonIsLoaded)
+            {
+                loadUserTaskBean(bean);
+            }
         }
         actionButton.setOnClickListener(onTakeActionClick());
         dueDateBtn.setOnClickListener(onDateClick());
 
         initToolBar();
         initBean();
+
+
 
         return view;
     }
@@ -116,7 +124,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 if (loadedWorkflowForm != null) {
                     loadWorkflowForm(loadedWorkflowForm);
                 } else {
-                    taskDetailsPresenter.getWorkflowForm(taskDetailsActivity.selectedTask.idWorkflowInstance);
+                    taskDetailsPresenter.getWorkflowForm(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                            taskDetailsActivity.selectedTask.idWorkflowInstance);
                 }
             }
         };
@@ -152,7 +161,6 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         supportActionBar.setHomeAsUpIndicator(R.drawable.icon_close_dark);
 
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -199,7 +207,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                     taskDetailsActivity.selectedTask.isOpen = true;
                     item.setIcon(R.drawable.icon_task_details_topbar_task);
                 }
-                taskDetailsPresenter.changeState(taskDetailsActivity.selectedTask);
+                taskDetailsPresenter.changeState(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                        taskDetailsActivity.selectedTask);
                 return true;
             case R.id.menu_item_important:
                 if (taskDetailsActivity.selectedTask.importance == 0) {
@@ -209,7 +218,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                     taskDetailsActivity.selectedTask.importance = 0;
                     item.setIcon(R.drawable.icon_task_details_topbar_heart);
                 }
-                taskDetailsPresenter.updateImportance(taskDetailsActivity.selectedTask.idTask, taskDetailsActivity.selectedTask.importance);
+                taskDetailsPresenter.updateImportance(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),taskDetailsActivity.selectedTask.idTask, taskDetailsActivity.selectedTask.importance);
                 return true;
             case R.id.menu_item_unfollow:
                 return true;
@@ -245,7 +254,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 final Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
                 taskDetailsActivity.selectedTask.dueDate = date;
                 dueDateBtn.setDate(date);
-                taskDetailsPresenter.updateDueDate(taskDetailsActivity.selectedTask.idTask, date);
+                taskDetailsPresenter.updateDueDate(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                        taskDetailsActivity.selectedTask.idTask, date);
                 break;
             case TasksModel.REQUEST_TASK_UPDATE:
                 taskDetailsActivity.selectedTask = new UserTaskBean(data.getExtras());
@@ -277,7 +287,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         if (taskDetailsActivity.selectedTask.hasForm) {
             actionButton.setText(taskDetailsActivity.selectedTask.canTakeAction() ? "Take Action" : "View Details");
             actionButton.setVisibility(View.VISIBLE);
-
+            workflowButtonIsLoaded = true;
         }
     }
 
@@ -294,7 +304,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     @Override
     public void loadWorkflowForm(MobWorkflowForm mobWorkflowForm) {
         WorkflowFormFragment fragment = WorkflowFormFragment.newInstance(TaskDetailsFragment.this, TasksModel.REQUEST_TASK_UPDATE, mobWorkflowForm, taskDetailsActivity.selectedTask.idWorkflowInstance);
-        getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment)
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
                 .addToBackStack("Back To Parent").commit();
         loadedWorkflowForm = mobWorkflowForm;
     }

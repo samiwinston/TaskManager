@@ -61,7 +61,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
 
     public void loginHandler() {
-        //loginPresenter.validateCredentials(userEdtView.getText().toString(), passEdtView.getText().toString());
+            //throw new RuntimeException("This is a crash");
+
+
         loginActivity.validateCredentials(userEdtView.getText().toString(), passEdtView.getText().toString());
     }
 

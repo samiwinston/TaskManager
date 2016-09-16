@@ -3,6 +3,7 @@ package com.codefish.android.taskmanager.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -107,7 +108,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         MyApplication.getAppComponent().inject(this);
         taskEditPresenter.setTaskEditView(this);
         taskEditPresenter.getTaskPossibleAssignees(taskDetailsActivity.selectedTask.idWorkflowInstance);
-        taskEditPresenter.getMyProjects();
+        taskEditPresenter.getMyProjects(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0));
         taskEditPresenter.getTags();
         isPossibleAssigneesLoaded = isProjectsLoaded = isTagsLoaded = false;
     }
@@ -316,7 +317,8 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 showAddProjectView();
                 taskDetailsActivity.selectedTask.groupName = null;
                 taskDetailsActivity.selectedTask.idGroup= 0;
-                taskEditPresenter.moveToProject(taskDetailsActivity.selectedTask.idWorkflowInstance, 0);
+                taskEditPresenter.moveToProject(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                        taskDetailsActivity.selectedTask.idWorkflowInstance, 0);
             }
         };
     }
@@ -326,7 +328,8 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                taskEditPresenter.unassignTask(userTaskBean.idTask);
+                taskEditPresenter.unassignTask(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                        userTaskBean.idTask);
             }
         };
     }
@@ -390,6 +393,8 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        Integer idAppUser = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0);
+
         switch (requestCode)
         {
             case TasksModel.REQUEST_DATE:
@@ -397,7 +402,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 if (date != null) {
                     userTaskBean.dueDate = taskDetailsActivity.selectedTask.dueDate = date;
                     dueDateTextView.setDate(date);
-                    taskEditPresenter.updateDueDate(taskDetailsActivity.selectedTask.idTask, date);
+                    taskEditPresenter.updateDueDate(idAppUser,taskDetailsActivity.selectedTask.idTask, date);
                 }
                 break;
             case TasksModel.REQUEST_ASSIGNEE:
@@ -405,14 +410,14 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 Double idReassignTo = (Double) assignee.get("id");
                 String assigneeName = assignee.get("name").toString();
                 taskDetailsActivity.selectedTask.ownerName = assigneeName;
-                taskEditPresenter.reassignTask(taskDetailsActivity.selectedTask.idTask, idReassignTo.intValue());
+                taskEditPresenter.reassignTask(idAppUser,taskDetailsActivity.selectedTask.idTask, idReassignTo.intValue());
                 break;
             case TasksModel.REQUEST_PROJECT:
                 HashMap<String, Object> project = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
                 Double idProject = (Double) project.get("id");
                 String groupName = project.get("title").toString();
                 taskDetailsActivity.selectedTask.groupName = groupName;
-                taskEditPresenter.moveToProject(taskDetailsActivity.selectedTask.idWorkflowInstance, idProject.intValue());
+                taskEditPresenter.moveToProject(idAppUser,taskDetailsActivity.selectedTask.idWorkflowInstance, idProject.intValue());
                 break;
             case TasksModel.REQUEST_TAG:
                 HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(TaskAddAssigneeFragment.ARGS_ITEM);
@@ -432,7 +437,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 taskDetailsActivity.selectedTask.description = data.getStringExtra(TaskEditStrFieldFragment.ARGS_ITEM);
                 break;
             case TasksModel.REQUEST_REMOVE_TASK:
-                taskEditPresenter.deleteTask(userTaskBean.idWorkflowInstance);
+                taskEditPresenter.deleteTask(idAppUser,userTaskBean.idWorkflowInstance);
                 break;
             case TasksModel.REQUEST_DOC:
                 break;

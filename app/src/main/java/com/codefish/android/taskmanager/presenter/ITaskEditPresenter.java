@@ -1,5 +1,7 @@
 package com.codefish.android.taskmanager.presenter;
 
+import android.content.Context;
+
 import com.codefish.android.taskmanager.fragment.ITaskEditView;
 
 import java.util.Date;
@@ -11,9 +13,9 @@ import java.util.List;
  */
 public interface ITaskEditPresenter {
 
-    void updateDueDate(Integer idTask,Date date);
-    void reassignTask(Integer idTask, Integer reassignTo);
-    void unassignTask(Integer idTask);
+    void updateDueDate(Integer idAppUser,Integer idTask,Date date);
+    void reassignTask(Integer idAppUser,Integer idTask, Integer reassignTo);
+    void unassignTask(Integer idAppUser,Integer idTask);
     void updateAssignee(Integer idTask, Integer idAssignee);
     void getTaskPossibleAssignees(Integer itTask);
     void setTaskEditView(ITaskEditView taskEditView);
@@ -22,11 +24,11 @@ public interface ITaskEditPresenter {
     void reassignTaskCallBack();
     void showErrorMsg(String msg);
     void unassignTaskCallBack();
-    void deleteTask(int idTask);
+    void deleteTask(Integer idAppUser,int idTask);
     void deleteTaskCallBack();
-    void moveToProject(int idWorkflowInstance, int idProject);
+    void moveToProject(Integer idAppUser,int idWorkflowInstance, int idProject);
     void moveToProjectCallBack();
-    void getMyProjects();
+    void getMyProjects(Integer idAppUser);
     void getTags();
     void updateMyProjects(List<HashMap<String, Object>> body);
     void updateTaskField(Integer idWorkflowInstance, String path, Object value, boolean isEntity);

@@ -1,6 +1,8 @@
 package com.codefish.android.taskmanager.component.projectsNavList;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,21 +72,38 @@ public class ProjectsNavListAdapter extends BaseAdapter {
         myListObj.put("title", "My Tasks");
         mResultList.add(myListObj);
 
-        ServiceModel.getInstance().taskService.getMyProjects(LoginModel.getInstance().getUserBean().getId(), false, false).enqueue(new Callback<List<HashMap<String, Object>>>() {
+        /*if(LoginModel.getInstance().getUserBean(mContext)!=null)
+        Log.v("LogListAdapter","user bean is not null");
+        else
+            Log.v("LogListAdapter","context is null");*/
+
+        Integer idAppUser = PreferenceManager.getDefaultSharedPreferences(mContext).getInt("userId", 0);
+
+
+        ServiceModel.getInstance().taskService.getMyProjects(idAppUser, false, false).enqueue(new Callback<List<HashMap<String, Object>>>() {
             @Override
             public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
                 if (response.isSuccessful()) {
                     mResultList.addAll(response.body());
                     notifyDataSetChanged();
                 } else {
-                    Toast.makeText(mContext, "Can not reach CodeFish", Toast.LENGTH_LONG).show();
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            Toast.makeText(mContext, response.errorBody().string(), Toast.LENGTH_LONG).show();
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(mContext, mContext.getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();
+                    }
                 }
 
             }
 
             @Override
             public void onFailure(Call<List<HashMap<String, Object>>> call, Throwable t) {
-                Toast.makeText(mContext, "Can not reach CodeFish", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mContext.getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();
             }
         });
     }

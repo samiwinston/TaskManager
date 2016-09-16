@@ -13,19 +13,20 @@ import java.util.Date;
  */
 public interface ITaskDetailsPresenter {
 
-    void changeState(UserTaskBean userTaskBean);
-    void updateDueDate(Integer idTask,Date date);
+    void changeState(Integer idAppUser,UserTaskBean userTaskBean);
+    void updateDueDate(Integer idAppUser,Integer idTask,Date date);
     void setTaskDetailsView(ITaskDetailsView taskDetailsView);
 
-    void updateImportance(Integer idUserTask, Integer importance);
+    void updateImportance(Integer userId, Integer idUserTask, Integer importance);
 
     void updateImportanceCBH();
 
     void updateDueCallBack(Date date);
-    void getTask(Integer idTask);
+    void getTask(Integer idAppUser, Integer idWorkflowInstance);
+
     void showErrorMsg(String s);
     void loadUserTaskBean(UserTaskBean bean);
     void changeStateCBH();
-    void getWorkflowForm(Integer idWorkflowInstance);
+    void getWorkflowForm(Integer idAppUser,Integer idWorkflowInstance);
     void loadWorkflowForm(MobWorkflowForm mobWorkflowForm);
 }

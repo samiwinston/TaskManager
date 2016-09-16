@@ -2,6 +2,7 @@ package com.codefish.android.taskmanager.component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -9,12 +10,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.component.userListView.UserListAdapter;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,7 +37,7 @@ public class SearchUserEditText extends EditText {
     private String mBeanPath;
     private UserListAdapter mSimpleAdapter;
     private Context context;
-    private Integer mIdAppUser = LoginModel.getInstance().getUserBean().getId();
+    private Integer mIdAppUser;
     private HashMap<String, Object> mSelectedItem;
     private boolean mIsProgramaticChange = false;
     public IGenericCallBack genericCallBack;
@@ -43,7 +46,9 @@ public class SearchUserEditText extends EditText {
     public SearchUserEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        if(!isInEditMode()) {
+        mIdAppUser = PreferenceManager.getDefaultSharedPreferences(context).getInt("userId", 0);
+        if (!isInEditMode()) {
+            mIdAppUser = PreferenceManager.getDefaultSharedPreferences(context).getInt("userId", 0);
             initExtraAttributes(context, attrs);
             addTextChangedListener(textChangeListener());
             setOnFocusChangeListener(onFocusChangeListener());
@@ -56,9 +61,8 @@ public class SearchUserEditText extends EditText {
         mBeanPath = arr.getString(R.styleable.SearchUserEditText_beanPath);
     }
 
-    public void initListView(ListView value,List<HashMap<String,Object>> values) {
+    public void initListView(ListView value, List<HashMap<String, Object>> values) {
         mListView = value;
-
 
 
         mSimpleAdapter = new UserListAdapter(context);
@@ -81,8 +85,7 @@ public class SearchUserEditText extends EditText {
                 setText(mSelectedItem.get(mLabelField).toString());
                 hideList();
 
-                if(genericCallBack!=null)
-                {
+                if (genericCallBack != null) {
                     genericCallBack.itemClicked(mSelectedItem);
                 }
             }
@@ -93,7 +96,7 @@ public class SearchUserEditText extends EditText {
         return new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus ) {
+                if (!hasFocus) {
                     hideList();
                 }
             }
@@ -126,28 +129,39 @@ public class SearchUserEditText extends EditText {
 
     private void refreshList(CharSequence searchText) {
 
-       ServiceModel.getInstance().reportingService.executeBeanReport(mBeanPath,
-               searchText.toString(), mIdAppUser).enqueue(callBack());
+        ServiceModel.getInstance().reportingService.executeBeanReport(mBeanPath,
+                searchText.toString(), mIdAppUser).enqueue(callBack());
 
 
     }
 
-    private Callback<List<HashMap<String, Object>>> callBack(){
+    private Callback<List<HashMap<String, Object>>> callBack() {
 
         return new Callback<List<HashMap<String, Object>>>() {
             @Override
             public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     mSimpleAdapter.mResultList = response.body();
                     mSimpleAdapter.refresh();
                     showList();
+                } else {
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Illegal error, please contact the admin", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<HashMap<String, Object>>> call, Throwable t) {
                 t.printStackTrace();
+                Toast.makeText(getContext(), "Can not reach Codefish", Toast.LENGTH_LONG).show();
             }
         };
 
@@ -155,12 +169,12 @@ public class SearchUserEditText extends EditText {
     }
 
     public void showList() {
-        if(mListView.getVisibility()!=VISIBLE)
-        mListView.setVisibility(VISIBLE);
+        if (mListView.getVisibility() != VISIBLE)
+            mListView.setVisibility(VISIBLE);
     }
 
     public void hideList() {
-        if(mListView.getVisibility()!=GONE)
+        if (mListView.getVisibility() != GONE)
             mListView.setVisibility(GONE);
     }
 
@@ -173,9 +187,8 @@ public class SearchUserEditText extends EditText {
         this.mSelectedItem = mSelectedItem;
     }
 
-    public Integer getIdSelectedItem(){
-        if(mSelectedItem!=null && mSelectedItem.get("id")!=null)
-        {
+    public Integer getIdSelectedItem() {
+        if (mSelectedItem != null && mSelectedItem.get("id") != null) {
             return ((Number) mSelectedItem.get("id")).intValue();
         }
         return null;

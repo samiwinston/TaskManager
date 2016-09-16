@@ -7,6 +7,8 @@ import com.codefish.android.taskmanager.daggerConfig.component.AppComponent;
 import com.codefish.android.taskmanager.daggerConfig.component.DaggerAppComponent;
 import com.codefish.android.taskmanager.daggerConfig.module.NetModule;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 
 
@@ -15,13 +17,14 @@ import okhttp3.OkHttpClient;
  */
 public class MyApplication extends Application {
 
-    private Boolean mock = false;
+    private Boolean mock = true;
 
     private static AppComponent appComponent;
 
 
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         initializeInjector();
 
     }
@@ -29,7 +32,7 @@ public class MyApplication extends Application {
     private void initializeInjector() {
 
         appComponent = DaggerAppComponent.builder()
-                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlAchDev):
+                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlDev):
                         getResources().getString(R.string.baseUrlAcHTest),new OkHttpClient()))
                 .build();
     }

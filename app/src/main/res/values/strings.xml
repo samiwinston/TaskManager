@@ -112,5 +112,8 @@
     <string name="title_activity_task_details">TaskDetailsActivity</string>
     <string name="date_picker_title">Select Date</string>
     <string name="unfollow_task">Unfollow</string>
+    <string name="unfollow_Test">Unfollow Test</string>
+    <string name="illegal_error_msg">Illegal Error, please contact the admin</string>
+    <string name="network_error">Can not reach CodeFish</string>
 
 </resources>

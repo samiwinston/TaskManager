@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import com.codefish.android.taskmanager.model.TaskListBean;
 import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -56,6 +58,36 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
         return tasksListFragment;
     }
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            tasksListFragment = (TasksListFragment) getSupportFragmentManager().getFragment(savedInstanceState, "TasksListFragment");
+
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            tasksListFragment = (TasksListFragment) getSupportFragmentManager().getFragment(savedInstanceState, "TasksListFragment");
+
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getSupportFragmentManager().putFragment(outState, "TasksListFragment", tasksListFragment);
+
+    }
 
     @Override
     protected void onPostResume() {
@@ -135,8 +167,8 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
             final TaskListBean taskListBean = new TaskListBean();
 
             taskListBean.name = taskTitle;
-            taskListBean.idSubmittedBy = LoginModel.getInstance().getUserBean().getId();
-            if (tasksListFragment.idSelectedProject != null)
+            taskListBean.idSubmittedBy = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getInt("userId",0);
+            if (tasksListFragment.idSelectedProject != null && tasksListFragment.idSelectedProject >0)
             {
                 taskListBean.idGroup = tasksListFragment.idSelectedProject;
             }
@@ -149,8 +181,25 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
                         if (newTaskBean != null && tasksListFragment != null) {
                             tasksListFragment.addItem(newTaskBean);
                             tasksListFragment.showTaskViewSnackBar(newTaskBean);
+                            tasksListFragment.refreshUserTasks();
                         } else {
-                            Toast.makeText(getBaseContext(), "Something didn't click!!!", Toast.LENGTH_LONG);
+                            Toast.makeText(getBaseContext(),getBaseContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG);
+                        }
+                    }
+                    else
+                    {
+                        try {
+                            if(response.code()==404 && response.errorBody().contentLength()<200)
+                            {
+                                Toast.makeText(getBaseContext(), response.errorBody().string(), Toast.LENGTH_LONG);
+                            }
+                            else
+                            {
+                                throw new Exception();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getBaseContext(), getBaseContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG);
                         }
                     }
 

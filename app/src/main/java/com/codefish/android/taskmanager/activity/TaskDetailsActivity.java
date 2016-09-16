@@ -48,11 +48,42 @@ public class TaskDetailsActivity extends SingleFragmentActivity implements ITask
         }
     }
 
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getSupportFragmentManager().putFragment(outState, "TaskDetailsFragment", taskDetailsFragment);
+        outState.putBundle("selectedTask",selectedTask.getBundle());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            taskDetailsFragment = (TaskDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "TaskDetailsFragment");
+            selectedTask = new UserTaskBean(savedInstanceState.getBundle("selectedTask"));
+
+        }
+    }
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         selectedTask = new UserTaskBean(getIntent().getExtras().getBundle(TaskDetailsActivity.USER_TASK_BEAN));
         idSelectedProject = getIntent().getIntExtra(SELECTED_PROJECT,0);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            taskDetailsFragment = (TaskDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "TaskDetailsFragment");
+            selectedTask = new UserTaskBean(savedInstanceState.getBundle("selectedTask"));
+
+        }
     }
 
 

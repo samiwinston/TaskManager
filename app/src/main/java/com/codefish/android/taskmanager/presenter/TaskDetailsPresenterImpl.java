@@ -32,8 +32,8 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     }
 
     @Override
-    public void updateImportance(Integer idUserTask, Integer importance) {
-        taskDetailsInteraction.updateImportance(LoginModel.getInstance().getUserBean().getId(),idUserTask,importance,this);
+    public void updateImportance(Integer idAppUser,Integer idUserTask, Integer importance) {
+        taskDetailsInteraction.updateImportance(idAppUser,idUserTask,importance,this);
     }
 
     @Override
@@ -47,12 +47,12 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     }
 
     @Override
-    public void changeState(UserTaskBean userTaskBean) {
+    public void changeState(Integer idAppUser,UserTaskBean userTaskBean) {
         SubmitActionParam submitParams= new SubmitActionParam();
         submitParams.idWorkflowInstance = userTaskBean.idWorkflowInstance;
         submitParams.actionName = "_action0";
         submitParams.idWorkflowForm = userTaskBean.idTask;
-        submitParams.idAppUser = LoginModel.getInstance().getUserBean().getId();
+        submitParams.idAppUser = idAppUser;
         submitParams.returnWorkflowBean = false;
 
         taskDetailsInteraction.changeState(submitParams, this);
@@ -60,16 +60,16 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     }
 
     @Override
-    public void updateDueDate(Integer idTask, Date date) {
-        taskDetailsInteraction.updateDueDate(idTask, date, LoginModel.getInstance().getUserBean().getId(), this);
+    public void updateDueDate(Integer idAppUser,Integer idTask, Date date) {
+        taskDetailsInteraction.updateDueDate(idTask, date, idAppUser, this);
     }
 
 
     @Override
-    public void getTask(Integer idWorkflowInstance) {
+    public void getTask(Integer idAppUser,Integer idWorkflowInstance) {
 
         GetTaskParameter param = new GetTaskParameter();
-        param.idAppUser = LoginModel.getInstance().getUserBean().getId();
+        param.idAppUser = idAppUser;
         param.idWorkflowInstance = idWorkflowInstance;
         param.showCompleted = true;
         param.getSubtasks = true;
@@ -95,8 +95,8 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     }
 
     @Override
-    public void getWorkflowForm(Integer idWorkflowInstance) {
-        taskDetailsInteraction.getWorkflowForm(LoginModel.getInstance().getUserBean().getId(),idWorkflowInstance,this);
+    public void getWorkflowForm(Integer idAppUser,Integer idWorkflowInstance) {
+        taskDetailsInteraction.getWorkflowForm(idAppUser,idWorkflowInstance,this);
     }
 
 

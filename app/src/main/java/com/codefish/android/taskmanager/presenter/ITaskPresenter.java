@@ -9,7 +9,7 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 public interface ITaskPresenter {
 
 
-    void getUserTasks(Integer idSelectedProject);
+    void getUserTasks(Integer idAppUser,Integer idSelectedProject);
 
     void refreshList();
 

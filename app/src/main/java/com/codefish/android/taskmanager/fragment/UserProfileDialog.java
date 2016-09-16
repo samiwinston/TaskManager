@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -23,6 +24,7 @@ import com.codefish.android.taskmanager.activity.LoginActivity;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobAppUserBean;
 import com.codefish.android.taskmanager.model.MobUserTaskBean;
+import com.google.gson.Gson;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -54,7 +56,11 @@ public class UserProfileDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bean = LoginModel.getInstance().getUserBean();
+        Gson gson = new Gson();
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String json = mPrefs.getString("MobAppUserBean", "");
+        MobAppUserBean obj = gson.fromJson(json, MobAppUserBean.class);
+        bean = obj;
 
 
     }
@@ -97,7 +103,7 @@ public class UserProfileDialog extends DialogFragment {
                 getActivity().startActivity(toLogin);
                 getActivity().finish();
 
-                SharedPreferences sharedpreferences = getActivity().getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.clear();
                 editor.commit();

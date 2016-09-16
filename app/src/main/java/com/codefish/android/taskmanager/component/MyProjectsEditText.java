@@ -2,6 +2,7 @@ package com.codefish.android.taskmanager.component;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -9,12 +10,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.component.userListView.SearchableListAdapter;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,7 +36,7 @@ public class MyProjectsEditText extends EditText {
     private CharSequence mLabelField;
     private SearchableListAdapter mSimpleAdapter;
     private Context context;
-    private Integer mIdAppUser = LoginModel.getInstance().getUserBean().getId();
+    private Integer mIdAppUser;
     private HashMap<String, Object> mSelectedItem;
 
     public MyProjectsEditText(Context context, AttributeSet attrs) {
@@ -41,6 +44,7 @@ public class MyProjectsEditText extends EditText {
         this.context = context;
         if(!isInEditMode())
         {
+            mIdAppUser = PreferenceManager.getDefaultSharedPreferences(context).getInt("userId",0);
             initExtraAttributes(context, attrs);
             addTextChangedListener(textChangeListener());
             setOnFocusChangeListener(onFocusChangeListener());
@@ -125,15 +129,32 @@ public class MyProjectsEditText extends EditText {
         return new Callback<List<HashMap<String, Object>>>() {
             @Override
             public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
-                if(response !=null && response.body()!=null)
+                if(response.isSuccessful())
                 {
                     mSimpleAdapter.mAllResults = response.body();
+                }
+                else
+                {
+                    try {
+                        if(response.code()==404 && response.errorBody().contentLength()<200)
+                        {
+                            Toast.makeText(getContext(),  response.errorBody().string(), Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Illegal error, please contact the admin", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<HashMap<String, Object>>> call, Throwable t) {
                 t.printStackTrace();
+                Toast.makeText(getContext(), "Can not reach Codefish", Toast.LENGTH_LONG).show();
             }
         };
 

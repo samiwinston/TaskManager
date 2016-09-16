@@ -16,6 +16,7 @@ import com.codefish.android.taskmanager.presenter.ITaskPresenter;
 import com.codefish.android.taskmanager.presenter.TaskPresenterImpl;
 import com.codefish.android.taskmanager.service.ITaskService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -57,7 +58,16 @@ public class TaskInteractionImpl implements ITaskInteraction {
                     taskListAdapter.setDataSet(list);
                     taskPresenter.refreshList();
                 } else {
-                    taskPresenter.showErrorMsg("Could not reach Codefish");
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskPresenter.showErrorMsg("Illegal Error, please contact the admin");
+                    }
                 }
             }
 
@@ -81,7 +91,16 @@ public class TaskInteractionImpl implements ITaskInteraction {
                     taskListAdapter.setDataSet(project.children);
                     taskPresenter.refreshList();
                 } else {
-                    taskPresenter.showErrorMsg("Can not reach CodeFish");
+                    try {
+                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                            taskPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskPresenter.showErrorMsg("Illegal error, please contact the admin!!");
+                    }
                 }
             }
 
@@ -93,8 +112,6 @@ public class TaskInteractionImpl implements ITaskInteraction {
 
 
     }
-
-
 
 
 }

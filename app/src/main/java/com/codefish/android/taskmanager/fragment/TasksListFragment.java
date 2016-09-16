@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -15,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +77,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     FloatingActionButton addNewTaskBtn;
     @Bind(R.id.tasks_list_layout_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    public Integer idSelectedProject;
+    public Integer idSelectedProject= 0;
 
     private Callbacks activity;
 
@@ -85,8 +87,22 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
+        outState.putInt("idSelectedProject",0);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            idSelectedProject = savedInstanceState.getInt("idSelectedProject");
+        }
     }
 
     @Nullable
@@ -103,7 +119,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         projectsBtn.setOnClickListener(onProjectsClick());
         addNewTaskBtn.setOnClickListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        userWidget.setText(LoginModel.getInstance().getUserBean().getInitials());
+        userWidget.setText(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("userInitials",""));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -114,6 +130,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         });
         projectsNavListView.setOnItemClickListener(onProjNavClick());
 
+        Log.v("OnCreatView","On Create View In TasksListFragment");
 
         initListData();
         return view;
@@ -125,7 +142,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap<String, Object> project = (HashMap<String, Object>) parent.getAdapter().getItem(position);
                 if (project != null && project.get("title") != null) {
-                    idSelectedProject = (project != null && project.get("id") != null) ? ((Double) project.get("id")).intValue() : null;
+                    idSelectedProject = (project != null && project.get("id") != null) ? ((Double) project.get("id")).intValue() : 0;
                     projectTitleView.setText(project.get("title").toString());
                     drawerLayout.closeDrawer(Gravity.RIGHT);
                     initListData();
@@ -158,19 +175,23 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     }
 
     public void refreshUserTasks() {
-        taskPresenter.getUserTasks(idSelectedProject);
+        taskPresenter.getUserTasks(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),idSelectedProject);
     }
 
     private View.OnClickListener onMicClick() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                        "Whats your next task?");
+                        "What's your next task?");
                 getActivity().startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
+
+                   // throw new RuntimeException("This is a crash");
+
 
             }
         };
@@ -227,7 +248,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
 
     public void addItem(final UserTaskBean taskBean) {
-        if (idSelectedProject == null || taskBean.idGroup.equals(idSelectedProject)) {
+        if (idSelectedProject == 0 || taskBean.idGroup.equals(idSelectedProject)) {
             taskListAdapter.addItem(taskBean);
             mLayoutManager.scrollToPosition(0);
         }
@@ -253,11 +274,6 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
     public void removeSelectedItem() {
         taskListAdapter.removeSelectedItem();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Override

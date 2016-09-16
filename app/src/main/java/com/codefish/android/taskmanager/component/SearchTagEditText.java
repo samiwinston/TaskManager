@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.component.userListView.SearchableOnlnListAdapter;
@@ -16,6 +17,7 @@ import com.codefish.android.taskmanager.component.userListView.UserListAdapter;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.ServiceModel;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -139,11 +141,29 @@ public class SearchTagEditText extends EditText implements IGenericCallBack {
                     mSimpleAdapter.refresh();
                     showList();
                 }
+                else
+                {
+                    try {
+                        if(response.code()==404 && response.errorBody().contentLength()<200)
+                        {
+                            Toast.makeText(context, response.errorBody().string(), Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(context, context.getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();
+                    }
+
+                }
             }
 
             @Override
             public void onFailure(Call<List<HashMap<String, Object>>> call, Throwable t) {
                 t.printStackTrace();
+                Toast.makeText(context, context.getString(R.string.network_error), Toast.LENGTH_LONG).show();
             }
         };
 
