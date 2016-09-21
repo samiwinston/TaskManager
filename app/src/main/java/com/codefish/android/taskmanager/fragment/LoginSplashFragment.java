@@ -15,22 +15,16 @@ import android.widget.Toast;
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.LoginActivity;
 
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class LoginFragment extends Fragment implements View.OnClickListener{
+public class LoginSplashFragment extends Fragment{
 
 
-    @Bind(R.id.userEdtView)
-    public EditText userEdtView;
-    @Bind(R.id.passEdtView)
-    public EditText passEdtView;
+
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
-    @Bind(R.id.loginBtn)
-    Button loginBtn;
 
     LoginActivity loginActivity;
 
@@ -50,9 +44,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.login_layout,container,false);
+        View view = inflater.inflate(R.layout.login_splash_layout,container,false);
         ButterKnife.bind(this,view);
-        loginBtn.setOnClickListener(this);
         return view;
     }
 
@@ -60,9 +53,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
 
 
-    public void loginHandler() {
-        loginActivity.validateCredentials(userEdtView.getText().toString(), passEdtView.getText().toString());
-    }
 
 
 
@@ -85,15 +75,5 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onClick(View v) {
-        loginHandler();
-    }
-
-    public interface ILoginCallBack{
-
-        public void validateCredentials(String username, String password);
-
-    }
 
 }

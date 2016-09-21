@@ -189,7 +189,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
                     else
                     {
                         try {
-                            if(response.code()==404 && response.errorBody().contentLength()<200)
+                            if(response.code()==500 && response.errorBody().contentLength()<200)
                             {
                                 Toast.makeText(getBaseContext(), response.errorBody().string(), Toast.LENGTH_LONG);
                             }

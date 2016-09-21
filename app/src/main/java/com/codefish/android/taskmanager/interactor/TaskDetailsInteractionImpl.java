@@ -34,7 +34,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.updateDueCallBack(date);
                 } else {
                     try {
-                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -69,7 +69,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.loadUserTaskBean(bean);
                 } else {
                     try {
-                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -100,7 +100,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.changeStateCBH();
                 } else {
                     try {
-                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -130,7 +130,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.updateImportanceCBH();
                 } else {
                     try {
-                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
                         taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -161,7 +161,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.loadWorkflowForm(response.body());
                 } else {
                     try {
-                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();

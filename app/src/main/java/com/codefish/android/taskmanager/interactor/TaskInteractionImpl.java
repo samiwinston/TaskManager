@@ -59,7 +59,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
                     taskPresenter.refreshList();
                 } else {
                     try {
-                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
                             taskPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -92,7 +92,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
                     taskPresenter.refreshList();
                 } else {
                     try {
-                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
                             taskPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();

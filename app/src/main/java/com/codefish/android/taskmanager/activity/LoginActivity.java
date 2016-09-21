@@ -114,7 +114,7 @@ public class LoginActivity extends SingleFragmentActivity {
 
                 } else {
                     try {
-                        if(response.code()==404 && response.errorBody().contentLength()<200)
+                        if(response.code()==500 && response.errorBody().contentLength()<200)
                         {
                             fragment.showToast(response.errorBody().string());
                         }
@@ -138,6 +138,11 @@ public class LoginActivity extends SingleFragmentActivity {
                 fragment.showToast("Can not reach CodeFish");
                 fragment.hideProgressBar();
                 t.printStackTrace();
+
+                SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.clear();
+                editor.commit();
             }
         });
 
@@ -166,8 +171,11 @@ public class LoginActivity extends SingleFragmentActivity {
 
             if(userName !=null && userName.length()>0 && password !=null && password.length()>0)
             {
+                fragment.userEdtView.setText(userName);
+                fragment.passEdtView.setText(password);
                 fragment.showProgressBar();
                 getUser(userName,password);
+
             }
         }
     }

@@ -196,7 +196,7 @@ public class WorkflowFormFragment extends Fragment {
                 } else {
 
                     try {
-                        if (response.code() == 404 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
                             Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
                         } else {
                             throw new Exception();

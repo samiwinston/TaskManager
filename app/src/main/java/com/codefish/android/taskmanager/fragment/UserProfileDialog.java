@@ -76,18 +76,17 @@ public class UserProfileDialog extends DialogFragment {
             userInitialsView.setText(bean.getInitials());
         }
 
+       /* int width = getResources().getDimensionPixelSize(R.dimen.popup_width);
+        int height = getResources().getDimensionPixelSize(R.dimen.popup_height);*/
+        //getDialog().getWindow().setLayout(width, height);
+
 
         logOutBtn.setOnClickListener(onLogOutClick());
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-
-
-        getDialog().getWindow().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-        WindowManager.LayoutParams p = getDialog().getWindow().getAttributes();
-        p.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        p.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
-        p.x = 200;
-        getDialog().getWindow().setAttributes(p);
+        //getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        getDialog().getWindow().setLayout(10000, 10000);
+        getDialog().getWindow().setGravity(Gravity.TOP);
 
         return view;
 
