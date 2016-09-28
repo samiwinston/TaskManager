@@ -41,7 +41,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }
@@ -76,7 +76,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }
@@ -137,7 +137,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
 
                     }
                 }

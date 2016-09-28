@@ -66,7 +66,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }
@@ -99,7 +99,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }

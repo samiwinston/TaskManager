@@ -1,7 +1,10 @@
 package com.codefish.android.taskmanager.model;
 
 
-public class WorkflowActionBean {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class WorkflowActionBean implements Parcelable {
 
     private String action;
     private String title;
@@ -18,6 +21,28 @@ public class WorkflowActionBean {
 
     }
 
+    private WorkflowActionBean(Parcel in) {
+        action = in.readString();
+        title = in.readString();
+        allowApprovalSelection  = in.readByte() != 0;
+        allowDueDateSelection = in.readByte() != 0;
+        requiresConfirmation = in.readByte() != 0;
+        visible = in.readByte() != 0;
+        idWorkflowInstance = in.readInt();
+        idWorkflowForm =in.readInt();
+        actionType = in.readString();
+        actionClass = in.readString();
+    }
+
+    public static final Parcelable.Creator<WorkflowActionBean> CREATOR = new Parcelable.Creator<WorkflowActionBean>() {
+        public WorkflowActionBean createFromParcel(Parcel in) {
+            return new WorkflowActionBean(in);
+        }
+
+        public WorkflowActionBean[] newArray(int size) {
+            return new WorkflowActionBean[size];
+        }
+    };
 
 
     public String getAction() {
@@ -98,6 +123,19 @@ public class WorkflowActionBean {
     public void setIdWorkflowForm(Integer idWorkflowForm) {
         this.idWorkflowForm = idWorkflowForm;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
+
+
 
 
 }

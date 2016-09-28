@@ -48,6 +48,8 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     AppCompatImageButton removeAssigneeBtn;
     @Bind(R.id.task_edit_layout_remove_tag)
     AppCompatImageButton removeTagBtn;
+    @Bind(R.id.task_edit_layout_remove_due_date)
+    AppCompatImageButton removeDueDateBtn;
     @Bind(R.id.task_edit_layout_remove_project)
     AppCompatImageButton removeProjectBtn;
     @Bind(R.id.task_edit_layout_add_assignee)
@@ -101,6 +103,29 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            isPossibleAssigneesLoaded = savedInstanceState.getBoolean("isPossibleAssigneesLoaded");
+            isProjectsLoaded = savedInstanceState.getBoolean("isProjectsLoaded");
+            isTagsLoaded = savedInstanceState.getBoolean("isTagsLoaded");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+        outState.putBoolean("isPossibleAssigneesLoaded",isPossibleAssigneesLoaded);
+        outState.putBoolean("isProjectsLoaded",isProjectsLoaded);
+        outState.putBoolean("isTagsLoaded",isTagsLoaded);
+
+    }
+
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -112,6 +137,8 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         taskEditPresenter.getTags();
         isPossibleAssigneesLoaded = isProjectsLoaded = isTagsLoaded = false;
     }
+
+
 
     @Nullable
     @Override
@@ -128,6 +155,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         taskTitleView.setOnClickListener(onTitleClick());
         taskDescView.setOnClickListener(onDescClick());
         deleteTextView.setOnClickListener(onDeleteClick());
+        removeDueDateBtn.setOnClickListener(onRemoveDueDateClick());
 
         if (taskDetailsActivity.selectedTask != null) {
             userTaskBean = taskDetailsActivity.selectedTask;
@@ -150,6 +178,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 removeTagBtn.setOnClickListener(onRemoveTagClick());
                 showTagView();
             }
+
 
             if (userTaskBean.followers != null && userTaskBean.followers.size() > 0) {
                 int numOfFollowers = userTaskBean.followers.size();
@@ -264,9 +293,11 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
     private void initForm() {
         if (userTaskBean.dueDate != null) {
             dueDateTextView.setDate(userTaskBean.dueDate);
+            removeDueDateBtn.setVisibility(View.VISIBLE);
         }
 
     }
+
 
 
     @Override
@@ -330,6 +361,20 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             public void onClick(View v) {
                 taskEditPresenter.unassignTask(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
                         userTaskBean.idTask);
+            }
+        };
+    }
+
+
+    private View.OnClickListener onRemoveDueDateClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer idAppUser = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0);
+                removeDueDateBtn.setVisibility(View.INVISIBLE);
+                taskDetailsActivity.selectedTask.dueDate = null;
+                dueDateTextView.setText(null);
+                taskEditPresenter.removeDueDate(idAppUser,taskDetailsActivity.selectedTask.idTask);
             }
         };
     }
@@ -403,6 +448,11 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                     userTaskBean.dueDate = taskDetailsActivity.selectedTask.dueDate = date;
                     dueDateTextView.setDate(date);
                     taskEditPresenter.updateDueDate(idAppUser,taskDetailsActivity.selectedTask.idTask, date);
+                    removeDueDateBtn.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    removeDueDateBtn.setVisibility(View.INVISIBLE);
                 }
                 break;
             case TasksModel.REQUEST_ASSIGNEE:

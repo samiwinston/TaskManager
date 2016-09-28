@@ -29,14 +29,18 @@ public class SmartDateTextView extends TextView {
 
 
     public void setDate(Date date) {
-        SmartDate smartDate = smartDateFormatter.getSmartDate(date);
-        if (smartDate.getColorResource() > 0)
-            setTextColor(ContextCompat.getColor(getContext(), smartDate.getColorResource()));
-        else
+        if(date!=null)
         {
-            setTextColor(Color.BLACK);
+            SmartDate smartDate = smartDateFormatter.getSmartDate(date);
+            if (smartDate.getColorResource() > 0)
+                setTextColor(ContextCompat.getColor(getContext(), smartDate.getColorResource()));
+            else
+            {
+                setTextColor(Color.BLACK);
+            }
+            setText(smartDate.getFormattedDate());
         }
-        setText(smartDate.getFormattedDate());
+
     }
 
 

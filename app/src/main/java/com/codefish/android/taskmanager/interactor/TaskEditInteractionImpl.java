@@ -42,7 +42,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
 
@@ -74,7 +74,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }
@@ -103,7 +103,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }
@@ -132,7 +132,39 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+
+                taskEditPresenter.showErrorMsg("Can not reach CodeFish");
+            }
+        });
+
+    }
+
+    @Override
+    public void removeDueDate(Integer idTask, Integer idAppUser, final ITaskEditPresenter taskEditPresenter) {
+
+        ServiceModel.getInstance().taskService.removeDueDate(idTask, idAppUser).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    taskEditPresenter.removeDueDateCallBack();
+                } else {
+                    try {
+                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                            taskEditPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }
@@ -164,7 +196,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }
@@ -230,7 +262,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
 

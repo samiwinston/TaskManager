@@ -73,6 +73,32 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         return taskDetailsFragment;
     }*/
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+           loadedWorkflowForm = savedInstanceState.getParcelable("loadedWorkflowForm");
+            workflowButtonIsLoaded = savedInstanceState.getBoolean("workflowButtonIsLoaded");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(loadedWorkflowForm!=null)
+        {
+            outState.putParcelable("loadedWorkflowForm",loadedWorkflowForm);
+            outState.putBoolean("workflowButtonIsLoaded",workflowButtonIsLoaded);
+        }
+
+
+
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,6 +226,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                         .addToBackStack("Back To Parent").commit();
                 return true;
             case R.id.menu_item_complete:
+                item.setEnabled(false);
                 if (taskDetailsActivity.selectedTask.isOpen) {
                     taskDetailsActivity.selectedTask.isOpen = false;
                     item.setIcon(R.drawable.icon_task_details_topbar_task_complete);

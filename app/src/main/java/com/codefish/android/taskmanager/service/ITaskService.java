@@ -81,6 +81,9 @@ public interface ITaskService {
     @GET("updateDueDate")
     Call<ResponseBody> updateDueDate(@Query("idUserTask") Integer idUserTask,
                                @Query("idAppUser") Integer idAppUser,@Query("dueDate") Date dueDate);
+    @GET("removeDueDate")
+    Call<ResponseBody> removeDueDate(@Query("idUserTask") Integer idUserTask,
+                                     @Query("idAppUser") Integer idAppUser);
     @GET("reassignTask")
     Call<ResponseBody> reassignTask(@Query("idUserTask") Integer idUserTask,
                                @Query("idAppUser") Integer idAppUser,@Query("reassignTo") Integer reassignTo);

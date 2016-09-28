@@ -173,6 +173,7 @@ public class TaskEditStrFieldFragment extends Fragment {
                 return true;
             case R.id.menu_item_save:
                 updateTaskField();
+                item.setEnabled(false);
                 View view = getActivity().getCurrentFocus();
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -186,12 +187,14 @@ public class TaskEditStrFieldFragment extends Fragment {
 
     private void updateTaskField() {
 
+
+
         if (editField.getText().length() > 0) {
             ServiceModel.getInstance().taskService.updateTaskField(taskDetailsActivity.selectedTask.idWorkflowInstance, path, editField.getText().toString(), false).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        if (getFragmentManager().getBackStackEntryCount() > 0) {
+                        if (getFragmentManager()!=null && getFragmentManager().getBackStackEntryCount() > 0) {
                             Intent intent = new Intent();
                             intent.putExtra(ARGS_ITEM, editField.getText().toString());
                             getTargetFragment().onActivityResult(requestCode, Activity.RESULT_OK, intent);

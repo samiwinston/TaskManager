@@ -15,10 +15,17 @@ public interface ITaskEditPresenter {
 
     void updateDueDate(Integer idAppUser,Integer idTask,Date date);
     void reassignTask(Integer idAppUser,Integer idTask, Integer reassignTo);
-    void unassignTask(Integer idAppUser,Integer idTask);
+
+    void removeDueDate(Integer idAppUser, Integer idTask);
+
+    void unassignTask(Integer idAppUser, Integer idTask);
     void updateAssignee(Integer idTask, Integer idAssignee);
     void getTaskPossibleAssignees(Integer itTask);
     void setTaskEditView(ITaskEditView taskEditView);
+
+    void removeDueDateCallBack();
+
+
     void updateDueCallBack(Date date);
     void updatePossibleAssignees(List<HashMap<String,Object>> result);
     void reassignTaskCallBack();

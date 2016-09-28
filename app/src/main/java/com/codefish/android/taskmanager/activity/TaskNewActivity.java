@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.codefish.android.taskmanager.fragment.LoginFragment;
 import com.codefish.android.taskmanager.fragment.SingleFragmentActivity;
 import com.codefish.android.taskmanager.fragment.TaskNewFragment;
 import com.codefish.android.taskmanager.fragment.TasksListFragment;
@@ -40,6 +41,17 @@ public class TaskNewActivity extends SingleFragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            taskNewFragment = (TaskNewFragment) getSupportFragmentManager().getFragment(savedInstanceState, "TaskNewFragment");
+
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance

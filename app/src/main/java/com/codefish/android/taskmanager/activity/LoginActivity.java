@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.codefish.android.taskmanager.fragment.LoginFragment;
 import com.codefish.android.taskmanager.fragment.SingleFragmentActivity;
+import com.codefish.android.taskmanager.fragment.TasksListFragment;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobAppUserBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
@@ -39,12 +41,38 @@ public class LoginActivity extends SingleFragmentActivity {
         return fragment;
     }
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            fragment = (LoginFragment) getSupportFragmentManager().getFragment(savedInstanceState, "fragment");
+        }
+
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            fragment = (LoginFragment) getSupportFragmentManager().getFragment(savedInstanceState, "fragment");
+
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+            //Save the fragment's instance
+            getSupportFragmentManager().putFragment(outState, "fragment", fragment);
+
+    }
 
     @Override
     protected void onPostResume() {

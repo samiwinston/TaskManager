@@ -24,12 +24,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
-            android:src="@drawable/logoimage"
+            android:src="@drawable/ac_logo"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="40dp"
-            android:paddingLeft="100dp"
-            android:paddingRight="100dp"
-            android:layout_weight="0.18" />
+            android:paddingLeft="80dp"
+            android:paddingRight="80dp"
+            />
 
         <EditText
             android:layout_width="match_parent"

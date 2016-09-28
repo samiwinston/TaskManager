@@ -14,6 +14,9 @@ public interface ITaskEditInteraction {
 
 
     void updateDueDate(Integer idTask,Date date,Integer idAppUser, final ITaskEditPresenter taskEditPresenter);
+
+    void removeDueDate(Integer idTask, Integer idAppUser, ITaskEditPresenter taskEditPresenter);
+
     void getTaskPossibleAssigness(Integer idTask, ITaskEditPresenter taskEditPresenter);
     void reassignTask(Integer idTask, Integer idAppUser, Integer reassignTo, ITaskEditPresenter taskEditPresenter);
     void deleteTask(Integer idAppUser, int idTask, final ITaskEditPresenter taskEditPresenter);

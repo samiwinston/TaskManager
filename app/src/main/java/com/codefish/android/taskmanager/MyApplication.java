@@ -32,7 +32,7 @@ public class MyApplication extends Application {
     private void initializeInjector() {
 
         appComponent = DaggerAppComponent.builder()
-                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlDev):
+                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlCloudTest):
                         getResources().getString(R.string.baseUrlAcH),new OkHttpClient()))
                 .build();
     }

@@ -31,6 +31,11 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     }
 
     @Override
+    public void removeDueDate(Integer idAppUser,Integer idTask) {
+        taskEditInteraction.removeDueDate(idTask, idAppUser, this);
+    }
+
+    @Override
     public void unassignTask(Integer idAppUser,Integer idTask) {
         taskEditInteraction.reassignTask(idTask, idAppUser, 0, this);
     }
@@ -48,6 +53,11 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     @Override
     public void getTaskPossibleAssignees(Integer idTask) {
         taskEditInteraction.getTaskPossibleAssigness(idTask, this);
+    }
+
+    @Override
+    public void removeDueDateCallBack() {
+        taskEditView.updateDueDateCallBack(null);
     }
 
     @Override
