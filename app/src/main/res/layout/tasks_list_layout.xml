@@ -43,6 +43,15 @@
                     android:src="@drawable/icon_caret_down_small_gray" />
 
 
+              <!--  <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/tasks_list_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/tasks_list_view_projects"
+                    android:background="@color/colorWhite"
+                    android:padding="10dp"
+                    android:src="@drawable/icon_plus_small" />-->
+
                 <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/tasks_list_view_projects"
                     android:layout_width="wrap_content"

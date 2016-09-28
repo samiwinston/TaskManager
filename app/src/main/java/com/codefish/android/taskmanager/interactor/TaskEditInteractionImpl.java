@@ -42,7 +42,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
                     }
                 }
 
@@ -74,7 +74,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
                     }
                 }
             }
@@ -103,7 +103,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
                     }
                 }
             }
@@ -132,7 +132,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
                     }
                 }
             }
@@ -164,7 +164,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
                     }
                 }
             }
@@ -230,7 +230,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskEditPresenter.showErrorMsg("Illegal error, please contact the admin!!");
+                        taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +"please contact the admin");
                     }
                 }
 

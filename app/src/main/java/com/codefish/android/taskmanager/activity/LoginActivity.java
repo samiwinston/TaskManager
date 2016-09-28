@@ -124,7 +124,7 @@ public class LoginActivity extends SingleFragmentActivity {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        fragment.showToast("Illegal error, please contact the admin");
+                        fragment.showToast("Illegal error "+response.code()+", please contact the admin");
                     }
 
                 }

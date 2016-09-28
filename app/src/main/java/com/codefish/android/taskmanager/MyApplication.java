@@ -33,7 +33,7 @@ public class MyApplication extends Application {
 
         appComponent = DaggerAppComponent.builder()
                 .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlDev):
-                        getResources().getString(R.string.baseUrlAcHTest),new OkHttpClient()))
+                        getResources().getString(R.string.baseUrlAcH),new OkHttpClient()))
                 .build();
     }
 

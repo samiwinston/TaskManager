@@ -61,6 +61,8 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     TextView projectTitleView;
     @Bind(R.id.tasks_list_view_projects)
     AppCompatImageButton projectsBtn;
+   /* @Bind(R.id.tasks_list_action)
+    AppCompatImageButton requestLeave;*/
     @Bind(R.id.tasks_list_layout_mic)
     AppCompatImageButton micBtn;
     @Bind(R.id.tasks_list_layout_coordinator_layout)
@@ -129,11 +131,21 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
         });
         projectsNavListView.setOnItemClickListener(onProjNavClick());
+        //requestLeave.setOnClickListener(onRequestLeaveClick());
 
         Log.v("OnCreatView","On Create View In TasksListFragment");
 
         initListData();
         return view;
+    }
+
+    private View.OnClickListener onRequestLeaveClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              Log.v("CLICK","buttonClicked");
+            }
+        };
     }
 
     private AdapterView.OnItemClickListener onProjNavClick() {

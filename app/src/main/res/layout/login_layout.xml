@@ -17,7 +17,8 @@
         android:id="@+id/linearLayout"
         android:layout_centerHorizontal="true"
         android:layout_weight="1"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:weightSum="1">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -25,7 +26,10 @@
             android:id="@+id/imageView"
             android:src="@drawable/logoimage"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"/>
+            android:layout_marginBottom="40dp"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
+            android:layout_weight="0.18" />
 
         <EditText
             android:layout_width="match_parent"

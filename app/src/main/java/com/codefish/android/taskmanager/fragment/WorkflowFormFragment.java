@@ -203,7 +203,7 @@ public class WorkflowFormFragment extends Fragment {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Toast.makeText(getContext(), "Illegal error, please contact the admin", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Illegal error "+response.code()+", please contact the admin", Toast.LENGTH_LONG).show();
                     }
 
 
