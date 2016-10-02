@@ -31,7 +31,6 @@ public class MyApplication extends Application {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         initializeInjector();
-
     }
 
     private void initializeInjector() {
