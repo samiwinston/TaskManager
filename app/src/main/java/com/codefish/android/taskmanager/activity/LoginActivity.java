@@ -16,7 +16,9 @@ import com.codefish.android.taskmanager.fragment.TasksListFragment;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobAppUserBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
+import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.crashlytics.android.Crashlytics;
+import com.google.common.primitives.Booleans;
 import com.google.gson.Gson;
 
 
@@ -30,15 +32,15 @@ import retrofit2.Response;
 public class LoginActivity extends SingleFragmentActivity {
 
 
-    private LoginFragment fragment;
+    private LoginFragment loginFragment;
     private boolean mock = false;
 
     public static final String MyPREFERENCES = "MyPrefs" ;
 
     @Override
     protected Fragment createFragment() {
-        fragment = new LoginFragment();
-        return fragment;
+        loginFragment = new LoginFragment();
+        return loginFragment;
     }
 
 
@@ -49,7 +51,7 @@ public class LoginActivity extends SingleFragmentActivity {
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance
-            fragment = (LoginFragment) getSupportFragmentManager().getFragment(savedInstanceState, "fragment");
+            loginFragment = (LoginFragment) getSupportFragmentManager().getFragment(savedInstanceState, "loginFragment");
         }
 
     }
@@ -60,7 +62,7 @@ public class LoginActivity extends SingleFragmentActivity {
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance
-            fragment = (LoginFragment) getSupportFragmentManager().getFragment(savedInstanceState, "fragment");
+            loginFragment = (LoginFragment) getSupportFragmentManager().getFragment(savedInstanceState, "loginFragment");
 
         }
     }
@@ -70,7 +72,7 @@ public class LoginActivity extends SingleFragmentActivity {
         super.onSaveInstanceState(outState, outPersistentState);
 
             //Save the fragment's instance
-            getSupportFragmentManager().putFragment(outState, "fragment", fragment);
+            getSupportFragmentManager().putFragment(outState, "loginFragment", loginFragment);
 
     }
 
@@ -80,24 +82,25 @@ public class LoginActivity extends SingleFragmentActivity {
         if (mock)
         {
            // LoginModel.getInstance().setUserBean(new MobAppUserBean(1164,"Abed Chmaytilli"));
-            navigateToTasksView();
+            navigateToTasksView(null);
         }
     }
 
-    public void navigateToTasksView() {
+    public void navigateToTasksView(WidgetActionItemBean leaveActionItemBean) {
         Intent intent = TasksListActivity.newInstance(this);
+        intent.putExtra("leaveActionItemBean",leaveActionItemBean);
         startActivity(intent);
     }
 
 
     public void validateCredentials(String username, String password) {
-        fragment.showProgressBar();
+        loginFragment.showProgressBar();
 
 
         if (username == null || username.length() == 0
                 || password == null || password.length() == 0) {
-            fragment.showToast("Please check your username or password");
-            fragment.hideProgressBar();
+            loginFragment.showToast("Please check your username or password");
+            loginFragment.hideProgressBar();
             return;
         }
         getUser(username, password);
@@ -113,7 +116,21 @@ public class LoginActivity extends SingleFragmentActivity {
                     MobAppUserBean user = response.body();
                     if (user.getId() > 0) {
                         LoginModel.getInstance().setUserBean(user);
-                        navigateToTasksView();
+                        WidgetActionItemBean leaveActionBean = null;
+
+                        if(user.getActionItems()!=null && user.getActionItems().length>0)
+                        {
+                            for (WidgetActionItemBean actionBean:user.getActionItems()) {
+                                if(actionBean.workflowName!=null && actionBean.workflowName.equals("hrLeaveRequestWorkflow"))
+                                {
+                                    leaveActionBean = actionBean;
+                                    break;
+                                }
+                            }
+                        }
+
+
+                        navigateToTasksView(leaveActionBean);
                         finish();
 
 
@@ -136,15 +153,15 @@ public class LoginActivity extends SingleFragmentActivity {
 
 
                     } else {
-                        fragment.showToast("Can not login, please check your username or password");
+                        loginFragment.showToast("Can not login, please check your username or password");
                     }
 
 
                 } else {
                     try {
-                        if(response.code()==500 && response.errorBody().contentLength()<200)
+                        if(response.code()==500 && response.errorBody().contentLength()<500)
                         {
-                            fragment.showToast(response.errorBody().string());
+                            loginFragment.showToast(response.errorBody().string());
                         }
                         else
                         {
@@ -152,19 +169,19 @@ public class LoginActivity extends SingleFragmentActivity {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        fragment.showToast("Illegal error "+response.code()+", please contact the admin");
+                        loginFragment.showToast("Illegal error "+response.code()+", please contact the admin");
                     }
 
                 }
 
-                fragment.hideProgressBar();
+                loginFragment.hideProgressBar();
 
             }
 
             @Override
             public void onFailure(Call<MobAppUserBean> call, Throwable t) {
-                fragment.showToast("Can not reach CodeFish");
-                fragment.hideProgressBar();
+                loginFragment.showToast("Can not reach CodeFish");
+                loginFragment.hideProgressBar();
                 t.printStackTrace();
 
                 SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -199,9 +216,9 @@ public class LoginActivity extends SingleFragmentActivity {
 
             if(userName !=null && userName.length()>0 && password !=null && password.length()>0)
             {
-                fragment.userEdtView.setText(userName);
-                fragment.passEdtView.setText(password);
-                fragment.showProgressBar();
+                loginFragment.userEdtView.setText(userName);
+                loginFragment.passEdtView.setText(password);
+                loginFragment.showProgressBar();
                 getUser(userName,password);
 
             }

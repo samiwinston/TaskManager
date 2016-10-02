@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -108,10 +109,18 @@ public class TaskNewFragment extends Fragment implements View.OnClickListener {
 
     }
 
+/*
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         taskNewActivity = (TaskNewActivity) activity;
+    }
+*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        taskNewActivity = (TaskNewActivity) context;
     }
 
     @Override
@@ -150,7 +159,7 @@ public class TaskNewFragment extends Fragment implements View.OnClickListener {
 
                     } else {
                         try {
-                            if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                            if (response.code() == 500 && response.errorBody().contentLength()<500) {
                                 Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG);
                             } else {
                                 throw new Exception();

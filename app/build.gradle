@@ -55,13 +55,14 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.android.support:support-annotations:23.1.1'
-    compile 'com.squareup:android-times-square:1.6.5@aar'
+    compile 'com.android.support:support-annotations:24.2.1'
+    compile 'com.github.clans:fab:1.6.4'
+    compile 'com.prolificinteractive:material-calendarview:1.4.0'
 
     androidTestCompile 'com.android.support.test:runner:0.3'
     androidTestCompile 'com.android.support.test:rules:0.3'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
-    androidTestCompile 'com.android.support:support-annotations:23.1.1'
+    androidTestCompile 'com.android.support:support-annotations:24.2.1'
 
     // add this for intent mocking support
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'

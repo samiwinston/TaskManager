@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -103,10 +104,16 @@ public class TaskFollowersFragment extends Fragment {
     }
 
 
-    @Override
+  /*  @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         taskDetailsActivity = (TaskDetailsActivity) activity;
+    }*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        taskDetailsActivity = (TaskDetailsActivity) context;
     }
 
     @Override
@@ -124,7 +131,7 @@ public class TaskFollowersFragment extends Fragment {
 
                     } else {
                         try {
-                            if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                            if (response.code() == 500 && response.errorBody().contentLength()<500) {
                                 Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
                             } else {
                                 throw new Exception();

@@ -1,22 +1,21 @@
 package com.codefish.android.taskmanager.interactor;
 
 
-import android.widget.Toast;
-
 import com.codefish.android.taskmanager.MyApplication;
 import com.codefish.android.taskmanager.component.tasksRecyclerView.TaskListAdapter;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.GetUserTasksParameter;
-import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.MobWorkflowBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
-import com.codefish.android.taskmanager.model.UserTask;
 import com.codefish.android.taskmanager.model.UserTaskBean;
+import com.codefish.android.taskmanager.model.hr.ICustomFormBean;
+import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
+import com.codefish.android.taskmanager.model.hr.SimpleLeaveRequestFormBean;
 import com.codefish.android.taskmanager.presenter.ITaskPresenter;
-import com.codefish.android.taskmanager.presenter.TaskPresenterImpl;
+import com.codefish.android.taskmanager.service.IHrService;
 import com.codefish.android.taskmanager.service.ITaskService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -25,7 +24,6 @@ import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by abedch on 2/15/2016.
@@ -35,6 +33,9 @@ public class TaskInteractionImpl implements ITaskInteraction {
 
     @Inject
     ITaskService taskService;
+
+    @Inject
+    IHrService hrService;
 
     @Inject
     TaskListAdapter taskListAdapter;
@@ -59,7 +60,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
                     taskPresenter.refreshList();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -92,7 +93,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
                     taskPresenter.refreshList();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();

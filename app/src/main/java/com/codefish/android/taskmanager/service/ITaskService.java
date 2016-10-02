@@ -3,18 +3,19 @@ package com.codefish.android.taskmanager.service;
 
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.GetUserTasksParameter;
-import com.codefish.android.taskmanager.model.MobUserTaskBean;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.SaveEntityAction;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.TaskListBean;
 import com.codefish.android.taskmanager.model.UserTaskBean;
+import com.codefish.android.taskmanager.model.MobWorkflowBean;
+import com.codefish.android.taskmanager.model.hr.ICustomFormBean;
+import com.codefish.android.taskmanager.model.hr.SimpleLeaveRequestFormBean;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -35,14 +36,17 @@ public interface ITaskService {
     Call<List<HashMap<String,Object>>> getMyProjects(@Query("idAppUser") Integer idAppUser,@Query("getStats") Boolean getStats
                                                      ,@Query("closedProjects") Boolean closedProjects);
 
-    @GET("getTags")
-    Call<List<HashMap<String,Object>>> getTags(@Query("searchText") String searchText);
+    @GET("getSearchableItems")
+    Call<List<HashMap<String,Object>>> getSearchableItems(@Query("searchText") String searchText,@Query("baseEntity") String baseEntity);
 
     @POST("getTask")
     Call<UserTaskBean> getTask(@Body GetTaskParameter params);
 
     @POST("createTask")
     Call<UserTaskBean> createTask(@Body TaskListBean params);
+
+    @POST("getCustomFormBean")
+    Call<ICustomFormBean> getCustomFormBean(@Body SubmitActionParam submitParams);
 
     @GET("getTaskPossibleAssignees")
     Call<List<HashMap<String,Object>>> getTaskPossibleAssignees(@Query("idTask") Integer idTask);

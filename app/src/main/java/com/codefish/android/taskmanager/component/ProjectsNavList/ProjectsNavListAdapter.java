@@ -88,7 +88,7 @@ public class ProjectsNavListAdapter extends BaseAdapter {
                     notifyDataSetChanged();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             Toast.makeText(mContext, response.errorBody().string(), Toast.LENGTH_LONG).show();
                         } else {
                             throw new Exception();

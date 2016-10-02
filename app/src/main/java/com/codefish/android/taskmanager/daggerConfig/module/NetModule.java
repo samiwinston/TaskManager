@@ -1,6 +1,9 @@
 package com.codefish.android.taskmanager.daggerConfig.module;
 
 
+import com.codefish.android.taskmanager.model.deserializer.MyDeserializer;
+import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
+import com.codefish.android.taskmanager.service.IHrService;
 import com.codefish.android.taskmanager.service.IProjectService;
 import com.codefish.android.taskmanager.service.IReportingService;
 import com.codefish.android.taskmanager.service.ITaskService;
@@ -13,6 +16,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -30,13 +35,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetModule {
 
     private final String baseUrl;
+    private final String hrBaseUrl;
     private final OkHttpClient okHttpClient;
     private final Gson gson;
 
-    public NetModule(String baseUrl, OkHttpClient okHttpClient) {
+    public NetModule(String baseUrl, String hrBaseUrl, OkHttpClient okHttpClient) {
         this.baseUrl = baseUrl;
+        this.hrBaseUrl = hrBaseUrl;
         this.okHttpClient = okHttpClient;
         this.gson = new GsonBuilder()
+                //.registerTypeAdapter(MobLeaveRequestFormBean.class,new MyDeserializer<MobLeaveRequestFormBean>())
                 .registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
                     @Override
                     public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {
@@ -44,7 +52,7 @@ public class NetModule {
                         return new JsonPrimitive(value);
                     }
                 })
-                .setDateFormat("yyyy-MM-dd")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .setLenient()
                 .create();
     }
@@ -60,6 +68,18 @@ public class NetModule {
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson)).build().create(ITaskService.class);
         return taskService;
+    }
+
+    @Provides
+    @Singleton
+    IHrService providesHrService() {
+
+        IHrService hrService = new Retrofit.
+                Builder()
+                .client(okHttpClient)
+                .baseUrl(hrBaseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson)).build().create(IHrService.class);
+        return hrService;
     }
 
     @Provides

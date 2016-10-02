@@ -8,6 +8,11 @@ import com.codefish.android.taskmanager.daggerConfig.component.DaggerAppComponen
 import com.codefish.android.taskmanager.daggerConfig.module.NetModule;
 
 import com.crashlytics.android.Crashlytics;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 
@@ -31,9 +36,13 @@ public class MyApplication extends Application {
 
     private void initializeInjector() {
 
+        Map<String,String> map = new HashMap<>();
+        map.put("frmwork",getResources().getString(R.string.frmworkUrlEP));
+        map.put("hr",getResources().getString(R.string.hrUrlEP));
+
         appComponent = DaggerAppComponent.builder()
-                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlCloudTest):
-                        getResources().getString(R.string.baseUrlAcH),new OkHttpClient()))
+                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlDev):
+                        getResources().getString(R.string.baseUrlAcH),getResources().getString(R.string.baseUrlHrDev),new OkHttpClient()))
                 .build();
     }
 

@@ -80,14 +80,17 @@ public class TaskAddProjectFragment extends Fragment implements IGenericCallBack
     }
 
 
-    @Override
+  /*  @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         taskDetailsActivity = (TaskDetailsActivity) activity;
+    }*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        taskDetailsActivity = (TaskDetailsActivity) context;
     }
-
-
-
 
     private void initToolBar() {
         taskDetailsActivity.setSupportActionBar(toolbar);

@@ -21,28 +21,9 @@ public class WorkflowActionBean implements Parcelable {
 
     }
 
-    private WorkflowActionBean(Parcel in) {
-        action = in.readString();
-        title = in.readString();
-        allowApprovalSelection  = in.readByte() != 0;
-        allowDueDateSelection = in.readByte() != 0;
-        requiresConfirmation = in.readByte() != 0;
-        visible = in.readByte() != 0;
-        idWorkflowInstance = in.readInt();
-        idWorkflowForm =in.readInt();
-        actionType = in.readString();
-        actionClass = in.readString();
-    }
 
-    public static final Parcelable.Creator<WorkflowActionBean> CREATOR = new Parcelable.Creator<WorkflowActionBean>() {
-        public WorkflowActionBean createFromParcel(Parcel in) {
-            return new WorkflowActionBean(in);
-        }
 
-        public WorkflowActionBean[] newArray(int size) {
-            return new WorkflowActionBean[size];
-        }
-    };
+
 
 
     public String getAction() {
@@ -132,10 +113,40 @@ public class WorkflowActionBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(this.action);
+        dest.writeString(this.title);
+        dest.writeValue(this.allowApprovalSelection);
+        dest.writeValue(this.allowDueDateSelection);
+        dest.writeValue(this.requiresConfirmation);
+        dest.writeValue(this.visible);
+        dest.writeValue(this.idWorkflowInstance);
+        dest.writeValue(this.idWorkflowForm);
+        dest.writeString(this.actionType);
+        dest.writeString(this.actionClass);
     }
 
+    protected WorkflowActionBean(Parcel in) {
+        this.action = in.readString();
+        this.title = in.readString();
+        this.allowApprovalSelection = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.allowDueDateSelection = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.requiresConfirmation = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.visible = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.idWorkflowInstance = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.idWorkflowForm = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.actionType = in.readString();
+        this.actionClass = in.readString();
+    }
 
+    public static final Parcelable.Creator<WorkflowActionBean> CREATOR = new Parcelable.Creator<WorkflowActionBean>() {
+        @Override
+        public WorkflowActionBean createFromParcel(Parcel source) {
+            return new WorkflowActionBean(source);
+        }
 
-
+        @Override
+        public WorkflowActionBean[] newArray(int size) {
+            return new WorkflowActionBean[size];
+        }
+    };
 }

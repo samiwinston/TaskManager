@@ -17,6 +17,8 @@ public class TasksModel {
     public static final int REQUEST_FOLLOWER = 1010;
     public static final int REQUEST_DOC = 1011;
     public static final int REQUEST_TASK_UPDATE= 1012;
+    public static final int REQUEST_WORKFLOW_TASK_UPDATE= 1013;
+    public static final int REQUEST_CLOSED_SUMMARY= 1014;
 
 
     private TasksModel() {

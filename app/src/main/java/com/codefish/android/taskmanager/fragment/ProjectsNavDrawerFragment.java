@@ -64,10 +64,6 @@ public class ProjectsNavDrawerFragment extends Fragment {
 
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

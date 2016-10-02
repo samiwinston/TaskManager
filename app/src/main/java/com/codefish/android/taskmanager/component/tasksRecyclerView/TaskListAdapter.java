@@ -101,7 +101,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         holder.bean = bean;
         holder.taskTitleView.setText(bean.title);
         if (bean.currentState != null && !bean.currentState.equals("Open")) {
-            holder.currentStateView.setText(bean.currentState);
+            holder.currentStateView.setText(bean.getCurrentStateLbl());
             holder.currentStateView.setVisibility(View.VISIBLE);
         } else {
             holder.currentStateView.setVisibility(View.GONE);

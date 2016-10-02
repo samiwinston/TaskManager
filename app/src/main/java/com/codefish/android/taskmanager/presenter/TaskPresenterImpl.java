@@ -9,6 +9,8 @@ import com.codefish.android.taskmanager.model.GetUserTasksParameter;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
+import com.codefish.android.taskmanager.model.WidgetActionItemBean;
+import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
 /**
  * Created by abedch on 2/9/2016.
@@ -26,11 +28,8 @@ public class TaskPresenterImpl implements ITaskPresenter {
     }
 
 
-
-
-
     @Override
-    public void getUserTasks(Integer idAppUser,Integer idSelectedProject) {
+    public void getUserTasks(Integer idAppUser, Integer idSelectedProject) {
 
         //Integer idAppUser = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0)
 
@@ -52,7 +51,7 @@ public class TaskPresenterImpl implements ITaskPresenter {
             param.idWorkflowInstance = idSelectedProject;
             param.showCompleted = false;
             param.getSubtasks = true;
-            param.getProjectPhases = true;
+            param.getProjectPhases = false;
 
             taskInteraction.getProjectTasks(param, this);
         }
@@ -82,4 +81,5 @@ public class TaskPresenterImpl implements ITaskPresenter {
     public void selectTask(UserTaskBean bean, int position) {
         taskView.selectTask(bean, position);
     }
+
 }

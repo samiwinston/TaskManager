@@ -120,6 +120,14 @@ public class UserTaskBean {
 
     }
 
+    public String getCurrentStateLbl(){
+
+        if(requiresReview)
+        return currentState+" (Pend. Approval)";
+
+        return currentState;
+    }
+
     public boolean canTakeAction()
     {
         return  (isOwner || (isAssignee && idOwner==null)) && isOpen;

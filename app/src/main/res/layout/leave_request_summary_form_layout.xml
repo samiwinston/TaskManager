@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/leave_request_summary_form_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorWhite"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/leave_request_summary_form_leave_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/colorPrimary"
+                android:ellipsize="end"
+                android:lines="1"
+                android:padding="17dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_columnSpan="2"
+                android:background="@color/colorLightGrey" />
+
+            <LinearLayout android:id="@+id/leave_request_form_warning_grp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_warning_msg" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_warning_msg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:visibility="gone"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/colorRed"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_warning_msg"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/leave_request_summary_form_days_allowed_grp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_plane_black"
+                    />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_form_days_allowed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingLeft="5dp"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_days_allowed"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/leave_request_summary_form_days_remaining_grp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_plane_black" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_form_days_remaining"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_days_remaining"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/leave_request_form_days_requested_grp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_plane_black" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_form_days_requested"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_days_requested"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/leave_request_form_days_requested_startDateGrp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_menu_date" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_form_days_requested_startDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_days_requested_startDate"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/leave_request_form_days_requested_endDateGrp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_menu_date" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_form_days_requested_endDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_days_requested_endDate"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/leave_request_summary_form_days_phone_grp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_phone_black" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/leave_request_summary_form_phone_on_leave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:hint="Enter phone on leave"
+                        android:background="@android:color/transparent"
+                        android:maxLength="15"
+                        android:inputType="phone"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_phone_on_leave"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout android:id="@+id/leave_request_summary_form_days_address_grp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_bed_black" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_form_address_on_leave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:text="10 days requested"
+                        android:lines="1"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_address_on_leave"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+            <LinearLayout android:id="@+id/leave_request_form_days_country_grp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_earth" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_form_country"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:text="Add country"
+                        android:lines="1"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_country"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
+            <!-- </GridLayout>-->
+
+            <TextView
+                android:id="@+id/leave_request_summary_form_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="18dp"
+                android:text="SUBMIT LEAVE"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat"
+                android:textColor="@color/colorLGreen" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

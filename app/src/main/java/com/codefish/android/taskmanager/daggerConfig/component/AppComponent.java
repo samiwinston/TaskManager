@@ -4,6 +4,8 @@ import com.codefish.android.taskmanager.activity.LoginActivity;
 import com.codefish.android.taskmanager.component.smartDateView.SmartDateButton;
 import com.codefish.android.taskmanager.component.smartDateView.SmartDateTextView;
 import com.codefish.android.taskmanager.component.tasksRecyclerView.TaskListAdapter;
+import com.codefish.android.taskmanager.fragment.LeaveFormSummaryFragment;
+import com.codefish.android.taskmanager.fragment.LeaveWorkflowFormFragment;
 import com.codefish.android.taskmanager.fragment.TaskDetailsFragment;
 import com.codefish.android.taskmanager.fragment.TaskEditFragment;
 import com.codefish.android.taskmanager.fragment.TaskNewFragment;
@@ -12,6 +14,7 @@ import com.codefish.android.taskmanager.interactor.LoginInteractionImpl;
 import com.codefish.android.taskmanager.daggerConfig.module.AppModule;
 import com.codefish.android.taskmanager.daggerConfig.module.NetModule;
 import com.codefish.android.taskmanager.interactor.TaskInteractionImpl;
+import com.codefish.android.taskmanager.interactor.WorkflowFormInteractionImpl;
 import com.codefish.android.taskmanager.model.ServiceModel;
 
 import javax.inject.Singleton;
@@ -28,6 +31,9 @@ public interface AppComponent {
 
     void inject(LoginActivity loginActivity);
     void inject(TasksListFragment tasksListFragment);
+    void inject(LeaveWorkflowFormFragment leaveWorkflowFormFragment);
+    void inject(LeaveFormSummaryFragment leaveFormSummaryFragment);
+    void inject(WorkflowFormInteractionImpl workflowFormInteraction);
     void inject(LoginInteractionImpl loginInteraction);
     void inject(TaskInteractionImpl loginInteraction);
     void inject(TaskListAdapter taskListAdapter);

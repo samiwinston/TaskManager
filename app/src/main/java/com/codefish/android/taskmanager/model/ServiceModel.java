@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.model;
 
 import com.codefish.android.taskmanager.MyApplication;
+import com.codefish.android.taskmanager.service.IHrService;
 import com.codefish.android.taskmanager.service.IProjectService;
 import com.codefish.android.taskmanager.service.IReportingService;
 import com.codefish.android.taskmanager.service.ITaskService;
@@ -23,6 +24,8 @@ public class ServiceModel {
     public IUserService userService;
     @Inject
     public ITaskService taskService;
+    @Inject
+    public IHrService hrService;
 
     private ServiceModel()
     {

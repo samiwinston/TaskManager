@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -40,7 +41,7 @@ import butterknife.ButterKnife;
  */
 public class TaskEditFragment extends Fragment implements ITaskEditView {
 
-    @Bind(R.id.my_toolbar)
+    @Bind(R.id.task_edit_layout_toolbar)
     Toolbar toolbar;
     @Bind(R.id.task_edit_layout_due_date)
     SmartDateTextView dueDateTextView;
@@ -429,10 +430,16 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         }
     }
 
-    @Override
+ /*   @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         taskDetailsActivity = (TaskDetailsActivity) activity;
+    }*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        taskDetailsActivity = (TaskDetailsActivity) context;
     }
 
     @Override

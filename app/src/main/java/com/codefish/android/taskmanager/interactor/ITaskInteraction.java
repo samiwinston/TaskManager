@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * Created by abedch on 2/22/2016.
  */
 public interface ITaskInteraction {
-   void getUserTasks(GetUserTasksParameter getUserTasksParameter,ITaskPresenter taskPresenter);
+
+   void getUserTasks(GetUserTasksParameter getUserTasksParameter, ITaskPresenter taskPresenter);
    void getProjectTasks(GetTaskParameter param, ITaskPresenter taskPresenter);
 }

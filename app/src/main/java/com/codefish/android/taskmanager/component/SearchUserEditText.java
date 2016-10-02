@@ -146,7 +146,7 @@ public class SearchUserEditText extends EditText {
                     showList();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
                         } else {
                             throw new Exception();

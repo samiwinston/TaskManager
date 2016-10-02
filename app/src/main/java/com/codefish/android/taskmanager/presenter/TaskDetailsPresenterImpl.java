@@ -50,7 +50,12 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     public void changeState(Integer idAppUser,UserTaskBean userTaskBean) {
         SubmitActionParam submitParams= new SubmitActionParam();
         submitParams.idWorkflowInstance = userTaskBean.idWorkflowInstance;
-        submitParams.actionName = "_action0";
+        if(userTaskBean.isOpen)
+        submitParams.actionName = "_action1";
+        else
+        {
+            submitParams.actionName = "_action0";
+        }
         submitParams.idWorkflowForm = userTaskBean.idTask;
         submitParams.idAppUser = idAppUser;
         submitParams.returnWorkflowBean = false;

@@ -127,7 +127,7 @@ public class SearchTagEditText extends EditText implements IGenericCallBack {
     }
 
     private void refreshList(CharSequence searchText) {
-        ServiceModel.getInstance().taskService.getTags(searchText.toString()).enqueue(callBack());
+        ServiceModel.getInstance().taskService.getSearchableItems(searchText.toString(),"WorkflowInstanceCategory").enqueue(callBack());
     }
 
     private Callback<List<HashMap<String, Object>>> callBack(){
@@ -144,7 +144,7 @@ public class SearchTagEditText extends EditText implements IGenericCallBack {
                 else
                 {
                     try {
-                        if(response.code()==500 && response.errorBody().contentLength()<200)
+                        if(response.code()==500 && response.errorBody().contentLength()<500)
                         {
                             Toast.makeText(context, response.errorBody().string(), Toast.LENGTH_LONG).show();
                         }

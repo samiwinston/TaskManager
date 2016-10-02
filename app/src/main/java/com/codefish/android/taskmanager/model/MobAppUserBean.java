@@ -14,6 +14,7 @@ public class MobAppUserBean {
     private String name;
     private String email;
     private String username;
+    private WidgetActionItemBean[] actionItems;
 
     public MobAppUserBean(int id, String name) {
         this.id = id;
@@ -95,5 +96,13 @@ public class MobAppUserBean {
             return this.name.charAt(0)+""+this.name.charAt(this.name.lastIndexOf(' ')+1);
         }
         return "";
+    }
+
+    public WidgetActionItemBean[] getActionItems() {
+        return actionItems;
+    }
+
+    public void setActionItems(WidgetActionItemBean[] actionItems) {
+        this.actionItems = actionItems;
     }
 }

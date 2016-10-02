@@ -110,10 +110,16 @@ public class TaskEditStrFieldFragment extends Fragment {
     }
 
 
-    @Override
+    /*@Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         taskDetailsActivity = (TaskDetailsActivity) activity;
+    }*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        taskDetailsActivity = (TaskDetailsActivity) context;
     }
 
     @Override
@@ -202,7 +208,7 @@ public class TaskEditStrFieldFragment extends Fragment {
                         }
                     } else {
                         try {
-                            if(response.code()==500 && response.errorBody().contentLength()<200)
+                            if(response.code()==500 && response.errorBody().contentLength()<500)
                             {
                                 Toast.makeText(getContext(),  response.errorBody().string(), Toast.LENGTH_LONG).show();
                             }

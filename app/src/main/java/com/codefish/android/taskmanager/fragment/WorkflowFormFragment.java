@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -89,6 +90,25 @@ public class WorkflowFormFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mobWorkflowForm = savedInstanceState.getParcelable("mobWorkflowForm");
+            idWorkflowInstance = savedInstanceState.getInt("idWorkflowInstance");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+        outState.putParcelable("mobWorkflowForm",mobWorkflowForm);
+        outState.putInt("idWorkflowInstance",idWorkflowInstance);
+
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,6 +137,9 @@ public class WorkflowFormFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.workflow_form_layout, container, false);
         ButterKnife.bind(this, view);
+
+        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         webView.setWebViewClient(new WebViewClient() {
 
@@ -166,10 +189,17 @@ public class WorkflowFormFragment extends Fragment {
     }
 
 
-    @Override
+   /* @Override
     public void onAttach(Activity activity) {
         taskDetailsActivity = (TaskDetailsActivity) activity;
         super.onAttach(activity);
+    }*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        taskDetailsActivity = (TaskDetailsActivity) context;
+
     }
 
     @Override
@@ -196,7 +226,7 @@ public class WorkflowFormFragment extends Fragment {
                 } else {
 
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
                         } else {
                             throw new Exception();

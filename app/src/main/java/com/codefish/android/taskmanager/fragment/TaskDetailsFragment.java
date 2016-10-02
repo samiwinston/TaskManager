@@ -1,6 +1,7 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -44,7 +45,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
 
     public static final int REQUEST_TASK_BEAN = 1010;
 
-    @Bind(R.id.my_toolbar)
+    @Bind(R.id.task_details_layout_toolbar)
     Toolbar toolbar;
     @Bind(R.id.task_details_due_date)
     SmartDateButton dueDateBtn;
@@ -67,6 +68,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     TaskEditFragment taskEditFragment;
     private MobWorkflowForm loadedWorkflowForm = null;
     private boolean workflowButtonIsLoaded=false;
+    Menu menu;
 
   /*  public static TaskDetailsFragment newInstance() {
         TaskDetailsFragment taskDetailsFragment = new TaskDetailsFragment();
@@ -105,7 +107,6 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         MyApplication.getAppComponent().inject(this);
         setHasOptionsMenu(true);
         taskDetailsPresenter.setTaskDetailsView(this);
-        taskEditFragment = TaskEditFragment.newInstance(TaskDetailsFragment.this);
         if (taskDetailsActivity.selectedTask != null)
             taskDetailsPresenter.getTask(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
                     taskDetailsActivity.selectedTask.idWorkflowInstance);
@@ -189,9 +190,12 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.task_details_menu, menu);
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(menu!=null)
+            this.menu = menu;
+
+
         if (taskDetailsActivity.selectedTask.importance == 1) {
             MenuItem menuItem = menu.findItem(R.id.menu_item_important);
             menuItem.setIcon(R.drawable.icon_task_details_topbar_heart_filled);
@@ -211,6 +215,14 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
             menuItem.setIcon(R.drawable.icon_task_details_topbar_task_complete);
         }
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.task_details_menu, menu);
+
+
 
     }
 
@@ -222,6 +234,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 goBackToList();
                 return true;
             case R.id.menu_item_edit:
+                taskEditFragment = TaskEditFragment.newInstance(TaskDetailsFragment.this);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, taskEditFragment)
                         .addToBackStack("Back To Parent").commit();
                 return true;
@@ -258,7 +271,9 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         Intent intent = new Intent();
         intent.putExtras(taskDetailsActivity.selectedTask.getBundle());
         intent.putExtra("hasNoFollowers", taskDetailsActivity.selectedTask.hasNoFollowers());
-        if (!taskDetailsActivity.selectedTask.isOpen || ( taskDetailsActivity.idSelectedProject!=0 && (!taskDetailsActivity.selectedTask.idGroup.equals(taskDetailsActivity.idSelectedProject)))) {
+        if ((!taskDetailsActivity.selectedTask.isOpen &&  (taskDetailsActivity.selectedTask.requiresReview ==null || !taskDetailsActivity.selectedTask.requiresReview))||
+                ( taskDetailsActivity.idSelectedProject!=0 &&
+                        (!taskDetailsActivity.selectedTask.idGroup.equals(taskDetailsActivity.idSelectedProject)))) {
 
             intent.putExtra("deleteThisTask", true);
         }
@@ -266,12 +281,17 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         getActivity().finish();
     }
 
-    @Override
+/*    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         taskDetailsActivity = (TaskDetailsActivity) activity;
-    }
+    }*/
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        taskDetailsActivity = (TaskDetailsActivity) context;
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -320,7 +340,11 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
 
     @Override
     public void changeStateCBH() {
-
+        if(menu!=null)
+        {
+            MenuItem menuItem = menu.findItem(R.id.menu_item_complete);
+            menuItem.setEnabled(true);
+        }
     }
 
     @Override

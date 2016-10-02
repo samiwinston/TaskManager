@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/leave_request_form_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorLightGrey"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Request Leave" />
+
+
+        <ViewSwitcher
+            android:id="@+id/leave_request_form_view_switcher"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <RelativeLayout
+                android:id="@+id/leave_request_form_layout_type_list_grp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/leave_request_form_layout_leaves_List"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:listSelector="@android:color/transparent"
+                    android:visibility="gone" />
+
+
+                <ProgressBar
+                    android:id="@+id/leave_request_form_progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/leave_request_form_layout_calendar_grp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/leave_request_form_layout_calendar_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- <EditText android:id="@+id/leave_request_form_layout_phoneOnLeave"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:inputType="phone"
+                     android:hint="Phone on leave"/>
+
+                 <EditText android:id="@+id/leave_request_form_layout_addressOnLeave"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:inputType="textMultiLine"
+                     android:hint="Address on leave"/>-->
+
+                <RelativeLayout android:layout_alignParentBottom="true"
+                    android:id="@+id/leave_request_form_layout_action_grp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Previous"
+                        android:id="@+id/leave_request_form_layout_previous"
+                        android:layout_alignParentLeft="true"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Next"
+                        android:id="@+id/leave_request_form_layout_next"
+                        android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </RelativeLayout>
+        </ViewSwitcher>
+</LinearLayout>

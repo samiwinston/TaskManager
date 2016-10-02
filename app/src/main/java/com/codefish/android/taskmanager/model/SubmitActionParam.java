@@ -1,10 +1,11 @@
 package com.codefish.android.taskmanager.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 
-public class SubmitActionParam {
+public class SubmitActionParam implements Serializable{
 
 
     public String comments;

@@ -35,7 +35,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     }
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskEditPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -67,7 +67,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.deleteTaskCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskEditPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -96,7 +96,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.moveToProjectCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskEditPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -125,7 +125,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.updateDueCallBack(date);
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskEditPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -157,7 +157,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.removeDueDateCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskEditPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -189,7 +189,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.updatePossibleAssignees(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskEditPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -222,7 +222,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.updateMyProjects(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskEditPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -255,7 +255,7 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
 
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<200) {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             taskEditPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();

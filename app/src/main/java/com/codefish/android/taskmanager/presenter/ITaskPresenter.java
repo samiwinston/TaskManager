@@ -2,6 +2,8 @@ package com.codefish.android.taskmanager.presenter;
 
 import com.codefish.android.taskmanager.activity.ITasksView;
 import com.codefish.android.taskmanager.model.UserTaskBean;
+import com.codefish.android.taskmanager.model.WidgetActionItemBean;
+import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
 /**
  * Created by abedch on 2/2/2016.
@@ -9,7 +11,7 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 public interface ITaskPresenter {
 
 
-    void getUserTasks(Integer idAppUser,Integer idSelectedProject);
+    void getUserTasks(Integer idAppUser, Integer idSelectedProject);
 
     void refreshList();
 
@@ -18,4 +20,5 @@ public interface ITaskPresenter {
     void setLoginView(ITasksView taskView);
 
     void selectTask(UserTaskBean bean, int position);
+
 }

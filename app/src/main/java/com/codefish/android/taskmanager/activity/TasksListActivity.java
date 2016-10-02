@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.codefish.android.taskmanager.R;
+import com.codefish.android.taskmanager.fragment.LeaveWorkflowFormFragment;
 import com.codefish.android.taskmanager.fragment.SingleFragmentActivity;
 import com.codefish.android.taskmanager.fragment.TaskDetailsFragment;
 import com.codefish.android.taskmanager.fragment.TaskNewFragment;
@@ -23,6 +24,8 @@ import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.TaskListBean;
 import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
+import com.codefish.android.taskmanager.model.WidgetActionItemBean;
+import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -117,6 +120,13 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
         startActivityForResult(navToNewTask, TasksModel.REQUEST_ADD_NEW_ITEM);
     }
 
+
+    @Override
+    public void onOpenLeaveForm(WidgetActionItemBean leaveActionItemBean) {
+        Intent navToDetails = LeaveWorkflowFormActivity.newInstance(this,leaveActionItemBean);
+        startActivityForResult(navToDetails, TasksModel.REQUEST_WORKFLOW_TASK_UPDATE);
+    }
+
     @Override
     public void onItemSelected(UserTaskBean bean) {
         // open second view
@@ -126,6 +136,10 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
         }
 
     }
+
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -186,7 +200,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
                     else
                     {
                         try {
-                            if(response.code()==500 && response.errorBody().contentLength()<200)
+                            if(response.code()==500 && response.errorBody().contentLength()<500)
                             {
                                 Toast.makeText(getBaseContext(), response.errorBody().string(), Toast.LENGTH_LONG);
                             }

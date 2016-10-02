@@ -1,6 +1,6 @@
 package com.codefish.android.taskmanager.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +33,8 @@ import com.codefish.android.taskmanager.component.tasksRecyclerView.TaskListAdap
 import com.codefish.android.taskmanager.component.tasksRecyclerView.TaskListLayoutManager;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
+import com.codefish.android.taskmanager.model.WidgetActionItemBean;
+import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 import com.codefish.android.taskmanager.presenter.ITaskPresenter;
 import com.codefish.android.taskmanager.utils.SmartDateFormatter;
 
@@ -76,7 +77,11 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     @Inject
     SmartDateFormatter smartDateFormatter;
     @Bind(R.id.tasks_list_layout_add_new_task)
-    FloatingActionButton addNewTaskBtn;
+    com.github.clans.fab.FloatingActionButton addNewTaskBtn;
+    @Bind(R.id.task_list_float_action_menu)
+    com.github.clans.fab.FloatingActionMenu floatActionMenu;
+    @Bind(R.id.tasks_list_layout_add_new_leave)
+    com.github.clans.fab.FloatingActionButton addNewLeave;
     @Bind(R.id.tasks_list_layout_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     public Integer idSelectedProject= 0;
@@ -86,9 +91,12 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     private TaskListLayoutManager mLayoutManager;
     boolean isMockData = false;
 
+    WidgetActionItemBean leaveActionItemBean;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        leaveActionItemBean = getActivity().getIntent().getParcelableExtra("leaveActionItemBean");
     }
 
     @Override
@@ -96,6 +104,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         super.onSaveInstanceState(outState);
 
         outState.putInt("idSelectedProject",0);
+        outState.putParcelable("leaveActionItemBean",leaveActionItemBean);
     }
 
     @Override
@@ -104,6 +113,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
         if (savedInstanceState != null) {
             idSelectedProject = savedInstanceState.getInt("idSelectedProject");
+            leaveActionItemBean = savedInstanceState.getParcelable("leaveActionItemBean");
         }
     }
 
@@ -131,7 +141,17 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
         });
         projectsNavListView.setOnItemClickListener(onProjNavClick());
+
+        if(leaveActionItemBean!=null)
+        {
+            addNewLeave.setVisibility(View.VISIBLE);
+            addNewLeave.setOnClickListener(onNewLeaveClick());
+        }
+
         //requestLeave.setOnClickListener(onRequestLeaveClick());
+
+        //floatActionMenu.setMenuButtonColorNormal(R.color.colorRed);
+
 
         Log.v("OnCreatView","On Create View In TasksListFragment");
 
@@ -139,14 +159,16 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         return view;
     }
 
-    private View.OnClickListener onRequestLeaveClick() {
+    private View.OnClickListener onNewLeaveClick() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Log.v("CLICK","buttonClicked");
+                activity.onOpenLeaveForm(leaveActionItemBean);
+                floatActionMenu.close(false);
             }
         };
     }
+
 
     private AdapterView.OnItemClickListener onProjNavClick() {
         return new AdapterView.OnItemClickListener() {
@@ -251,12 +273,17 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     @Override
     public void selectTask(UserTaskBean bean, int position) {
         activity.onItemSelected(bean);
+        if(floatActionMenu.isOpened())
+        {
+            floatActionMenu.close(false);
+        }
     }
 
     @Override
     public void showErrorMsg(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
+
 
 
     public void addItem(final UserTaskBean taskBean) {
@@ -314,19 +341,25 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     @Override
     public void onClick(View v) {
         activity.onNewItemSelect();
+        floatActionMenu.close(false);
     }
 
 
-    @Override
+  /*  @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (Callbacks) activity;
-    }
+    }*/
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.activity = (Callbacks) context;
+    }
 
     public interface Callbacks {
         void onNewItemSelect();
-
+        void onOpenLeaveForm(WidgetActionItemBean leaveActionItemBean);
         void onItemSelected(UserTaskBean bean);
     }
 

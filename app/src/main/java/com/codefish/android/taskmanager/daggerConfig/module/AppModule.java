@@ -8,15 +8,18 @@ import com.codefish.android.taskmanager.interactor.LoginInteractionImpl;
 import com.codefish.android.taskmanager.interactor.TaskDetailsInteractionImpl;
 import com.codefish.android.taskmanager.interactor.TaskEditInteractionImpl;
 import com.codefish.android.taskmanager.interactor.TaskInteractionImpl;
+import com.codefish.android.taskmanager.interactor.WorkflowFormInteractionImpl;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ILoginPresenter;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
 import com.codefish.android.taskmanager.presenter.ITaskEditPresenter;
 import com.codefish.android.taskmanager.presenter.ITaskPresenter;
+import com.codefish.android.taskmanager.presenter.IWorkflowFormPresenter;
 import com.codefish.android.taskmanager.presenter.LoginPresenterImpl;
 import com.codefish.android.taskmanager.presenter.TaskDetailsPresenterImpl;
 import com.codefish.android.taskmanager.presenter.TaskEditPresenterImpl;
 import com.codefish.android.taskmanager.presenter.TaskPresenterImpl;
+import com.codefish.android.taskmanager.presenter.WorkflowFormPresenterImpl;
 import com.codefish.android.taskmanager.utils.SmartDateFormatter;
 
 import java.util.ArrayList;
@@ -86,6 +89,12 @@ public class AppModule {
     @Singleton
     ITaskPresenter providesTaskPresenter(){
         return new TaskPresenterImpl(new TaskInteractionImpl());
+    }
+
+    @Provides
+    @Singleton
+    IWorkflowFormPresenter providesWorkflowFormPresenter(){
+        return new WorkflowFormPresenterImpl(new WorkflowFormInteractionImpl());
     }
 
    /* @Provides
