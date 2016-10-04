@@ -26,7 +26,7 @@ public interface ITaskDetailsPresenter {
 
     void showErrorMsg(String s);
     void loadUserTaskBean(UserTaskBean bean);
-    void changeStateCBH();
+    void changeStateCBH(String updatedState);
     void getWorkflowForm(Integer idAppUser,Integer idWorkflowInstance);
     void loadWorkflowForm(MobWorkflowForm mobWorkflowForm);
 }

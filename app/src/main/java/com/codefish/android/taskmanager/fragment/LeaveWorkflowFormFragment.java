@@ -166,9 +166,9 @@ public class LeaveWorkflowFormFragment extends Fragment implements ILeaveWorkflo
                 } else {
                     prepareLeave();
                     leaveFormSummaryFragment = LeaveFormSummaryFragment.newInstance(LeaveWorkflowFormFragment.this);
-                    getFragmentManager().beginTransaction().add(R.id.fragment_container, leaveFormSummaryFragment)
-                            .addToBackStack("Back To Parent").commit();
-                    getFragmentManager().beginTransaction().hide(LeaveWorkflowFormFragment.this).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, leaveFormSummaryFragment)
+                            .commit();
+                    //getFragmentManager().beginTransaction().hide(LeaveWorkflowFormFragment.this).commit();
                 }
 
             }
@@ -376,20 +376,7 @@ public class LeaveWorkflowFormFragment extends Fragment implements ILeaveWorkflo
 
     }
 
-    @Override
-    public void showProgressBar() {
 
-    }
-
-    @Override
-    public void hideProgressBar() {
-
-    }
-
-    @Override
-    public void showErrorMessage(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-    }
 
     @Override
     public void getLeaveBeanCBH(MobLeaveRequestFormBean bean) {
@@ -400,8 +387,8 @@ public class LeaveWorkflowFormFragment extends Fragment implements ILeaveWorkflo
     }
 
     @Override
-    public void submitLeaveCBH(UserTaskBean userTaskBean) {
-        // finish and update bean
+    public void showErrorMsg(String msg) {
+        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
     }
 
     public void show() {

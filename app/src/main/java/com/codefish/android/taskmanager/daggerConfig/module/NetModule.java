@@ -34,14 +34,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetModule {
 
+    public static final int TASK_MANAGER_MODULE = 1;
+    public static final int HR_MODULE = 2;
+
+
     private final String baseUrl;
-    private final String hrBaseUrl;
+    private final HashMap<Integer,String> controllerMap;
     private final OkHttpClient okHttpClient;
     private final Gson gson;
 
-    public NetModule(String baseUrl, String hrBaseUrl, OkHttpClient okHttpClient) {
-        this.baseUrl = baseUrl;
-        this.hrBaseUrl = hrBaseUrl;
+    // end point
+
+    public NetModule(String endPoint, HashMap<Integer, String> controllerMap, OkHttpClient okHttpClient) {
+        this.baseUrl = endPoint;
+        this.controllerMap = controllerMap;
         this.okHttpClient = okHttpClient;
         this.gson = new GsonBuilder()
                 //.registerTypeAdapter(MobLeaveRequestFormBean.class,new MyDeserializer<MobLeaveRequestFormBean>())
@@ -65,7 +71,7 @@ public class NetModule {
         ITaskService taskService = new Retrofit.
                 Builder()
                 .client(okHttpClient)
-                .baseUrl(baseUrl)
+                .baseUrl(baseUrl+controllerMap.get(TASK_MANAGER_MODULE))
                 .addConverterFactory(GsonConverterFactory.create(gson)).build().create(ITaskService.class);
         return taskService;
     }
@@ -77,7 +83,7 @@ public class NetModule {
         IHrService hrService = new Retrofit.
                 Builder()
                 .client(okHttpClient)
-                .baseUrl(hrBaseUrl)
+                .baseUrl(baseUrl+controllerMap.get(HR_MODULE))
                 .addConverterFactory(GsonConverterFactory.create(gson)).build().create(IHrService.class);
         return hrService;
     }
@@ -86,7 +92,9 @@ public class NetModule {
     @Singleton
     IUserService providesUserService() {
         IUserService userService = new Retrofit.
-                Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create(gson)).build().create(IUserService.class);
+                Builder()
+                .baseUrl(baseUrl+controllerMap.get(TASK_MANAGER_MODULE))
+                .addConverterFactory(GsonConverterFactory.create(gson)).build().create(IUserService.class);
         return userService;
     }
 
@@ -94,7 +102,9 @@ public class NetModule {
     @Singleton
     IReportingService providesReportingService() {
         IReportingService reportingService = new Retrofit.
-                Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create(gson)).build().create(IReportingService.class);
+                Builder()
+                .baseUrl(baseUrl+controllerMap.get(TASK_MANAGER_MODULE))
+                .addConverterFactory(GsonConverterFactory.create(gson)).build().create(IReportingService.class);
         return reportingService;
     }
 
@@ -102,7 +112,9 @@ public class NetModule {
     @Singleton
     IProjectService providesProjectService() {
         IProjectService projectService = new Retrofit.
-                Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create(gson)).build().create(IProjectService.class);
+                Builder()
+                .baseUrl(baseUrl+controllerMap.get(TASK_MANAGER_MODULE))
+                .addConverterFactory(GsonConverterFactory.create(gson)).build().create(IProjectService.class);
         return projectService;
     }
 

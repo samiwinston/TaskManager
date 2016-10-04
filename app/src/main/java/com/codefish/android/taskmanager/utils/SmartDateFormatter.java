@@ -38,13 +38,13 @@ public class SmartDateFormatter {
             Integer dayDiff = date.get(Calendar.DATE) - today.get(Calendar.DATE);
             if (dayDiff == 1) {
                 formattedDate = "Tomorrow";
-                colorResource = R.color.colorLGreen;
+                colorResource = R.color.colorDGreen;
             } else if (dayDiff == -1) {
                 formattedDate = "Yesterday";
                 colorResource = R.color.colorRed;
             } else if (dayDiff == 0) {
                 formattedDate = "Today";
-                colorResource = R.color.colorLGreen;
+                colorResource = R.color.colorDGreen;
             } else if (dayDiff > 1 && dayDiff < 8) {
                 formattedDate = dayOfTheWeekFormatter.format(dateValue);
             } else

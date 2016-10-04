@@ -72,9 +72,9 @@ public class LeavesListAdapter extends BaseAdapter {
         }
 
 
-        String type = getItem(position).get("leaveTypeName").toString();
-        String daysTaken = getItem(position).get("totalDays").toString();
-        String desc = getItem(position).get("description").toString();
+        String type = getItem(position).get("leaveTypeName")!=null?getItem(position).get("leaveTypeName").toString():"";
+        String daysTaken = getItem(position).get("totalDays")!=null?getItem(position).get("totalDays").toString():"";
+        String desc = getItem(position).get("description")!=null?getItem(position).get("description").toString():"";
 
         viewHolder.typeView.setText(type);
         viewHolder.daysTakenView.setText(daysTaken);

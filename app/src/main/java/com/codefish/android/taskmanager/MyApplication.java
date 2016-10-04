@@ -22,7 +22,11 @@ import okhttp3.OkHttpClient;
  */
 public class MyApplication extends Application {
 
-    private Boolean mock = true;
+    public final static int DEV = 1;
+    public final static int DEV_CLOUD = 2;
+    public final static int PROD = 3;
+    public final static int PROD_TEST = 4;
+    public final static int DEV_HOT_SPOT = 5;
 
     private static AppComponent appComponent;
 
@@ -35,13 +39,35 @@ public class MyApplication extends Application {
 
     private void initializeInjector() {
 
-        Map<String,String> map = new HashMap<>();
-        map.put("frmwork",getResources().getString(R.string.frmworkUrlEP));
-        map.put("hr",getResources().getString(R.string.hrUrlEP));
+        HashMap<Integer,String> controllerMap = new HashMap<>();
+        controllerMap.put(NetModule.TASK_MANAGER_MODULE,getResources().getString(R.string.frmworkUrlEP));
+        controllerMap.put(NetModule.HR_MODULE,getResources().getString(R.string.hrUrlEP));
+        String baseUrl = "";
+        Integer buildType = DEV_HOT_SPOT;
+
+        switch (buildType)
+        {
+            case DEV:
+                baseUrl = getResources().getString(R.string.baseUrlDev);
+                break;
+            case DEV_HOT_SPOT:
+                baseUrl = getResources().getString(R.string.baseUrlHotSpot);
+                break;
+            case DEV_CLOUD:
+                baseUrl = getResources().getString(R.string.baseUrlCloudTest);
+                break;
+            case PROD:
+                baseUrl = getResources().getString(R.string.baseUrlAcHProd);
+                break;
+            case PROD_TEST:
+                baseUrl = getResources().getString(R.string.baseUrlAcHTest);
+                break;
+            default:
+
+        }
 
         appComponent = DaggerAppComponent.builder()
-                .netModule(new NetModule(mock?getResources().getString(R.string.baseUrlDev):
-                        getResources().getString(R.string.baseUrlAcH),getResources().getString(R.string.baseUrlHrDev),new OkHttpClient()))
+                .netModule(new NetModule(baseUrl,controllerMap,new OkHttpClient()))
                 .build();
     }
 

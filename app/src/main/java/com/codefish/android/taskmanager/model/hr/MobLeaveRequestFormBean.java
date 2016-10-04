@@ -88,6 +88,7 @@ public class MobLeaveRequestFormBean implements Parcelable {
 		this.isOneDay = b.getBoolean("isOneDay");
 		this.showAddressBox = b.getBoolean("showAddressBox");
 		this.includeInLeave = b.getBoolean("includeInLeave");
+		this.isNew = b.getBoolean("isNew");
 		this.totalDays = b.getInt("totalDays");
 	}
 
@@ -112,10 +113,23 @@ public class MobLeaveRequestFormBean implements Parcelable {
 		b.putSerializable("requestEndDate",requestEndDate);
         b.putSerializable("submitParams", submitParams);
 		b.putString("warningMessage",warningMessage);
-		b.putBoolean("isOneDay",isOneDay);
+		b.putBoolean("isOneDay",isOneDay==null ?false:isOneDay);
 		b.putBoolean("showAddressBox",showAddressBox==null ? false:showAddressBox);
 		b.putBoolean("includeInLeave",includeInLeave== null ?false:includeInLeave);
+		b.putBoolean("isNew",isNew== null ?false:isNew);
 		return b;
+	}
+
+	public String getRequestedStartDateLbl(){
+		if(requestStartDate==null)
+			return "";
+		return calendarBean.formatter.format(requestStartDate);
+	}
+
+	public String getRequestedEndDateLbl(){
+		if(requestEndDate==null)
+			return "";
+		return calendarBean.formatter.format(requestEndDate);
 	}
 
 
@@ -125,7 +139,7 @@ public class MobLeaveRequestFormBean implements Parcelable {
 	}
 
 	public void updateActionName(){
-		if(submitParams !=null && actions!=null && actions.size()==0)
+		if(submitParams !=null && actions!=null && actions.size()==1)
 		submitParams.actionName = actions.get(0).getAction();
 	}
 

@@ -6,6 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+   <!-- xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">-->
+
+    <!-- <?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">-->
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -111,9 +126,8 @@
 
             <com.github.clans.fab.FloatingActionMenu
                 android:id="@+id/task_list_float_action_menu"
-                android:layout_width="303dp"
-                android:layout_height="wrap_content"
-                fab:menu_icon="@drawable/ic_dawurofloating"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 fab:menu_fab_size="normal"
                 android:layout_gravity="right|bottom"
                 fab:fab_colorNormal="#0F97D6"
@@ -122,7 +136,13 @@
                 app:menu_colorNormal="@color/colorPrimary"
                 app:menu_labels_colorNormal="@color/colorPrimary"
                 app:menu_colorPressed="@color/colorPrimary"
-                app:menu_colorRipple="@color/colorClearGrey">
+                app:menu_colorRipple="@color/colorClearGrey"
+                fab:menu_labels_ellipsize="end"
+                fab:menu_labels_singleLine="true"
+                fab:menu_backgroundColor="#ccffffff"
+                >
+
+
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/tasks_list_layout_add_new_leave"
@@ -132,9 +152,21 @@
                     app:fab_colorNormal="@color/colorPrimary"
                     app:fab_colorPressed="@color/colorPrimary"
                     app:fab_colorRipple="#99FFFFFF"
-                    android:visibility="gone"
                     android:src="@drawable/ic_send_black_24dp"
-                    app:backgroundTint="@color/colorPrimary"  />
+                    app:backgroundTint="@color/colorPrimary"
+                    fab:fab_label="Request Leave"/>
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/tasks_list_layout_add_new_project"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="18dp"
+                    app:fab_colorNormal="@color/colorPrimary"
+                    app:fab_colorPressed="@color/colorPrimary"
+                    app:fab_colorRipple="#99FFFFFF"
+                    android:src="@drawable/ic_content_paste_black_24dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    fab:fab_label="Add Project"/>
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/tasks_list_layout_add_new_task"
@@ -145,18 +177,11 @@
                     app:fab_colorPressed="@color/colorPrimary"
                     app:fab_colorRipple="#99FFFFFF"
                     android:src="@drawable/ic_assignment_black_24dp"
-                    app:backgroundTint="@color/colorPrimary"  />
+                    app:backgroundTint="@color/colorPrimary"
+                    fab:fab_label="Add Task"/>
 
             </com.github.clans.fab.FloatingActionMenu>
 
-          <!--  <android.support.design.widget.FloatingActionButton
-                android:id="@+id/tasks_list_layout_add_new_task"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_margin="18dp"
-                android:src="@drawable/ic_add_24dp"
-                app:backgroundTint="@color/colorPrimary" />-->
         </android.support.design.widget.CoordinatorLayout>
     </FrameLayout>
 

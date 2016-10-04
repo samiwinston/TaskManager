@@ -16,6 +16,7 @@ import com.codefish.android.taskmanager.service.IUserService;
 
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,21 +38,30 @@ public class WorkflowFormInteractionImpl implements IWorkflowFormInteraction {
     }
 
     @Override
-    public void submitLeave(MobLeaveRequestFormBean mobLeaveRequestFormBean, IWorkflowFormPresenter workflowFormPresenter) {
+    public void submitLeave(MobLeaveRequestFormBean mobLeaveRequestFormBean,final IWorkflowFormPresenter workflowFormPresenter) {
 
-        ServiceModel.getInstance().hrService.submitLeaveRequest(mobLeaveRequestFormBean).enqueue(new Callback<UserTaskBean>() {
+        ServiceModel.getInstance().hrService.submitLeaveRequest(mobLeaveRequestFormBean).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<UserTaskBean> call, Response<UserTaskBean> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-
-                } else {
-
+                    workflowFormPresenter.submitLeaveCBH(null);
+                }  else {
+                    try {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                            workflowFormPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        workflowFormPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<UserTaskBean> call, Throwable t) {
-
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                workflowFormPresenter.showErrorMsg("Can no reach CodeFish");
             }
         });
 

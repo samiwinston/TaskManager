@@ -32,6 +32,7 @@ import com.codefish.android.taskmanager.component.SimpleDividerItemDecoration;
 import com.codefish.android.taskmanager.component.tasksRecyclerView.TaskListAdapter;
 import com.codefish.android.taskmanager.component.tasksRecyclerView.TaskListLayoutManager;
 import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
@@ -78,6 +79,8 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     SmartDateFormatter smartDateFormatter;
     @Bind(R.id.tasks_list_layout_add_new_task)
     com.github.clans.fab.FloatingActionButton addNewTaskBtn;
+    @Bind(R.id.tasks_list_layout_add_new_project)
+    com.github.clans.fab.FloatingActionButton addNewProjectBtn;
     @Bind(R.id.task_list_float_action_menu)
     com.github.clans.fab.FloatingActionMenu floatActionMenu;
     @Bind(R.id.tasks_list_layout_add_new_leave)
@@ -141,22 +144,31 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
         });
         projectsNavListView.setOnItemClickListener(onProjNavClick());
-
+        addNewProjectBtn.setOnClickListener(onNewProjectClick());
         if(leaveActionItemBean!=null)
         {
             addNewLeave.setVisibility(View.VISIBLE);
             addNewLeave.setOnClickListener(onNewLeaveClick());
         }
 
-        //requestLeave.setOnClickListener(onRequestLeaveClick());
 
-        //floatActionMenu.setMenuButtonColorNormal(R.color.colorRed);
+        //floatActionMenu.setClosedOnTouchOutside(true);
 
 
-        Log.v("OnCreatView","On Create View In TasksListFragment");
 
         initListData();
         return view;
+    }
+
+    private View.OnClickListener onNewProjectClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProjectNewDialog userProfileDialog = ProjectNewDialog.newInstance(TasksListFragment.this, TasksModel.REQUEST_NEW_PROJECT);
+                userProfileDialog.show(getFragmentManager(), "User Profile Dialog");
+                floatActionMenu.close(false);
+            }
+        };
     }
 
     private View.OnClickListener onNewLeaveClick() {
@@ -355,6 +367,10 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (Callbacks) context;
+    }
+
+    public void refreshProjects() {
+        projectsNavListView.refreshProjects();
     }
 
     public interface Callbacks {

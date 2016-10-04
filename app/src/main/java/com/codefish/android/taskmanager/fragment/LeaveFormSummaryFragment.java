@@ -3,67 +3,41 @@ package com.codefish.android.taskmanager.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
 import com.codefish.android.taskmanager.MyApplication;
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.ILeaveFormSummaryView;
-import com.codefish.android.taskmanager.activity.ILeaveWorkflowFormView;
 import com.codefish.android.taskmanager.activity.LeaveWorkflowFormActivity;
-import com.codefish.android.taskmanager.component.WorkflowActionButton;
-import com.codefish.android.taskmanager.component.userListView.LeavesListAdapter;
-import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
-import com.codefish.android.taskmanager.model.WorkflowActionBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
-import com.codefish.android.taskmanager.model.hr.MobSimpleLeaveCalendarEntity;
 import com.codefish.android.taskmanager.presenter.IWorkflowFormPresenter;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.DayViewDecorator;
-import com.prolificinteractive.materialcalendarview.DayViewFacade;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by abedch on 5/2/2016.
@@ -78,8 +52,8 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
     private LeaveWorkflowFormActivity leaveWorkflowFormActivity;
 
-    @Bind(R.id.leave_request_summary_form_submit)
-    TextView submitBtn;
+    /*@Bind(R.id.leave_request_summary_form_submit)
+    TextView submitBtn;*/
     @Bind(R.id.leave_request_summary_warning_msg)
     TextView warningView;
     @Bind(R.id.leave_request_form_warning_grp)
@@ -98,25 +72,101 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
     TextView daysRequested;
     @Bind(R.id.leave_request_summary_form_leave_type)
     TextView leaveType;
+    @Bind(R.id.leave_request_summary_form_address_on_leave)
+    TextView addressOnLeave;
+    @Bind(R.id.leave_request_summary_form_days_requested_startDate)
+    TextView requestedStartDate;
+  /*  @Bind(R.id.leave_request_summary_form_days_requested_endDate)
+    TextView requestedEndDate;*/
+    @Bind(R.id.leave_request_summary_form_country)
+    TextView countryOnLeaveView;
+   /* @Bind(R.id.leave_request_summary_form_days_requested_endDateGrp)
+    LinearLayout requestedEndDateGrp;*/
     @Bind(R.id.leave_request_summary_form_days_allowed_grp)
     LinearLayout daysAllowedGrp;
     @Bind(R.id.leave_request_summary_form_days_remaining_grp)
     LinearLayout daysRemainingGrp;
+    @Bind(R.id.leave_request_summary_form_days_country_grp)
+    LinearLayout countryGrp;
+
+    private Menu menu;
+    private boolean isSaveVisible = false;
+    private String enteredPhoneNumber = null;
+    private String enteredAddressOnLeave = null;
+    private Integer idSelectedCountry = 0;
+    private String selectedCountryName = "";
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean("isSaveVisible", isSaveVisible);
+        outState.putString("enteredPhoneNumber", enteredPhoneNumber);
+        outState.putString("enteredAddressOnLeave", enteredAddressOnLeave);
+        outState.putInt("idSelectedCountry", idSelectedCountry);
+        outState.putString("selectedCountryName", selectedCountryName);
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            this.isSaveVisible = savedInstanceState.getBoolean("isSaveVisible");
+            this.enteredPhoneNumber = savedInstanceState.getString("enteredPhoneNumber");
+            this.enteredAddressOnLeave = savedInstanceState.getString("enteredAddressOnLeave");
+            this.selectedCountryName = savedInstanceState.getString("selectedCountryName");
+            this.idSelectedCountry = savedInstanceState.getInt("idSelectedCountry");
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        isSaveVisible = (!leaveWorkflowFormActivity.mobLeaveRequestFormBean.showAddressBox);
     }
 
 
-    
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (menu != null)
+            this.menu = menu;
+
+        if (isSaveVisible) {
+            showSaveOption();
+        } else {
+            hideSaveOption();
+        }
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.leave_summary_menu, menu);
+        this.menu = menu;
+    }
+
+    private void hideSaveOption() {
+        MenuItem item = menu.findItem(R.id.leave_summary_menu_submit);
+        item.setVisible(false);
+    }
+
+    private void showSaveOption() {
+        MenuItem item = menu.findItem(R.id.leave_summary_menu_submit);
+        item.setVisible(true);
+    }
+
+
     public static LeaveFormSummaryFragment newInstance(LeaveWorkflowFormFragment targetFragment) {
         LeaveFormSummaryFragment fragment = new LeaveFormSummaryFragment();
         fragment.setTargetFragment(targetFragment, TasksModel.REQUEST_CLOSED_SUMMARY);
         return fragment;
     }
-    
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -127,59 +177,155 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
         //workflowFormPresenter.submitLeave(leaveWorkflowFormActivity.mobLeaveRequestFormBean);
 
-        //submitBtn.setOnClickListener(onSubmitClick());
+        //submitBtn.setOnClickListener(onSubmitForm());
+
 
         initToolBar();
 
         MobLeaveRequestFormBean bean = leaveWorkflowFormActivity.mobLeaveRequestFormBean;
-        bean.updateActionName();
-        leaveType.setText(bean.leaveTypeName+" leave was requested");
-        daysRequested.setText(bean.totalDays +(bean.isOneDay?" day":" days")+ " requested");
+        leaveType.setText(bean.leaveTypeName + " leave was requested");
+        daysRequested.setText(bean.totalDays + (bean.isOneDay ? " day" : " days") + " requested");
+        String requestedStartDateMsg = "From ";
+        String requestedEndDateMsg = "";
 
-        if(bean.includeInLeave)
-        {
-            daysAllowed.setText(bean.leaveInfoBean.getDaysAllowed()+" allowed as of today");
-            daysAllowedGrp.setVisibility(View.VISIBLE);
-            daysRemaining.setText((bean.leaveInfoBean.getDoubleTotalDaysLeft() - bean.totalDays)+" remaining for this year");
-            daysRemainingGrp.setVisibility(View.VISIBLE);
+        if (bean.isOneDay) {
+            requestedStartDateMsg = "On ";
+        } else {
+            requestedEndDateMsg =" To "+bean.getRequestedEndDateLbl();
         }
 
-        if (bean.warningMessage!=null) {
+        requestedStartDate.setText(requestedStartDateMsg + "" + bean.getRequestedStartDateLbl()+requestedEndDateMsg);
+
+        if (bean.includeInLeave) {
+            daysAllowed.setText(bean.leaveInfoBean.getDaysAllowed() + " allowed as of today");
+            daysAllowedGrp.setVisibility(View.VISIBLE);
+            daysRemaining.setText((bean.leaveInfoBean.getDoubleTotalDaysLeft() - bean.totalDays) + " remaining for this year");
+            daysRemainingGrp.setVisibility(View.VISIBLE);
+        } else {
+            daysAllowedGrp.setVisibility(View.GONE);
+            daysRemainingGrp.setVisibility(View.GONE);
+        }
+
+
+        if (bean.warningMessage != null) {
             warningView.setText(bean.warningMessage);
             warningGrp.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             warningGrp.setVisibility(View.GONE);
         }
 
-        if(bean.showAddressBox)
-        {
+        if (bean.showAddressBox) {
             phoneOnLeaveGrp.setVisibility(View.VISIBLE);
             addressOnLeaveGrp.setVisibility(View.VISIBLE);
-            phoneOnLeave.setTextLocale(Locale.US);
-            phoneOnLeave.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+            countryGrp.setVisibility(View.VISIBLE);
+            countryOnLeaveView.setOnClickListener(onAddCountryClick());
+            phoneOnLeave.setTextLocale(Locale.getDefault());
+            phoneOnLeave.addTextChangedListener(onTextChangeListener());
+            addressOnLeave.setOnClickListener(addAddressOnLeave());
+            if (enteredAddressOnLeave != null)
+                addressOnLeave.setText(enteredAddressOnLeave);
+            if (selectedCountryName != null)
+                countryOnLeaveView.setText(selectedCountryName);
         }
-
-
 
 
         return view;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private View.OnClickListener onSubmitClick() {
+    private View.OnClickListener onAddCountryClick() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                LeaveSummaryAddCountryFragment leaveSummaryAddCountryFragment = LeaveSummaryAddCountryFragment.
+                        newInstance(LeaveFormSummaryFragment.this);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, leaveSummaryAddCountryFragment)
+                        .addToBackStack("Back To Parent").commit();
             }
         };
     }
+
+    private View.OnClickListener addAddressOnLeave() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LeaveSummaryStrFieldFragment leaveSummaryStrFieldFragment = LeaveSummaryStrFieldFragment.newInstance(LeaveFormSummaryFragment.this,
+                        TasksModel.REQUEST_UPDATE_FIELD, "Enter address on leave", addressOnLeave.getText().toString());
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, leaveSummaryStrFieldFragment)
+                        .addToBackStack("Back To Parent").commit();
+            }
+        };
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case TasksModel.REQUEST_UPDATE_FIELD:
+                enteredAddressOnLeave = data.getStringExtra(LeaveSummaryStrFieldFragment.ARGS_ITEM);
+                updateSubmitVisibility();
+                break;
+            case TasksModel.REQUEST_COUNTRY:
+                HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(LeaveSummaryAddCountryFragment.ARGS_ITEM);
+                idSelectedCountry = ((Double) item.get("id")).intValue();
+                selectedCountryName = (String) item.get("name");
+                updateSubmitVisibility();
+                break;
+            default:
+        }
+    }
+
+
+    private TextWatcher onTextChangeListener() {
+        return new PhoneNumberFormattingTextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                super.beforeTextChanged(s, start, count, after);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                super.onTextChanged(s, start, before, count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                if (s.length() > 3) {
+                    enteredPhoneNumber = s.toString();
+
+                } else {
+                    enteredPhoneNumber = null;
+                }
+                updateSubmitVisibility();
+            }
+        };
+    }
+
+    private void updateSubmitVisibility() {
+
+        if (enteredPhoneNumber != null && enteredAddressOnLeave != null && idSelectedCountry > 0) {
+            isSaveVisible = true;
+        } else {
+            isSaveVisible = false;
+        }
+
+
+        getActivity().invalidateOptionsMenu();
+
+    }
+
+
+    private void onSubmitForm() {
+        MobLeaveRequestFormBean bean = leaveWorkflowFormActivity.mobLeaveRequestFormBean;
+        bean.lastPhoneOnLeave = enteredPhoneNumber;
+        bean.lastCountryOnLeave = idSelectedCountry;
+        bean.lastAddressOnLeave = enteredAddressOnLeave;
+        bean.updateActionName();
+        workflowFormPresenter.submitLeave(bean);
+    }
+
+
 
     private void initToolBar() {
         toolbar.setTitle("Leave Request Summary");
@@ -198,10 +344,16 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (getFragmentManager().getBackStackEntryCount() > 0) {
-                    getFragmentManager().popBackStack();
-                    getFragmentManager().beginTransaction().show(getTargetFragment()).commit();
+                getActivity().finish();
+                return true;
+            case R.id.leave_summary_menu_submit:
+                item.setEnabled(false);
+                View view = getActivity().getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+                onSubmitForm();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -212,11 +364,17 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.leaveWorkflowFormActivity = (LeaveWorkflowFormActivity)context;
+        this.leaveWorkflowFormActivity = (LeaveWorkflowFormActivity) context;
     }
 
     @Override
     public void submitLeaveCBH(UserTaskBean userTaskBean) {
+        Toast.makeText(getContext(),"Request is sent, please refresh list",Toast.LENGTH_LONG).show();
+          getActivity().finish();
+    }
 
+    @Override
+    public void showErrorMsg(String msg) {
+        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
     }
 }

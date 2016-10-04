@@ -1,6 +1,5 @@
 package com.codefish.android.taskmanager.activity;
 
-import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
 /**
@@ -9,11 +8,6 @@ import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 public interface ILeaveWorkflowFormView {
 
 
-    void showProgressBar();
-    void hideProgressBar();
-    void showErrorMessage(String msg);
-
     void getLeaveBeanCBH(MobLeaveRequestFormBean bean);
-
-    void submitLeaveCBH(UserTaskBean userTaskBean);
+    void showErrorMsg(String msg);
 }

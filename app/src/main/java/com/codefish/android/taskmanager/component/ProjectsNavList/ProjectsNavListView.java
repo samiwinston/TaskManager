@@ -30,6 +30,11 @@ public class ProjectsNavListView extends ListView  {
 
     }
 
+    public void refreshProjects()
+    {
+        listAdapter.getMyProjects(true);
+    }
+
     public List<HashMap<String, Object>> getList()
     {
         return listAdapter.mResultList;

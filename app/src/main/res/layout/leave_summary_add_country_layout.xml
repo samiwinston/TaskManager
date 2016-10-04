@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/leave_summary_add_country_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorLightGrey"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Add Country" />
+
+    <com.codefish.android.taskmanager.component.userListView.SearchCountryEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search country"
+        android:padding="22dp"
+        android:id="@+id/leave_summary_add_country_layout_search"/>
+
+    <ListView
+        android:id="@+id/leave_summary_add_country_layout_countries"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+
+</LinearLayout>

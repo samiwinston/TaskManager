@@ -69,7 +69,7 @@ public interface ITaskService {
                                             @Query("action") String action);
 
     @POST("changeState")
-    Call<ResponseBody> changeState(@Body SubmitActionParam params);
+    Call<String> changeState(@Body SubmitActionParam params);
 
     @GET("updateTaskField")
     Call<ResponseBody> updateTaskField(@Query("idWorkflowInstance") Integer idWorkflowInstance,
@@ -85,6 +85,10 @@ public interface ITaskService {
     @GET("updateDueDate")
     Call<ResponseBody> updateDueDate(@Query("idUserTask") Integer idUserTask,
                                @Query("idAppUser") Integer idAppUser,@Query("dueDate") Date dueDate);
+    @GET("createProject")
+    Call<ResponseBody> createProject(@Query("idAppUser") Integer idAppUser,
+                                     @Query("projectName") String projectName);
+
     @GET("removeDueDate")
     Call<ResponseBody> removeDueDate(@Query("idUserTask") Integer idUserTask,
                                      @Query("idAppUser") Integer idAppUser);

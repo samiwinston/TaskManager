@@ -11,4 +11,6 @@ public interface ILeaveFormSummaryView {
 
 
     void submitLeaveCBH(UserTaskBean userTaskBean);
+
+    void showErrorMsg(String msg);
 }

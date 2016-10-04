@@ -1,24 +1,14 @@
 <resources>
     <string name="app_name">AcHolding</string>
     <string name="name">name</string>
-    <string name="baseUrlExtDev">http://73.236.2.194:8080/WooshServer/mvc/taskManager/</string>
-    <string name="baseUrlLtDev">http://192.168.1.101:8080/WooshServer/mvc/taskManager/</string>
-    <string name="baseUrl3gDev">http://192.168.43.149:8080/WooshServer/mvc/taskManager/</string>
-    <string name="baseUrlWifiDev">http://10.0.0.155:8080/WooshServer/mvc/taskManager/</string>
-    <string name="baseUrlDev">http://10.0.0.2:8080/CodefishTestServer/mvc/taskManager/</string>
-    <string name="baseUrlDevUni">http://150.212.79.247:8080/CodefishTestServer/mvc/taskManager/</string>
-    <string name="baseUrlHrDev">http://10.0.0.2:8080/CodefishTestServer/mvc/hrModule/</string>
-    <string name="baseUrlHrhotspotDev">http://192.168.43.149:8080/CodefishTestServer/mvc/hrModule/</string>
-
-    <string name="baseUrlAchDev">http://10.0.0.2:8080/ACHoldingServer/mvc/taskManager/</string>
-    <string name="baseUrlWarDev">http://10.0.0.2:8282/WooshServer/mvc/taskManager/</string>
-    <string name="baseUrlHotSpot">http://192.168.43.149:8080/CodefishTestServer/mvc/taskManager/</string>
-    <string name="baseUrlProd">http://codefishserver.com:8282/CodefishServer/mvc/taskManager/</string>
-    <string name="baseUrlCloudTest">http://codefishserver.com:8282/CodefishTestServer/mvc/taskManager/</string>
-    <string name="baseUrlAcHTest">http://hrportal.ac-holding.net:8181/ACHoldingServerTest/mvc/taskManager/</string>
-    <string name="baseUrlAcH">http://hrportal.ac-holding.net:8181/ACHoldingServer/mvc/taskManager/</string>
-    <string name="hrUrlEP">hrModule</string>
-    <string name="frmworkUrlEP">taskManager</string>
+    <string name="baseUrlDev">http://10.0.0.2:8080/CodefishTestServer/mvc/</string>
+    <string name="baseUrlHotSpot">http://192.168.43.149:8080/CodefishTestServer/mvc/</string>
+    <string name="baseUrlProd">http://codefishserver.com:8282/CodefishServer/mvc/</string>
+    <string name="baseUrlCloudTest">http://codefishserver.com:8282/CodefishTestServer/mvc/</string>
+    <string name="baseUrlAcHTest">http://hrportal.ac-holding.net:8181/ACHoldingServerTest/mvc/</string>
+    <string name="baseUrlAcHProd">http://hrportal.ac-holding.net:8181/ACHoldingServer/mvc/</string>
+    <string name="hrUrlEP">hrModule/</string>
+    <string name="frmworkUrlEP">taskManager/</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name ="complete_task" > Complete Task </string>
     <string name ="edit_task" > Edit Task</string>

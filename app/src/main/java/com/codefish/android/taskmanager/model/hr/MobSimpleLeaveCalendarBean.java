@@ -12,7 +12,7 @@ public class MobSimpleLeaveCalendarBean implements Serializable {
 
 	public MobSimpleLeaveCalendarBean(){
 	}
-	private static Format formatter = new SimpleDateFormat("dd-MMM-yy");
+	public static Format formatter = new SimpleDateFormat("dd-MMM-yy");
 	
 	private Integer[] weekends;
 	private Map<String, MobSimpleLeaveCalendarEntity> entityItems;

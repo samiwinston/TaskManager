@@ -35,7 +35,7 @@ public class ProjectsNavListAdapter extends BaseAdapter {
     public ProjectsNavListAdapter(Context context, CharSequence labelField) {
         mContext = context;
         mLabelField = labelField;
-        getMyProjects();
+        getMyProjects(false);
     }
 
 
@@ -66,7 +66,7 @@ public class ProjectsNavListAdapter extends BaseAdapter {
     }
 
 
-    private void getMyProjects() {
+    public void getMyProjects(final Boolean isRefresh) {
 
         HashMap<String, Object> myListObj = new HashMap<>();
         myListObj.put("title", "My Tasks");
@@ -84,7 +84,11 @@ public class ProjectsNavListAdapter extends BaseAdapter {
             @Override
             public void onResponse(Call<List<HashMap<String, Object>>> call, Response<List<HashMap<String, Object>>> response) {
                 if (response.isSuccessful()) {
-                    mResultList.addAll(response.body());
+                    if(isRefresh)
+                    {
+                        mResultList = new ArrayList<HashMap<String, Object>>();
+                    }
+                        mResultList.addAll(response.body());
                     notifyDataSetChanged();
                 } else {
                     try {

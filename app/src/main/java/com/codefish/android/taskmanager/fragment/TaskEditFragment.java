@@ -93,6 +93,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
 
     private TaskDetailsActivity taskDetailsActivity;
     private UserTaskBean userTaskBean;
+    private Integer idWorkflowInstance;
 
     TaskDetailsFragment targetFragment;
     private List<HashMap<String, Object>> myProjects;
@@ -111,6 +112,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
             isPossibleAssigneesLoaded = savedInstanceState.getBoolean("isPossibleAssigneesLoaded");
             isProjectsLoaded = savedInstanceState.getBoolean("isProjectsLoaded");
             isTagsLoaded = savedInstanceState.getBoolean("isTagsLoaded");
+            idWorkflowInstance = savedInstanceState.getInt("idWorkflowInstance");
         }
     }
 
@@ -122,6 +124,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         outState.putBoolean("isPossibleAssigneesLoaded",isPossibleAssigneesLoaded);
         outState.putBoolean("isProjectsLoaded",isProjectsLoaded);
         outState.putBoolean("isTagsLoaded",isTagsLoaded);
+        outState.putInt("idWorkflowInstance",taskDetailsActivity.selectedTask.idWorkflowInstance);
 
     }
 
@@ -133,7 +136,14 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         targetFragment = (TaskDetailsFragment) getTargetFragment();
         MyApplication.getAppComponent().inject(this);
         taskEditPresenter.setTaskEditView(this);
-        taskEditPresenter.getTaskPossibleAssignees(taskDetailsActivity.selectedTask.idWorkflowInstance);
+        if(savedInstanceState!=null)
+        {
+            taskEditPresenter.getTaskPossibleAssignees(savedInstanceState.getInt("idWorkflowInstance"));
+        }
+        else
+        {
+            taskEditPresenter.getTaskPossibleAssignees(taskDetailsActivity.selectedTask.idWorkflowInstance);
+        }
         taskEditPresenter.getMyProjects(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0));
         taskEditPresenter.getTags();
         isPossibleAssigneesLoaded = isProjectsLoaded = isTagsLoaded = false;

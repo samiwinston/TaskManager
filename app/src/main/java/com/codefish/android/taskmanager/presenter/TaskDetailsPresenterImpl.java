@@ -1,11 +1,8 @@
 package com.codefish.android.taskmanager.presenter;
 
-import android.util.Log;
-
 import com.codefish.android.taskmanager.fragment.ITaskDetailsView;
 import com.codefish.android.taskmanager.interactor.ITaskDetailsInteraction;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
-import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
@@ -65,6 +62,11 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     }
 
     @Override
+    public void changeStateCBH(String updatedState) {
+        taskDetailsView.changeStateCBH(updatedState);
+    }
+
+    @Override
     public void updateDueDate(Integer idAppUser,Integer idTask, Date date) {
         taskDetailsInteraction.updateDueDate(idTask, date, idAppUser, this);
     }
@@ -92,11 +94,6 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     @Override
     public void loadUserTaskBean(UserTaskBean bean) {
         taskDetailsView.loadUserTaskBean(bean);
-    }
-
-    @Override
-    public void changeStateCBH() {
-        taskDetailsView.changeStateCBH();
     }
 
     @Override

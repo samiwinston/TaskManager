@@ -18,14 +18,14 @@ import java.util.List;
 /**
  * Created by abedch on 4/13/2016.
  */
-public class SearchableOnlnListAdapter extends BaseAdapter  {
+public class SearchableCntryOnlnListAdapter extends BaseAdapter  {
 
     private Context mContext;
     private CharSequence mLabelField = "name";
     public List<HashMap<String, Object>> mResultList = new ArrayList<>();
     public List<HashMap<String, Object>> mAllResults = new ArrayList<>();
 
-    public SearchableOnlnListAdapter(Context context)
+    public SearchableCntryOnlnListAdapter(Context context)
     {
         mContext = context;
     }
@@ -52,11 +52,11 @@ public class SearchableOnlnListAdapter extends BaseAdapter  {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.tag_item_layout, parent, false);
+            convertView = inflater.inflate(R.layout.country_item_layout, parent, false);
 
             viewHolder = new ViewHolder();
 
-            viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.tag_item_layout_title);
+            viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.country_item_layout_title);
 
 
             convertView.setTag(viewHolder);

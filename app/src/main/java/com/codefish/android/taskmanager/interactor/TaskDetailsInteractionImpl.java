@@ -11,6 +11,7 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import okhttp3.ResponseBody;
@@ -93,11 +94,11 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
     @Override
     public void changeState(SubmitActionParam submitParams, final ITaskDetailsPresenter taskDetailsPresenter) {
 
-        ServiceModel.getInstance().taskService.changeState(submitParams).enqueue(new Callback<ResponseBody>() {
+        ServiceModel.getInstance().taskService.changeState(submitParams).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    taskDetailsPresenter.changeStateCBH();
+                    taskDetailsPresenter.changeStateCBH(response.body());
                 } else {
                     try {
                         if (response.code() == 500 && response.errorBody().contentLength()<500) {
@@ -113,7 +114,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
             }
         });

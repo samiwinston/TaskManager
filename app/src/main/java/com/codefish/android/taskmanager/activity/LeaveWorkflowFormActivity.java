@@ -40,17 +40,12 @@ public class LeaveWorkflowFormActivity extends SingleFragmentActivity {
 
     @Override
     public void onBackPressed() {
-        int count = getSupportFragmentManager().getBackStackEntryCount();
+        //int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        if (count == 0) {
-          //  taskDetailsFragment.goBackToList();
-            //additional code
-        }
-        else
-        {
+       /* if (count == 1) {
             leaveWorkflowFormFragment.show();
-            super.onBackPressed();
-        }
+        }*/
+        super.onBackPressed();
     }
 
 
@@ -59,14 +54,6 @@ public class LeaveWorkflowFormActivity extends SingleFragmentActivity {
         super.onCreate(savedInstanceState);
         //mobLeaveRequestFormBean = new MobLeaveRequestFormBean(getIntent().getExtras().getBundle("mobLeaveRequestFormBean"));
         leaveActionItemBean = getIntent().getExtras().getParcelable("leaveActionItemBean");
-
-
-
-
-
-
-
-
 
 
         if (savedInstanceState != null) {

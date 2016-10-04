@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,8 +23,6 @@ import android.widget.Toast;
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
 import com.codefish.android.taskmanager.model.ServiceModel;
-
-import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -59,12 +56,20 @@ public class TaskEditStrFieldFragment extends Fragment {
         fragment.setTargetFragment(targetFragment, requestCode);
         Bundle args = new Bundle();
         args.putString(ARGS_VALUES, value);
+        args.putString("title",title);
+        args.putString("path",path);
         fragment.setArguments(args);
-        fragment.path = path;
-        fragment.title = title;
         fragment.requestCode = requestCode;
 
         return fragment;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("path",getArguments().getString(path));
+        outState.putString("title",getArguments().getString(title));
     }
 
     @Override
@@ -72,6 +77,19 @@ public class TaskEditStrFieldFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if(savedInstanceState!=null)
+        {
+            title = savedInstanceState.getString("title");
+            path = savedInstanceState.getString("path");
+        }
     }
 
     @Nullable
@@ -82,7 +100,21 @@ public class TaskEditStrFieldFragment extends Fragment {
         initToolBar();
 
 
-        editField.setText((String) getArguments().get(ARGS_VALUES));
+        if(savedInstanceState!=null)
+        {
+            title = savedInstanceState.getString("title");
+            path = savedInstanceState.getString("path");
+        }
+        else
+        {
+            editField.setText((String) getArguments().get(ARGS_VALUES));
+            title = getArguments().getString("title");
+            path = getArguments().getString("path");
+        }
+
+
+
+
         editField.addTextChangedListener(onTextChangeListener());
 
 
@@ -129,7 +161,12 @@ public class TaskEditStrFieldFragment extends Fragment {
 
 
     private void initToolBar() {
+        if(title!=null)
         toolbar.setTitle(title);
+        else
+        {
+            toolbar.setTitle(getArguments().getString("title"));
+        }
         taskDetailsActivity.setSupportActionBar(toolbar);
 
         ActionBar supportActionBar = taskDetailsActivity.getSupportActionBar();
@@ -140,6 +177,9 @@ public class TaskEditStrFieldFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        if(menu!=null)
+            this.menu = menu;
+
         if(isSaveVisible)
         {
             showSaveOption();
@@ -153,18 +193,19 @@ public class TaskEditStrFieldFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.task_edit_title, menu);
+        inflater.inflate(R.menu.edit_field_menu, menu);
         this.menu = menu;
     }
 
 
+
     private void hideSaveOption() {
-        MenuItem item = menu.findItem(R.id.menu_item_save);
+        MenuItem item = menu.findItem(R.id.edit_field_menu_item_save);
         item.setVisible(false);
     }
 
     private void showSaveOption() {
-        MenuItem item = menu.findItem(R.id.menu_item_save);
+        MenuItem item = menu.findItem(R.id.edit_field_menu_item_save);
         item.setVisible(true);
     }
 
@@ -177,7 +218,7 @@ public class TaskEditStrFieldFragment extends Fragment {
                     getFragmentManager().popBackStack();
                 }
                 return true;
-            case R.id.menu_item_save:
+            case R.id.edit_field_menu_item_save:
                 updateTaskField();
                 item.setEnabled(false);
                 View view = getActivity().getCurrentFocus();

@@ -5,6 +5,7 @@ import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -19,5 +20,5 @@ public interface IHrService {
 
 
     @POST("submitLeaveRequest")
-    Call<UserTaskBean> submitLeaveRequest(@Body MobLeaveRequestFormBean mLeaveBean);
+    Call<ResponseBody> submitLeaveRequest(@Body MobLeaveRequestFormBean mLeaveBean);
 }

@@ -18,19 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.LeaveWorkflowFormActivity;
-import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
-import com.codefish.android.taskmanager.model.ServiceModel;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by abedch on 5/2/2016.
@@ -51,14 +44,13 @@ public class LeaveSummaryStrFieldFragment extends Fragment {
     private Integer requestCode;
     private boolean isSaveVisible;
 
-    public static LeaveSummaryStrFieldFragment newInstance(Fragment targetFragment, Integer requestCode, String title, String path, String value) {
+    public static LeaveSummaryStrFieldFragment newInstance(Fragment targetFragment, Integer requestCode, String title,String value) {
 
         LeaveSummaryStrFieldFragment fragment = new LeaveSummaryStrFieldFragment();
         fragment.setTargetFragment(targetFragment, requestCode);
         Bundle args = new Bundle();
         args.putString(ARGS_VALUES, value);
         fragment.setArguments(args);
-        fragment.path = path;
         fragment.title = title;
         fragment.requestCode = requestCode;
 
@@ -145,18 +137,18 @@ public class LeaveSummaryStrFieldFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.task_edit_title, menu);
+        inflater.inflate(R.menu.edit_field_menu, menu);
         this.menu = menu;
     }
 
 
     private void hideSaveOption() {
-        MenuItem item = menu.findItem(R.id.menu_item_save);
+        MenuItem item = menu.findItem(R.id.edit_field_menu_item_save);
         item.setVisible(false);
     }
 
     private void showSaveOption() {
-        MenuItem item = menu.findItem(R.id.menu_item_save);
+        MenuItem item = menu.findItem(R.id.edit_field_menu_item_save);
         item.setVisible(true);
     }
 
@@ -169,14 +161,14 @@ public class LeaveSummaryStrFieldFragment extends Fragment {
                     getFragmentManager().popBackStack();
                 }
                 return true;
-            case R.id.menu_item_save:
-                updateTaskField();
+            case R.id.edit_field_menu_item_save:
                 item.setEnabled(false);
                 View view = getActivity().getCurrentFocus();
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+                updateTaskField();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -185,7 +177,10 @@ public class LeaveSummaryStrFieldFragment extends Fragment {
 
     private void updateTaskField() {
 
-        // return to fragment and update related field
+        Intent intent = new Intent();
+        intent.putExtra(ARGS_ITEM, editField.getText().toString());
+        getTargetFragment().onActivityResult(requestCode, Activity.RESULT_OK, intent);
+        getFragmentManager().popBackStack();
 
     }
 

@@ -155,6 +155,7 @@ public class WorkflowFormFragment extends Fragment {
             for (WorkflowActionBean actionBean : mobWorkflowForm.actionBeans) {
                 WorkflowActionButton button = new WorkflowActionButton(getContext(), null);
                 button.setWorkflowActionBean(actionBean);
+                button.setDuplicateParentStateEnabled(true);
                 button.setOnClickListener(onActionClick());
                 actionBtnGroup.addView(button);
             }
@@ -181,8 +182,11 @@ public class WorkflowFormFragment extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                actionBtnGroup.setEnabled(false);
-                WorkflowActionBean bean = ((WorkflowActionButton) v).getWorkflowActionBean();
+                actionBtnGroup.setVisibility(View.GONE);
+                webView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                WorkflowActionButton actionButton =((WorkflowActionButton) v);
+                WorkflowActionBean bean = actionButton.getWorkflowActionBean();
                 submitWorkflowAction(bean);
             }
         };
@@ -228,6 +232,10 @@ public class WorkflowFormFragment extends Fragment {
                     try {
                         if (response.code() == 500 && response.errorBody().contentLength()<500) {
                             Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
+                            actionBtnGroup.setVisibility(View.VISIBLE);
+                            webView.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+
                         } else {
                             throw new Exception();
                         }

@@ -19,6 +19,9 @@ public class TasksModel {
     public static final int REQUEST_TASK_UPDATE= 1012;
     public static final int REQUEST_WORKFLOW_TASK_UPDATE= 1013;
     public static final int REQUEST_CLOSED_SUMMARY= 1014;
+    public static final int REQUEST_UPDATE_FIELD= 1015;
+    public static final int REQUEST_COUNTRY = 1016 ;
+    public static final int REQUEST_NEW_PROJECT = 1017;
 
 
     private TasksModel() {

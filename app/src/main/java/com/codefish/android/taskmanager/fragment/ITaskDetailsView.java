@@ -12,7 +12,7 @@ public interface ITaskDetailsView {
     void updateDueCallBack(Date date);
     void showErrorMsg(String s);
     void loadUserTaskBean(UserTaskBean userTaskBean);
-    void changeStateCBH();
+    void changeStateCBH(String updatedState);
     void updateImportanceCBH();
     void loadWorkflowForm(MobWorkflowForm mobWorkflowForm);
 }

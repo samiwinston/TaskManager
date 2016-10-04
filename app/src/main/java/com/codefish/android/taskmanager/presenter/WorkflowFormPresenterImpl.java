@@ -46,7 +46,7 @@ public class WorkflowFormPresenterImpl implements IWorkflowFormPresenter {
 
     @Override
     public void showErrorMsg(String msg) {
-
+        leaveWorkflowFormView.showErrorMsg(msg);
     }
 
     @Override

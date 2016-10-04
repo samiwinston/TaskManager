@@ -339,11 +339,12 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     }
 
     @Override
-    public void changeStateCBH() {
+    public void changeStateCBH(String updatedState) {
         if(menu!=null)
         {
             MenuItem menuItem = menu.findItem(R.id.menu_item_complete);
             menuItem.setEnabled(true);
+            taskDetailsActivity.selectedTask.currentState = updatedState;
         }
     }
 
