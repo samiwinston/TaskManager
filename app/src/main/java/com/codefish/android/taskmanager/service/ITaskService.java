@@ -84,7 +84,7 @@ public interface ITaskService {
 
     @GET("updateDueDate")
     Call<ResponseBody> updateDueDate(@Query("idUserTask") Integer idUserTask,
-                               @Query("idAppUser") Integer idAppUser,@Query("dueDate") Date dueDate);
+                               @Query("idAppUser") Integer idAppUser,@Query("dueDate") String dueDateStr);
     @GET("createProject")
     Call<ResponseBody> createProject(@Query("idAppUser") Integer idAppUser,
                                      @Query("projectName") String projectName);

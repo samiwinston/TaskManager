@@ -28,7 +28,9 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
     @Override
     public void updateDueDate(Integer idTask, final Date date, Integer idAppUser, final ITaskDetailsPresenter taskDetailsPresenter) {
 
-        ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, date).enqueue(new Callback<ResponseBody>() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        String dueDateStr = dateFormat.format(date);
+        ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, dueDateStr).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

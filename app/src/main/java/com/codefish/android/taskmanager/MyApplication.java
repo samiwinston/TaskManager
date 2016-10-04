@@ -43,7 +43,7 @@ public class MyApplication extends Application {
         controllerMap.put(NetModule.TASK_MANAGER_MODULE,getResources().getString(R.string.frmworkUrlEP));
         controllerMap.put(NetModule.HR_MODULE,getResources().getString(R.string.hrUrlEP));
         String baseUrl = "";
-        Integer buildType = DEV_HOT_SPOT;
+        Integer buildType = DEV;
 
         switch (buildType)
         {

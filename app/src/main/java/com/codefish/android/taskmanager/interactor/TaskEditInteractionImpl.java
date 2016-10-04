@@ -7,6 +7,7 @@ import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.presenter.ITaskEditPresenter;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -118,7 +119,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
     @Override
     public void updateDueDate(Integer idTask, final Date date, Integer idAppUser, final ITaskEditPresenter taskEditPresenter) {
 
-        ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, date).enqueue(new Callback<ResponseBody>() {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        String dueDateStr = dateFormat.format(date);
+        ServiceModel.getInstance().taskService.updateDueDate(idTask, idAppUser, dueDateStr).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

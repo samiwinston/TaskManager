@@ -78,8 +78,7 @@ public class ProjectNewDialog extends DialogFragment {
         inputBtn.setOnClickListener(createProject());
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-        //getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        getDialog().getWindow().setLayout(10000, 10000);
+        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         getDialog().getWindow().setGravity(Gravity.CENTER_VERTICAL);
 
         return view;
@@ -93,15 +92,16 @@ public class ProjectNewDialog extends DialogFragment {
             public void onClick(View v) {
                 if (projectEditText.getText().length() > 0)
                 {
+                   final String projectName = projectEditText.getText().toString();
                     inputBtn.setEnabled(false);
-                    ServiceModel.getInstance().taskService.createProject(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),projectEditText.getText().toString()).enqueue(new Callback<ResponseBody>() {
+                    ServiceModel.getInstance().taskService.createProject(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),projectName).enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if(response.isSuccessful())
                             {
-                                Intent intent = new Intent();
                                 ((TasksListFragment)getTargetFragment()).refreshProjects();
                                 dismiss();
+                                Toast.makeText(getContext(), "Project "+projectName+" has been created",Toast.LENGTH_LONG).show();
                             }
                             else {
                                 try {
