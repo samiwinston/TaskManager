@@ -152,7 +152,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         }
 
 
-        //floatActionMenu.setClosedOnTouchOutside(true);
+        floatActionMenu.setClosedOnTouchOutside(true);
 
 
 
@@ -166,7 +166,6 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
             public void onClick(View v) {
                 ProjectNewDialog userProfileDialog = ProjectNewDialog.newInstance(TasksListFragment.this, TasksModel.REQUEST_NEW_PROJECT);
                 userProfileDialog.show(getFragmentManager(), "User Profile Dialog");
-                hideFobMenu();
             }
         };
     }
@@ -176,7 +175,6 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
             @Override
             public void onClick(View v) {
                 activity.onOpenLeaveForm(leaveActionItemBean);
-                hideFobMenu();
             }
         };
     }
@@ -205,7 +203,6 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideFobMenu();
                 drawerLayout.openDrawer(Gravity.RIGHT);
             }
         };
@@ -217,7 +214,6 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
             public void onClick(View v) {
                 UserProfileDialog userProfileDialog = UserProfileDialog.newInstance(TasksListFragment.this);
                 userProfileDialog.show(getFragmentManager(), "User Profile Dialog");
-                hideFobMenu();
             }
         };
     }
@@ -230,7 +226,6 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideFobMenu();
                 Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -287,15 +282,8 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     @Override
     public void selectTask(UserTaskBean bean, int position) {
         activity.onItemSelected(bean);
-        hideFobMenu();
     }
-
-    private void hideFobMenu() {
-        if(floatActionMenu.isOpened())
-        {
-            floatActionMenu.close(false);
-        }
-    }
+    
 
     @Override
     public void showErrorMsg(String msg) {
@@ -359,7 +347,6 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     @Override
     public void onClick(View v) {
         activity.onNewItemSelect();
-        hideFobMenu();
     }
 
 
