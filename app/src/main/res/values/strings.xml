@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stream line</string>
+    <string name="app_name">Streamline</string>
     <string name="name">name</string>
     <string name="baseUrlDev">http://10.0.0.2:8080/CodefishTestServer/mvc/</string>
     <string name="baseUrlHotSpot">http://192.168.43.149:8080/CodefishTestServer/mvc/</string>
