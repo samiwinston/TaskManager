@@ -8,6 +8,7 @@ import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.View;
 import android.widget.Toast;
 
 import com.codefish.android.taskmanager.fragment.LoginFragment;
@@ -182,6 +183,7 @@ public class LoginActivity extends SingleFragmentActivity {
             public void onFailure(Call<MobAppUserBean> call, Throwable t) {
                 loginFragment.showToast("Can not reach CodeFish");
                 loginFragment.hideProgressBar();
+                showControls();
                 t.printStackTrace();
 
                 SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -192,6 +194,8 @@ public class LoginActivity extends SingleFragmentActivity {
         });
 
     }
+
+
 
 
     private void logUser(String userName,String userEmail, String name) {
@@ -216,12 +220,26 @@ public class LoginActivity extends SingleFragmentActivity {
 
             if(userName !=null && userName.length()>0 && password !=null && password.length()>0)
             {
-                loginFragment.userEdtView.setText(userName);
-                loginFragment.passEdtView.setText(password);
+
+                hideControls();
                 loginFragment.showProgressBar();
                 getUser(userName,password);
 
             }
         }
     }
+
+    private void showControls() {
+        loginFragment.userEdtView.setVisibility(View.VISIBLE);
+        loginFragment.passEdtView.setVisibility(View.VISIBLE);
+        loginFragment.loginBtn.setVisibility(View.VISIBLE);
+    }
+
+    private void hideControls() {
+        loginFragment.userEdtView.setVisibility(View.INVISIBLE);
+        loginFragment.passEdtView.setVisibility(View.INVISIBLE);
+        loginFragment.loginBtn.setVisibility(View.INVISIBLE);
+    }
+
+
 }

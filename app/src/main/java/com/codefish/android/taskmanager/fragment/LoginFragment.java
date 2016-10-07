@@ -31,12 +31,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
     @Bind(R.id.loginBtn)
-    Button loginBtn;
+    public Button loginBtn;
 
     LoginActivity loginActivity;
-
-
-    private Boolean mockValidation = false;
 
    @Override
     public void onAttach(Context context) {
@@ -81,11 +78,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-
-    public void navigateToTasksView() {
-
-    }
-
     public void showToast(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
@@ -93,12 +85,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         loginHandler();
-    }
-
-    public interface ILoginCallBack{
-
-        public void validateCredentials(String username, String password);
-
     }
 
 }
