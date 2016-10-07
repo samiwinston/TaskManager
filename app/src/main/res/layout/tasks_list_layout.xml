@@ -119,6 +119,7 @@
                 fab:fab_colorNormal="#0F97D6"
                 android:paddingRight="10dp"
                 android:paddingBottom="10dp"
+                fab:layout_behavior="com.codefish.android.taskmanager.component.fa.FloatingActionMenuBehavior"
                 android:paddingLeft="10dp"
                 fab:menu_colorNormal="@color/colorPrimary"
                 fab:menu_labels_colorNormal="@color/colorPrimary"

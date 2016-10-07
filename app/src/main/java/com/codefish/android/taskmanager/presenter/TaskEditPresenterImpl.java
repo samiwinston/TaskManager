@@ -86,8 +86,8 @@ public class TaskEditPresenterImpl implements ITaskEditPresenter {
     }
 
     @Override
-    public void deleteTask(Integer idAppUser,int idTask) {
-        taskEditInteraction.deleteTask(idAppUser, idTask, this);
+    public void deleteTask(Integer idAppUser,int idWorkflowInstance) {
+        taskEditInteraction.deleteTask(idAppUser, idWorkflowInstance, this);
     }
 
     @Override

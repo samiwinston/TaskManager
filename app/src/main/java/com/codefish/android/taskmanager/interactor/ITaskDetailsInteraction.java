@@ -12,6 +12,8 @@ import java.util.Date;
  * Created by abedch on 5/25/2016.
  */
 public interface ITaskDetailsInteraction {
+    void deleteTask(Integer idAppUser, int idTask, ITaskDetailsPresenter taskDetailsPresenter);
+
     void updateDueDate(Integer idTask, Date date, Integer idAppUser, ITaskDetailsPresenter taskDetailsPresenter);
     void getTask(GetTaskParameter param, ITaskDetailsPresenter taskDetailsPresenter);
     void changeState(SubmitActionParam submitParams, ITaskDetailsPresenter taskDetailsPresenter);

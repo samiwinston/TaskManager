@@ -107,5 +107,15 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
         taskDetailsView.loadWorkflowForm(mobWorkflowForm);
     }
 
+    @Override
+    public void deleteTask(int userId, int idWorkflowInstance) {
+        taskDetailsInteraction.deleteTask(userId, idWorkflowInstance, this);
+    }
+
+    @Override
+    public void deleteTaskCallBack() {
+        taskDetailsView.deleteTaskCallBack();
+    }
+
 
 }

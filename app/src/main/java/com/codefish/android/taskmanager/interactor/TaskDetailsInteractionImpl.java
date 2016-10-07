@@ -26,6 +26,35 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
 
 
     @Override
+    public void deleteTask(Integer idAppUser, int idTask, final ITaskDetailsPresenter taskDetailsPresenter) {
+        ServiceModel.getInstance().taskService.deleteTask(idAppUser, idTask).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    taskDetailsPresenter.deleteTaskCallBack();
+                } else {
+                    try {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                taskDetailsPresenter.showErrorMsg("Can not reach Codefish");
+            }
+        });
+    }
+
+    @Override
     public void updateDueDate(Integer idTask, final Date date, Integer idAppUser, final ITaskDetailsPresenter taskDetailsPresenter) {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");

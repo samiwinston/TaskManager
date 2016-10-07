@@ -48,20 +48,20 @@ public class WorkflowFormInteractionImpl implements IWorkflowFormInteraction {
                 }  else {
                     try {
                         if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            workflowFormPresenter.showErrorMsg(response.errorBody().string());
+                            workflowFormPresenter.showErrorMsgInSummary(response.errorBody().string());
                         } else {
                             throw new Exception();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        workflowFormPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                        workflowFormPresenter.showErrorMsgInSummary("Illegal error, "+response.code() +" please contact the admin");
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                workflowFormPresenter.showErrorMsg("Can no reach CodeFish");
+                workflowFormPresenter.showErrorMsgInSummary("Can no reach CodeFish");
             }
         });
 

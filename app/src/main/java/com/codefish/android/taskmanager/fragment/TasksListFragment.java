@@ -155,7 +155,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         floatActionMenu.setClosedOnTouchOutside(true);
 
 
-
+        initList();
         initListData();
         return view;
     }
@@ -164,6 +164,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideFobMenu();
                 ProjectNewDialog userProfileDialog = ProjectNewDialog.newInstance(TasksListFragment.this, TasksModel.REQUEST_NEW_PROJECT);
                 userProfileDialog.show(getFragmentManager(), "User Profile Dialog");
             }
@@ -174,7 +175,9 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideFobMenu();
                 activity.onOpenLeaveForm(leaveActionItemBean);
+
             }
         };
     }
@@ -259,11 +262,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
     @Override
     public void refreshList() {
-        if (mLayoutManager == null) {
-            initList();
-        } else {
-            taskListAdapter.notifyDataSetChanged();
-        }
+        taskListAdapter.notifyDataSetChanged();
         hideProgressBar();
 
 
@@ -283,7 +282,10 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     public void selectTask(UserTaskBean bean, int position) {
         activity.onItemSelected(bean);
     }
-    
+
+    private void hideFobMenu() {
+            floatActionMenu.close(false);
+    }
 
     @Override
     public void showErrorMsg(String msg) {
@@ -346,6 +348,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
     @Override
     public void onClick(View v) {
+        hideFobMenu();
         activity.onNewItemSelect();
     }
 

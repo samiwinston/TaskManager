@@ -19,6 +19,8 @@ public interface IWorkflowFormPresenter {
 
     void showErrorMsg(String msg);
 
+    void showErrorMsgInSummary(String msg);
+
     void getLeaveBeanCBH(MobLeaveRequestFormBean bean);
 
 

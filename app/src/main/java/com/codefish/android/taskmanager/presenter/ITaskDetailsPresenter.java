@@ -29,4 +29,8 @@ public interface ITaskDetailsPresenter {
     void changeStateCBH(String updatedState);
     void getWorkflowForm(Integer idAppUser,Integer idWorkflowInstance);
     void loadWorkflowForm(MobWorkflowForm mobWorkflowForm);
+
+    void deleteTask(int userId, int idWorkflowInstance);
+
+    void deleteTaskCallBack();
 }

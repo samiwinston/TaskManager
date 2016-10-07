@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +90,8 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
     LinearLayout daysRemainingGrp;
     @Bind(R.id.leave_request_summary_form_days_country_grp)
     LinearLayout countryGrp;
+    @Bind(R.id.leave_request_summary_form_progress_bar)
+    ProgressBar progressBar;
 
     private Menu menu;
     private boolean isSaveVisible = false;
@@ -178,7 +182,8 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
         //workflowFormPresenter.submitLeave(leaveWorkflowFormActivity.mobLeaveRequestFormBean);
 
         //submitBtn.setOnClickListener(onSubmitForm());
-
+        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         initToolBar();
 
@@ -317,6 +322,7 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
 
     private void onSubmitForm() {
+        progressBar.setVisibility(View.VISIBLE);
         MobLeaveRequestFormBean bean = leaveWorkflowFormActivity.mobLeaveRequestFormBean;
         bean.lastPhoneOnLeave = enteredPhoneNumber;
         bean.lastCountryOnLeave = idSelectedCountry;
@@ -375,6 +381,7 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
     @Override
     public void showErrorMsg(String msg) {
+        progressBar.setVisibility(View.GONE);
         Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
     }
 }

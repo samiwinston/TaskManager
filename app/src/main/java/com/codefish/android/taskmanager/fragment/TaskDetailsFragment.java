@@ -67,7 +67,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
 
     TaskEditFragment taskEditFragment;
     private MobWorkflowForm loadedWorkflowForm = null;
-    private boolean workflowButtonIsLoaded=false;
+    private boolean workflowButtonIsLoaded = false;
     Menu menu;
 
   /*  public static TaskDetailsFragment newInstance() {
@@ -81,7 +81,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
-           loadedWorkflowForm = savedInstanceState.getParcelable("loadedWorkflowForm");
+            loadedWorkflowForm = savedInstanceState.getParcelable("loadedWorkflowForm");
             workflowButtonIsLoaded = savedInstanceState.getBoolean("workflowButtonIsLoaded");
         }
     }
@@ -90,12 +90,10 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if(loadedWorkflowForm!=null)
-        {
-            outState.putParcelable("loadedWorkflowForm",loadedWorkflowForm);
-            outState.putBoolean("workflowButtonIsLoaded",workflowButtonIsLoaded);
+        if (loadedWorkflowForm != null) {
+            outState.putParcelable("loadedWorkflowForm", loadedWorkflowForm);
+            outState.putBoolean("workflowButtonIsLoaded", workflowButtonIsLoaded);
         }
-
 
 
     }
@@ -108,7 +106,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         setHasOptionsMenu(true);
         taskDetailsPresenter.setTaskDetailsView(this);
         if (taskDetailsActivity.selectedTask != null)
-            taskDetailsPresenter.getTask(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+            taskDetailsPresenter.getTask(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0),
                     taskDetailsActivity.selectedTask.idWorkflowInstance);
     }
 
@@ -128,8 +126,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 initialsView.setText(bean.getOwnerInitals());
                 assigneeView.setText(bean.ownerName);
             }
-            if(workflowButtonIsLoaded)
-            {
+            if (workflowButtonIsLoaded) {
                 loadUserTaskBean(bean);
             }
         }
@@ -138,7 +135,6 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
 
         initToolBar();
         initBean();
-
 
 
         return view;
@@ -151,7 +147,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 if (loadedWorkflowForm != null) {
                     loadWorkflowForm(loadedWorkflowForm);
                 } else {
-                    taskDetailsPresenter.getWorkflowForm(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                    taskDetailsPresenter.getWorkflowForm(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0),
                             taskDetailsActivity.selectedTask.idWorkflowInstance);
                 }
             }
@@ -192,7 +188,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(menu!=null)
+        if (menu != null)
             this.menu = menu;
 
 
@@ -205,6 +201,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         if (taskDetailsActivity.selectedTask.hasForm) {
             MenuItem menuItemComplete = menu.findItem(R.id.menu_item_complete);
             menuItemComplete.setVisible(false);
+            MenuItem menuDeleteItem = menu.findItem(R.id.menu_item_delete);
+            menuDeleteItem.setVisible(false);
             MenuItem menuItemEdit = menu.findItem(R.id.menu_item_edit);
             menuItemEdit.setVisible(false);
             MenuItem menuItemImportant = menu.findItem(R.id.menu_item_important);
@@ -221,7 +219,6 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.task_details_menu, menu);
-
 
 
     }
@@ -247,7 +244,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                     taskDetailsActivity.selectedTask.isOpen = true;
                     item.setIcon(R.drawable.icon_task_details_topbar_task);
                 }
-                taskDetailsPresenter.changeState(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                taskDetailsPresenter.changeState(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0),
                         taskDetailsActivity.selectedTask);
                 return true;
             case R.id.menu_item_important:
@@ -258,21 +255,32 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                     taskDetailsActivity.selectedTask.importance = 0;
                     item.setIcon(R.drawable.icon_task_details_topbar_heart);
                 }
-                taskDetailsPresenter.updateImportance(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),taskDetailsActivity.selectedTask.idTask, taskDetailsActivity.selectedTask.importance);
+                taskDetailsPresenter.updateImportance(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0), taskDetailsActivity.selectedTask.idTask, taskDetailsActivity.selectedTask.importance);
                 return true;
-            case R.id.menu_item_unfollow:
+            case R.id.menu_item_delete:
+                onDeleteClick();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void onDeleteClick() {
+
+        MyDialogFragment dialogFragment = MyDialogFragment.newInstance();
+        dialogFragment.setTargetFragment(TaskDetailsFragment.this, TasksModel.REQUEST_REMOVE_TASK);
+        if (!dialogFragment.isAdded()) {
+            dialogFragment.show(getFragmentManager(), "dialog date");
+        }
+
+    }
+
     public void goBackToList() {
         Intent intent = new Intent();
         intent.putExtras(taskDetailsActivity.selectedTask.getBundle());
         intent.putExtra("hasNoFollowers", taskDetailsActivity.selectedTask.hasNoFollowers());
-        if ((!taskDetailsActivity.selectedTask.isOpen &&  (taskDetailsActivity.selectedTask.requiresReview ==null || !taskDetailsActivity.selectedTask.requiresReview))||
-                ( taskDetailsActivity.idSelectedProject!=0 &&
+        if ((!taskDetailsActivity.selectedTask.isOpen && (taskDetailsActivity.selectedTask.requiresReview == null || !taskDetailsActivity.selectedTask.requiresReview)) ||
+                (taskDetailsActivity.idSelectedProject != 0 &&
                         (!taskDetailsActivity.selectedTask.idGroup.equals(taskDetailsActivity.idSelectedProject)))) {
 
             intent.putExtra("deleteThisTask", true);
@@ -301,18 +309,29 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 final Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
                 taskDetailsActivity.selectedTask.dueDate = date;
                 dueDateBtn.setDate(date);
-                taskDetailsPresenter.updateDueDate(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),
+                taskDetailsPresenter.updateDueDate(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0),
                         taskDetailsActivity.selectedTask.idTask, date);
                 break;
             case TasksModel.REQUEST_TASK_UPDATE:
                 taskDetailsActivity.selectedTask = new UserTaskBean(data.getExtras());
                 goBackToList();
                 break;
+            case TasksModel.REQUEST_REMOVE_TASK:
+                taskDetailsPresenter.deleteTask(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0), taskDetailsActivity.selectedTask.idWorkflowInstance);
+                break;
 
             default:
         }
 
 
+    }
+
+    @Override
+    public void deleteTaskCallBack() {
+        Intent intent = new Intent();
+        intent.putExtra("deleteThisTask", true);
+        getActivity().setResult(TasksModel.REQUEST_REMOVE_TASK, intent);
+        getActivity().finish();
     }
 
 
@@ -340,8 +359,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
 
     @Override
     public void changeStateCBH(String updatedState) {
-        if(menu!=null)
-        {
+        if (menu != null) {
             MenuItem menuItem = menu.findItem(R.id.menu_item_complete);
             menuItem.setEnabled(true);
             taskDetailsActivity.selectedTask.currentState = updatedState;

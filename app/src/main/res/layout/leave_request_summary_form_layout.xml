@@ -19,10 +19,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+
+
+        <LinearLayout android:id="@+id/leave_request_summary_form_grp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <ProgressBar android:id="@+id/leave_request_summary_form_progress_bar"
+                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"/>
 
             <TextView
                 android:id="@+id/leave_request_summary_form_leave_type"

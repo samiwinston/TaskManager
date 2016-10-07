@@ -7,6 +7,6 @@
         app:showAsAction ="always" android:title="@string/important_task" />
     <item android:id ="@+id/menu_item_edit" android:icon ="@drawable/icon_task_details_topbar_edit"
         app:showAsAction ="always" android:title="@string/edit_task"  />
-    <item android:id ="@+id/menu_item_unfollow"
-        app:showAsAction ="never" android:title="@string/unfollow_task"/>
+    <item android:id ="@+id/menu_item_delete"
+        app:showAsAction ="never" android:title="@string/delete_task"/>
 </menu>

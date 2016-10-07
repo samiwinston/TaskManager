@@ -87,6 +87,9 @@ public class ProjectsNavListAdapter extends BaseAdapter {
                     if(isRefresh)
                     {
                         mResultList = new ArrayList<HashMap<String, Object>>();
+                        HashMap<String, Object> myListObj = new HashMap<>();
+                        myListObj.put("title", "My Tasks");
+                        mResultList.add(myListObj);
                     }
                         mResultList.addAll(response.body());
                     notifyDataSetChanged();

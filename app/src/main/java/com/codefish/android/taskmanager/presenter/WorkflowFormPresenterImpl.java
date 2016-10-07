@@ -50,6 +50,11 @@ public class WorkflowFormPresenterImpl implements IWorkflowFormPresenter {
     }
 
     @Override
+    public void showErrorMsgInSummary(String msg) {
+        leaveFormSummaryView.showErrorMsg(msg);
+    }
+
+    @Override
     public void getLeaveBeanCBH(MobLeaveRequestFormBean bean) {
         leaveWorkflowFormView.getLeaveBeanCBH(bean);
     }

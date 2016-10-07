@@ -9,6 +9,8 @@ import java.util.Date;
  * Created by abedch on 5/25/2016.
  */
 public interface ITaskDetailsView {
+    void deleteTaskCallBack();
+
     void updateDueCallBack(Date date);
     void showErrorMsg(String s);
     void loadUserTaskBean(UserTaskBean userTaskBean);
