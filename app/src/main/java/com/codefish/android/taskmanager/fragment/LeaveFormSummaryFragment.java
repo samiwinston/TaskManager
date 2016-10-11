@@ -3,6 +3,7 @@ package com.codefish.android.taskmanager.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -33,7 +34,9 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 import com.codefish.android.taskmanager.presenter.IWorkflowFormPresenter;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -76,6 +79,8 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
     TextView leaveType;
     @Bind(R.id.leave_request_summary_form_address_on_leave)
     TextView addressOnLeave;
+    @Bind(R.id.leave_request_summary_form_peers_on_leave)
+    TextView peersOnLeave;
     @Bind(R.id.leave_request_summary_form_days_requested_startDate)
     TextView requestedStartDate;
   /*  @Bind(R.id.leave_request_summary_form_days_requested_endDate)
@@ -95,21 +100,24 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
     private Menu menu;
     private boolean isSaveVisible = false;
+    private boolean isPeersLoaded = false;
     private String enteredPhoneNumber = null;
     private String enteredAddressOnLeave = null;
     private Integer idSelectedCountry = 0;
     private String selectedCountryName = "";
+    private List<HashMap<String, Object>> peersOfLeaveList;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putBoolean("isSaveVisible", isSaveVisible);
+        outState.putBoolean("isPeersLoaded", isPeersLoaded);
         outState.putString("enteredPhoneNumber", enteredPhoneNumber);
         outState.putString("enteredAddressOnLeave", enteredAddressOnLeave);
         outState.putInt("idSelectedCountry", idSelectedCountry);
         outState.putString("selectedCountryName", selectedCountryName);
-
+        outState.putSerializable("peersOfLeaveList", (Serializable) peersOfLeaveList);
     }
 
     @Override
@@ -118,10 +126,13 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
         if (savedInstanceState != null) {
             this.isSaveVisible = savedInstanceState.getBoolean("isSaveVisible");
+            this.isPeersLoaded = savedInstanceState.getBoolean("isPeersLoaded");
             this.enteredPhoneNumber = savedInstanceState.getString("enteredPhoneNumber");
             this.enteredAddressOnLeave = savedInstanceState.getString("enteredAddressOnLeave");
             this.selectedCountryName = savedInstanceState.getString("selectedCountryName");
             this.idSelectedCountry = savedInstanceState.getInt("idSelectedCountry");
+            this.peersOfLeaveList = (List<HashMap<String, Object>>) savedInstanceState.getSerializable("peersOfLeaveList");
+
         }
     }
 
@@ -130,6 +141,14 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         isSaveVisible = (!leaveWorkflowFormActivity.mobLeaveRequestFormBean.showAddressBox);
+
+
+        // get peers on leave
+
+
+
+
+
     }
 
 
@@ -233,8 +252,31 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
                 countryOnLeaveView.setText(selectedCountryName);
         }
 
+        peersOnLeave.setOnClickListener(peersOnLeaveClick());
+
+
+        workflowFormPresenter
+                .getPeersOnLeave(PreferenceManager
+                                .getDefaultSharedPreferences(getContext()).getInt("userId", 0),
+                        bean.requestStartDate
+                        ,bean.requestEndDate);
 
         return view;
+    }
+
+    private View.OnClickListener peersOnLeaveClick() {
+     return new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             if(isPeersLoaded)
+             {
+                 LeaveSummaryPeersOnLeaveFragment leaveSummaryPeersOnLeaveFragment = LeaveSummaryPeersOnLeaveFragment.
+                         newInstance(LeaveFormSummaryFragment.this,peersOfLeaveList);
+                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, leaveSummaryPeersOnLeaveFragment)
+                         .addToBackStack("Back To Parent").commit();
+             }
+         }
+     };
     }
 
     private View.OnClickListener onAddCountryClick() {
@@ -383,5 +425,11 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
     public void showErrorMsg(String msg) {
         progressBar.setVisibility(View.GONE);
         Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void getPeersOnLeaveCBH(List<HashMap<String, Object>> result) {
+        isPeersLoaded = true;
+        this.peersOfLeaveList = result;
     }
 }

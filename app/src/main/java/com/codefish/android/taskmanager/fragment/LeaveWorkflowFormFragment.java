@@ -167,8 +167,7 @@ public class LeaveWorkflowFormFragment extends Fragment implements ILeaveWorkflo
                     prepareLeave();
                     leaveFormSummaryFragment = LeaveFormSummaryFragment.newInstance(LeaveWorkflowFormFragment.this);
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, leaveFormSummaryFragment)
-                            .commit();
-                    //getFragmentManager().beginTransaction().hide(LeaveWorkflowFormFragment.this).commit();
+                            .addToBackStack("Back To Parent").commit();
                 }
 
             }

@@ -10,6 +10,10 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by abedch on 2/9/2016.
  */
@@ -45,6 +49,12 @@ public class WorkflowFormPresenterImpl implements IWorkflowFormPresenter {
     }
 
     @Override
+    public void getPeersOnLeave(Integer idAppUser, Date startDate, Date endDate) {
+        workflowFormInteraction.getPeersOnLeave(idAppUser,startDate,endDate,this);
+    }
+
+
+    @Override
     public void showErrorMsg(String msg) {
         leaveWorkflowFormView.showErrorMsg(msg);
     }
@@ -72,5 +82,10 @@ public class WorkflowFormPresenterImpl implements IWorkflowFormPresenter {
     @Override
     public void setLeaveFormSummaryView(ILeaveFormSummaryView leaveFormSummaryView) {
         this.leaveFormSummaryView = leaveFormSummaryView;
+    }
+
+    @Override
+    public void getPeersOnLeaveCBH(List<HashMap<String, Object>> result) {
+        leaveFormSummaryView.getPeersOnLeaveCBH(result);
     }
 }

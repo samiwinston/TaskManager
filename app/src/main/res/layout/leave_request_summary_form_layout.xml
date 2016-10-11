@@ -249,7 +249,45 @@
             </LinearLayout>
 
 
+            <LinearLayout android:id="@+id/leave_request_summary_form_peers_on_leave_grp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
 
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_user_calendar" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/leave_request_summary_form_peers_on_leave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="View peers on leave"
+                        android:textStyle="bold"
+                        android:paddingLeft="5dp"
+                        android:paddingBottom="22dp"
+                        android:paddingTop="22dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_below="@id/leave_request_summary_form_peers_on_leave"
+                        android:background="@color/colorLightGrey" />
+                </RelativeLayout>
+
+            </LinearLayout>
 
 
             <LinearLayout android:id="@+id/leave_request_summary_form_days_address_grp"

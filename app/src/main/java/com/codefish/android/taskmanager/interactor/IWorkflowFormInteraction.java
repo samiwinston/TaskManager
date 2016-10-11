@@ -6,6 +6,8 @@ import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 import com.codefish.android.taskmanager.presenter.ITaskPresenter;
 import com.codefish.android.taskmanager.presenter.IWorkflowFormPresenter;
 
+import java.util.Date;
+
 /**
  * Created by abedch on 2/15/2016.
  */
@@ -15,4 +17,6 @@ public interface IWorkflowFormInteraction {
     void submitLeave(MobLeaveRequestFormBean mobLeaveRequestFormBean, IWorkflowFormPresenter workflowFormPresenter);
 
     void getLeaveBean(SubmitActionParam submitActionParam, IWorkflowFormPresenter workflowFormPresenter);
+
+    void getPeersOnLeave(Integer idAppUser, Date startDate, Date endDate, IWorkflowFormPresenter workflowFormPresenter);
 }
