@@ -94,120 +94,9 @@ public class LoginActivity extends SingleFragmentActivity {
     }
 
 
-    public void validateCredentials(String username, String password) {
-        loginFragment.showProgressBar();
 
 
-        if (username == null || username.length() == 0
-                || password == null || password.length() == 0) {
-            loginFragment.showToast("Please check your username or password");
-            loginFragment.hideProgressBar();
-            return;
-        }
-        getUser(username, password);
-    }
-
-    private void getUser(final String username, final String password) {
-
-
-        ServiceModel.getInstance().userService.getUser(username, password).enqueue(new Callback<MobAppUserBean>() {
-            @Override
-            public void onResponse(Call<MobAppUserBean> call, Response<MobAppUserBean> response) {
-                if (response.isSuccessful()) {
-                    MobAppUserBean user = response.body();
-                    if (user.getId() > 0) {
-                        LoginModel.getInstance().setUserBean(user);
-                        WidgetActionItemBean leaveActionBean = null;
-
-                        if(user.getActionItems()!=null && user.getActionItems().length>0)
-                        {
-                            for (WidgetActionItemBean actionBean:user.getActionItems()) {
-                                if(actionBean.workflowName!=null && actionBean.workflowName.equals("hrLeaveRequestWorkflow"))
-                                {
-                                    leaveActionBean = actionBean;
-                                    break;
-                                }
-                            }
-                        }
-
-
-                        navigateToTasksView(leaveActionBean);
-                        finish();
-
-
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user);
-                        editor.putString("MobAppUserBean", json);
-                        editor.putString("email",user.getEmail());
-                        editor.putString("username",user.getUsername());
-                        editor.putString("name", user.getName());
-                        editor.putInt("userId", user.getId());
-                        editor.putString("userInitials", user.getName().charAt(0)+""+user.getName().charAt(user.getName().lastIndexOf(' ')+1));
-                        editor.putString("password", password);
-                        editor.commit();
-
-
-                        // TODO: Move this to where you establish a user session
-                        logUser(user.getUsername(),"Email Here",user.getName());
-
-
-                    } else {
-                        loginFragment.showToast("Can not login, please check your username or password");
-                    }
-
-
-                } else {
-                    try {
-                        if(response.code()==500 && response.errorBody().contentLength()<500)
-                        {
-                            loginFragment.showToast(response.errorBody().string());
-                        }
-                        else
-                        {
-                            throw new Exception();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        loginFragment.showToast("Illegal error "+response.code()+", please contact the admin");
-                    }
-
-                }
-
-                loginFragment.hideProgressBar();
-
-            }
-
-            @Override
-            public void onFailure(Call<MobAppUserBean> call, Throwable t) {
-                loginFragment.showToast("Can not reach CodeFish");
-                loginFragment.hideProgressBar();
-                showControls();
-                t.printStackTrace();
-
-                SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.clear();
-                editor.commit();
-            }
-        });
-
-    }
-
-
-
-
-    private void logUser(String userName,String userEmail, String name) {
-        // TODO: Use the current user's information
-        // You can call any combination of these three methods
-        Crashlytics.setUserIdentifier(name);
-        Crashlytics.setUserEmail(userEmail);
-        Crashlytics.setUserName(userName);
-    }
-
-
-    @Override
+  /*  @Override
     protected void onResume() {
         super.onResume();
 
@@ -221,25 +110,15 @@ public class LoginActivity extends SingleFragmentActivity {
             if(userName !=null && userName.length()>0 && password !=null && password.length()>0)
             {
 
-                hideControls();
+                loginFragment.hideControls();
                 loginFragment.showProgressBar();
-                getUser(userName,password);
+                loginFragment.getUser(userName,password);
 
             }
         }
-    }
+    }*/
 
-    private void showControls() {
-        loginFragment.userEdtView.setVisibility(View.VISIBLE);
-        loginFragment.passEdtView.setVisibility(View.VISIBLE);
-        loginFragment.loginBtn.setVisibility(View.VISIBLE);
-    }
 
-    private void hideControls() {
-        loginFragment.userEdtView.setVisibility(View.INVISIBLE);
-        loginFragment.passEdtView.setVisibility(View.INVISIBLE);
-        loginFragment.loginBtn.setVisibility(View.INVISIBLE);
-    }
 
 
 }

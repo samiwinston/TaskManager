@@ -32,7 +32,7 @@ public class MyApplication extends Application {
         HashMap<Integer,String> controllerMap = new HashMap<>();
         controllerMap.put(NetModule.TASK_MANAGER_MODULE,getResources().getString(R.string.frmworkUrlEP));
         controllerMap.put(NetModule.HR_MODULE,getResources().getString(R.string.hrUrlEP));
-        String baseUrl =  getResources().getString(R.string.baseUrlHotSpot);
+        String baseUrl =  getResources().getString(R.string.baseUrlAcHProd);
 
 
         appComponent = DaggerAppComponent.builder()
