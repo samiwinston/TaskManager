@@ -108,7 +108,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
         }
 
-        if (bean.dueDate != null) {
+        if (bean.dueDate != null && (!bean.hasForm)) {
             holder.dueDateView.setDate(bean.dueDate);
             holder.dueDateView.setVisibility(View.VISIBLE);
         } else {

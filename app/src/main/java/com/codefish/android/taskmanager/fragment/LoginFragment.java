@@ -235,7 +235,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
 
     public void showToast(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+        if(getContext()!=null)
+        {
+            Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

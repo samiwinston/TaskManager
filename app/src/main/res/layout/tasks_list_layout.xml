@@ -154,7 +154,7 @@
                     fab:fab_colorRipple="#99FFFFFF"
                     android:src="@drawable/ic_content_paste_black_24dp"
                     fab:backgroundTint="@color/colorPrimary"
-                    fab:fab_label="Add Project"/>
+                    fab:fab_label="Project"/>
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/tasks_list_layout_add_new_task"
@@ -166,7 +166,7 @@
                     fab:fab_colorRipple="#99FFFFFF"
                     android:src="@drawable/ic_assignment_black_24dp"
                     fab:backgroundTint="@color/colorPrimary"
-                    fab:fab_label="Add Task"/>
+                    fab:fab_label="Task"/>
 
             </com.github.clans.fab.FloatingActionMenu>
 

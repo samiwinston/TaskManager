@@ -20,7 +20,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:gravity="left">
 
         <com.codefish.android.taskmanager.component.smartDateView.SmartDateTextView
             android:id="@+id/task_item_layout_task_due_date"
