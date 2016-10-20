@@ -67,6 +67,8 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     AppCompatImageButton requestLeave;*/
     @Bind(R.id.tasks_list_layout_mic)
     AppCompatImageButton micBtn;
+    @Bind(R.id.tasks_list_layout_nav_create_project)
+    AppCompatImageButton navCreateProjectBtn;
     @Bind(R.id.tasks_list_layout_coordinator_layout)
     CoordinatorLayout coordinatorLayout;
     @Bind(R.id.tasks_list_layout_nav_drawer_projects)
@@ -145,6 +147,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         });
         projectsNavListView.setOnItemClickListener(onProjNavClick());
         addNewProjectBtn.setOnClickListener(onNewProjectClick());
+        navCreateProjectBtn.setOnClickListener(onNewProjectClick());
         if(leaveActionItemBean!=null)
         {
             addNewLeave.setVisibility(View.VISIBLE);

@@ -14,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/linearLayout"
         android:layout_centerHorizontal="true"
         android:layout_weight="1"
         android:layout_centerVertical="true"
@@ -23,7 +22,6 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView"
             android:src="@drawable/company_logo"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="40dp"
@@ -39,7 +37,7 @@
             android:id="@+id/userEdtView"
             android:paddingLeft="5dp"
             android:hint="Username"
-            android:singleLine="true"
+            android:maxLines="1"
             />
 
         <EditText
@@ -52,7 +50,7 @@
             android:paddingLeft="5dp"
             android:inputType="textPassword"
             android:layout_marginTop="20dp"
-            android:singleLine="true"
+            android:maxLines="1"
             />
 
         <Button

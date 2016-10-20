@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Streamline</string>
+    <string name="app_name">FishTank</string>
     <string name="hrUrlEP">hrModule/</string>
     <string name="frmworkUrlEP">taskManager/</string>
     <string name ="complete_task" > Complete Task </string>

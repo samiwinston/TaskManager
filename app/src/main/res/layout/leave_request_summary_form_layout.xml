@@ -21,7 +21,7 @@
 
 
 
-        <LinearLayout android:id="@+id/leave_request_summary_form_grp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -87,7 +87,7 @@
 
             </LinearLayout>
 
-            <LinearLayout android:id="@+id/leave_request_form_days_requested_grp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -126,7 +126,7 @@
 
             </LinearLayout>
 
-            <LinearLayout android:id="@+id/leave_request_form_days_requested_startDateGrp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -249,7 +249,7 @@
             </LinearLayout>
 
 
-            <LinearLayout android:id="@+id/leave_request_summary_form_peers_on_leave_grp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
