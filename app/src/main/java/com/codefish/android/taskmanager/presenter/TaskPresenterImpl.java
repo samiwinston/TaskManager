@@ -12,6 +12,8 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
+import java.util.Date;
+
 /**
  * Created by abedch on 2/9/2016.
  */
@@ -25,6 +27,23 @@ public class TaskPresenterImpl implements ITaskPresenter {
 
     public TaskPresenterImpl(ITaskInteraction tasksInteraction) {
         this.taskInteraction = tasksInteraction;
+    }
+
+    @Override
+    public void updateProjectDueDate(Integer idAppUser,Integer idTask, Date date) {
+        
+        if(date==null)
+            taskInteraction.removeProjectDueDate(idTask, idAppUser, this);
+            else
+        {
+            taskInteraction.updateProjectDueDate(idTask, date, idAppUser, this);
+        }
+
+    }
+
+    @Override
+    public void updateDueCallBack(Date date) {
+
     }
 
 
@@ -61,6 +80,13 @@ public class TaskPresenterImpl implements ITaskPresenter {
 
 
     @Override
+    public void getProjectTasksCBH(UserTaskBean selectedProject) {
+        taskView.refreshSelectedProject(selectedProject);
+        refreshList();
+    }
+
+
+    @Override
     public void refreshList() {
         taskView.refreshList();
         taskView.hideProgressBar();
@@ -80,6 +106,11 @@ public class TaskPresenterImpl implements ITaskPresenter {
     @Override
     public void selectTask(UserTaskBean bean, int position) {
         taskView.selectTask(bean, position);
+    }
+
+    @Override
+    public void removeProjectDueDateCallBack() {
+
     }
 
 }

@@ -14,4 +14,6 @@ public interface ITasksView {
     void initList();
     void selectTask(UserTaskBean bean, int position);
     void showErrorMsg(String msg);
+
+    void refreshSelectedProject(UserTaskBean selectedProject);
 }

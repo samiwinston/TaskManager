@@ -88,7 +88,7 @@
                 android:elevation="0dp"
                 android:textSize="14sp"
                 android:textAllCaps="false"
-                android:text="Due On" />
+                android:hint="Due On" />
         </LinearLayout>
 
         <TextView

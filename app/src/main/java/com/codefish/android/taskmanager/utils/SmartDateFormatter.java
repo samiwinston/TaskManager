@@ -28,14 +28,14 @@ public class SmartDateFormatter {
     }
 
     public SmartDate getSmartDate(Date dateValue) {
-        String formattedDate = "";
+        String formattedDate;
         Integer colorResource = 0;
 
         date.setTime(dateValue);
 
 
         if (date.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
-            Integer dayDiff = date.get(Calendar.DATE) - today.get(Calendar.DATE);
+            Integer dayDiff = date.get(Calendar.DAY_OF_YEAR) - today.get(Calendar.DAY_OF_YEAR);
             if (dayDiff == 1) {
                 formattedDate = "Tomorrow";
                 colorResource = R.color.colorDGreen;

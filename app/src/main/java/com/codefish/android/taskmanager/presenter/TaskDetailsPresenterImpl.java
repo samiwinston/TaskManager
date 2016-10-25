@@ -34,6 +34,16 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     }
 
     @Override
+    public void removeDueDate(Integer idAppUser,Integer idTask) {
+        taskDetailsInteraction.removeDueDate(idTask, idAppUser, this);
+    }
+
+    @Override
+    public void removeDueDateCallBack() {
+
+    }
+
+    @Override
     public void updateImportanceCBH() {
         taskDetailsView.updateImportanceCBH();
     }

@@ -45,6 +45,8 @@ public class UserTaskBean {
 
 
     public Boolean canReassign;
+    public Boolean canModifyDueDate;
+    public Boolean isSupervisor;
     public List<HashMap<String, Object>> assignees;
     public List<FollowerBean> followers;
     public ArrayList<UserTaskBean> children;
@@ -67,6 +69,8 @@ public class UserTaskBean {
         this.importance = (Integer) bundle.get("importance");
         this.canReassign = (Boolean) bundle.get("canReassign");
         this.hasForm = (Boolean) bundle.get("hasForm");
+        this.canModifyDueDate = (Boolean) bundle.get("canModifyDueDate");
+        this.isSupervisor = (Boolean) bundle.get("isSupervisor");
         this.isOpen = (Boolean) bundle.get("isOpen");
         this.isOwner = (Boolean) bundle.get("isOwner");
         this.isAssignee = (Boolean) bundle.get("isAssignee");
@@ -93,10 +97,12 @@ public class UserTaskBean {
         b.putInt("taskType", taskType == null ? 0 : taskType);
         b.putInt("idGroup", idGroup == null ? 0 : idGroup);
         b.putBoolean("canReassign", canReassign);
+        b.putBoolean("canModifyDueDate", canModifyDueDate);
         b.putBoolean("hasForm", hasForm);
         b.putBoolean("isOpen", isOpen);
         b.putBoolean("isAssignee", isAssignee);
         b.putBoolean("isOwner", isOwner);
+        b.putBoolean("isSupervisor", isSupervisor);
         b.putBoolean("requiresReview", requiresReview);
         b.putBoolean("isReviewed", isReviewed);
 

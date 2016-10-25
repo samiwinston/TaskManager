@@ -15,6 +15,9 @@ public interface ITaskDetailsInteraction {
     void deleteTask(Integer idAppUser, int idTask, ITaskDetailsPresenter taskDetailsPresenter);
 
     void updateDueDate(Integer idTask, Date date, Integer idAppUser, ITaskDetailsPresenter taskDetailsPresenter);
+
+    void removeDueDate(Integer idTask, Integer idAppUser, ITaskDetailsPresenter taskDetailsPresenter);
+
     void getTask(GetTaskParameter param, ITaskDetailsPresenter taskDetailsPresenter);
     void changeState(SubmitActionParam submitParams, ITaskDetailsPresenter taskDetailsPresenter);
     void updateImportance(Integer idAppUser, Integer idUserTask, Integer importance, ITaskDetailsPresenter taskDetailsPresenter);

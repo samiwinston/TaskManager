@@ -19,6 +19,10 @@ public interface ITaskDetailsPresenter {
 
     void updateImportance(Integer userId, Integer idUserTask, Integer importance);
 
+    void removeDueDate(Integer idAppUser, Integer idTask);
+
+    void removeDueDateCallBack();
+
     void updateImportanceCBH();
 
     void updateDueCallBack(Date date);

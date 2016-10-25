@@ -29,6 +29,7 @@ import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.ITasksView;
 import com.codefish.android.taskmanager.component.projectsNavList.ProjectsNavListView;
 import com.codefish.android.taskmanager.component.SimpleDividerItemDecoration;
+import com.codefish.android.taskmanager.component.smartDateView.SmartDateButton;
 import com.codefish.android.taskmanager.component.tasksRecyclerView.TaskListAdapter;
 import com.codefish.android.taskmanager.component.tasksRecyclerView.TaskListLayoutManager;
 import com.codefish.android.taskmanager.model.LoginModel;
@@ -81,6 +82,8 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     SmartDateFormatter smartDateFormatter;
     @Bind(R.id.tasks_list_layout_add_new_task)
     com.github.clans.fab.FloatingActionButton addNewTaskBtn;
+    @Bind(R.id.tasks_list_layout_project_dueDate)
+    SmartDateButton projectDueDateBtn;
     @Bind(R.id.tasks_list_layout_add_new_project)
     com.github.clans.fab.FloatingActionButton addNewProjectBtn;
     @Bind(R.id.task_list_float_action_menu)
@@ -148,6 +151,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         projectsNavListView.setOnItemClickListener(onProjNavClick());
         addNewProjectBtn.setOnClickListener(onNewProjectClick());
         navCreateProjectBtn.setOnClickListener(onNewProjectClick());
+        projectDueDateBtn.setOnClickListener(onProjectDueDateClick());
         if(leaveActionItemBean!=null)
         {
             addNewLeave.setVisibility(View.VISIBLE);
@@ -157,10 +161,57 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
         floatActionMenu.setClosedOnTouchOutside(true);
 
+        updateProjectDueDateVisibility();
+
 
         initList();
         initListData();
         return view;
+    }
+
+    private void updateProjectDueDateVisibility() {
+        if(idSelectedProject!=null && idSelectedProject>0)
+            projectDueDateBtn.setVisibility(View.VISIBLE);
+        else
+        {
+            projectDueDateBtn.setVisibility(View.GONE);
+        }
+    }
+
+    private View.OnClickListener onProjectDueDateClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+           // update project due date
+                DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(projectDueDateBtn.getSelectedDate());
+                datePickerFragment.setTargetFragment(TasksListFragment.this, TasksModel.REQUEST_DATE);
+                if (!datePickerFragment.isAdded()) {
+                    datePickerFragment.show(getFragmentManager(), "dialog date");
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode)
+        {
+            case TasksModel.REQUEST_DATE:
+                final Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+                projectDueDateBtn.setDate(date);
+                // update project's due date
+                projectsBtn.setEnabled(false);
+                projectsNavListView.updateDueDate(idSelectedProject,date);
+                projectsBtn.setEnabled(true);
+                taskPresenter.updateProjectDueDate(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0),idSelectedProject,date);
+            break;
+
+            default:
+                break;
+        }
+
     }
 
     private View.OnClickListener onNewProjectClick() {
@@ -194,7 +245,9 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
                 if (project != null && project.get("title") != null) {
                     idSelectedProject = (project != null && project.get("id") != null) ? ((Double) project.get("id")).intValue() : 0;
                     projectTitleView.setText(project.get("title").toString());
+                    projectDueDateBtn.setDate(project.get("dueDate")!=null?new Date(((Double)project.get("dueDate")).longValue()):null);
                     drawerLayout.closeDrawer(Gravity.RIGHT);
+                    updateProjectDueDateVisibility();
                     initListData();
                 } else {
                     showErrorMsg("Can not init project, please contact your admin");
@@ -226,6 +279,13 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
     public void refreshUserTasks() {
         taskPresenter.getUserTasks(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId",0),idSelectedProject);
+    }
+
+    public void updateProjectDueDate(Date dueDate) {
+
+        //projectDueDateBtn.setDate(dueDate);
+
+        //update due date
     }
 
     private View.OnClickListener onMicClick() {
@@ -295,6 +355,10 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void refreshSelectedProject(UserTaskBean selectedProject) {
+        projectDueDateBtn.setEnabled(selectedProject.isSupervisor && selectedProject.canModifyDueDate);
+    }
 
 
     public void addItem(final UserTaskBean taskBean) {
@@ -371,6 +435,8 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     public void refreshProjects() {
         projectsNavListView.refreshProjects();
     }
+
+
 
     public interface Callbacks {
         void onNewItemSelect();

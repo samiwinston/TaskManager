@@ -20,7 +20,7 @@ public class SmartDateButton extends Button {
 
     @Inject
     SmartDateFormatter smartDateFormatter;
-
+    private Date selectedDate;
 
     public SmartDateButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,16 +30,32 @@ public class SmartDateButton extends Button {
         }
     }
 
-
-    public void setDate(Date date) {
-        SmartDate smartDate = smartDateFormatter.getSmartDate(date);
-        if (smartDate.getColorResource() > 0)
-            setTextColor(ContextCompat.getColor(getContext(), smartDate.getColorResource()));
-        else
-        {
-            setTextColor(Color.BLACK);
-        }
-        setText(smartDate.getFormattedDate());
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
     }
 
+    public void setDate(Date date) {
+        if(date!=null)
+        {
+            SmartDate smartDate = smartDateFormatter.getSmartDate(date);
+            if (smartDate.getColorResource() > 0)
+                setTextColor(ContextCompat.getColor(getContext(), smartDate.getColorResource()));
+            else
+            {
+                setTextColor(Color.BLACK);
+            }
+            setText(smartDate.getFormattedDate());
+        }
+        else
+        {
+            setText("");
+        }
+        selectedDate = date;
+
+    }
+
+    public Date getSelectedDate() {
+        return selectedDate;
+    }
 }

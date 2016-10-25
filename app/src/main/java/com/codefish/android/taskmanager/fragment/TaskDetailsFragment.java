@@ -309,8 +309,14 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 final Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
                 taskDetailsActivity.selectedTask.dueDate = date;
                 dueDateBtn.setDate(date);
+                if(date!=null)
                 taskDetailsPresenter.updateDueDate(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0),
                         taskDetailsActivity.selectedTask.idTask, date);
+                else
+                {
+                    taskDetailsPresenter.removeDueDate(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0)
+                            ,taskDetailsActivity.selectedTask.idTask);
+                }
                 break;
             case TasksModel.REQUEST_TASK_UPDATE:
                 taskDetailsActivity.selectedTask = new UserTaskBean(data.getExtras());

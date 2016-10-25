@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tasks_list_layout_drawer_layout"
     android:layout_width="match_parent"
@@ -19,16 +18,17 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="125dp"
-                android:background="@drawable/separator"
-                android:orientation="vertical">
+                android:layout_height="130dp"
+                android:background="@drawable/task_list_controls"
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:id="@+id/tasks_list_layout_user_widget"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/circular_label"
                     android:gravity="center"
@@ -39,27 +39,27 @@
                     android:id="@+id/tasks_list_layout_open_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:background="@color/colorWhite"
                     android:layout_toRightOf="@id/tasks_list_layout_user_widget"
+                    android:background="@color/colorClearGrey"
+                    android:paddingTop="20dp"
                     android:src="@drawable/icon_caret_down_small_gray" />
 
 
-              <!--  <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/tasks_list_action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/tasks_list_view_projects"
-                    android:background="@color/colorWhite"
-                    android:padding="10dp"
-                    android:src="@drawable/icon_plus_small" />-->
+                <!--  <android.support.v7.widget.AppCompatImageButton
+                      android:id="@+id/tasks_list_action"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_toLeftOf="@+id/tasks_list_view_projects"
+                      android:background="@color/colorWhite"
+                      android:padding="10dp"
+                      android:src="@drawable/icon_plus_small" />-->
 
                 <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/tasks_list_view_projects"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/tasks_list_layout_mic"
-                    android:background="@color/colorWhite"
+                    android:background="@color/colorClearGrey"
                     android:padding="10dp"
                     android:src="@drawable/icon_lists_dark" />
 
@@ -69,20 +69,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:background="@color/colorWhite"
+                    android:background="@color/colorClearGrey"
                     android:padding="10dp"
                     android:src="@drawable/ic_menu_mic" />
 
-
-                <TextView
-                    android:id="@+id/tasks_list_layout_project_title"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:padding="15dp"
-                    android:text="My Tasks"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+                    android:paddingLeft="19dp"
+                    android:layout_marginBottom="6dp">
+
+                    <TextView
+                        android:id="@+id/tasks_list_layout_project_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="My Tasks"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.codefish.android.taskmanager.component.smartDateView.SmartDateButton
+                        android:id="@+id/tasks_list_layout_project_dueDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="23dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:drawableLeft="@drawable/ic_date_range_black_18dp"
+                        android:hint="Due On"
+                        android:visibility="gone"
+                        android:textStyle="normal"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
             </RelativeLayout>
 
             <android.support.v4.widget.SwipeRefreshLayout
@@ -114,23 +133,21 @@
                 android:id="@+id/task_list_float_action_menu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                fab:menu_fab_size="normal"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                fab:fab_colorNormal="#0F97D6"
-                android:paddingRight="10dp"
                 android:paddingBottom="10dp"
-                fab:layout_behavior="com.codefish.android.taskmanager.component.fa.FloatingActionMenuBehavior"
                 android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                fab:fab_colorNormal="#0F97D6"
+                fab:layout_behavior="com.codefish.android.taskmanager.component.fa.FloatingActionMenuBehavior"
+                fab:menu_backgroundColor="#ccffffff"
                 fab:menu_colorNormal="@color/colorPrimary"
-                fab:menu_labels_colorNormal="@color/colorPrimary"
                 fab:menu_colorPressed="@color/colorPrimary"
                 fab:menu_colorRipple="@color/colorClearGrey"
+                fab:menu_fab_size="normal"
+                fab:menu_labels_colorNormal="@color/colorPrimary"
                 fab:menu_labels_ellipsize="end"
-                fab:menu_labels_singleLine="true"
-                fab:menu_backgroundColor="#ccffffff"
-                >
-
+                fab:menu_labels_singleLine="true">
 
 
                 <com.github.clans.fab.FloatingActionButton
@@ -138,36 +155,36 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="18dp"
+                    android:src="@drawable/ic_send_black_24dp"
+                    fab:backgroundTint="@color/colorPrimary"
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimary"
                     fab:fab_colorRipple="#99FFFFFF"
-                    android:src="@drawable/ic_send_black_24dp"
-                    fab:backgroundTint="@color/colorPrimary"
-                    fab:fab_label="Request Leave"/>
+                    fab:fab_label="Request Leave" />
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/tasks_list_layout_add_new_project"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="18dp"
+                    android:src="@drawable/ic_content_paste_black_24dp"
+                    fab:backgroundTint="@color/colorPrimary"
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimary"
                     fab:fab_colorRipple="#99FFFFFF"
-                    android:src="@drawable/ic_content_paste_black_24dp"
-                    fab:backgroundTint="@color/colorPrimary"
-                    fab:fab_label="Project"/>
+                    fab:fab_label="Project" />
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/tasks_list_layout_add_new_task"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="18dp"
+                    android:src="@drawable/ic_assignment_black_24dp"
+                    fab:backgroundTint="@color/colorPrimary"
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimary"
                     fab:fab_colorRipple="#99FFFFFF"
-                    android:src="@drawable/ic_assignment_black_24dp"
-                    fab:backgroundTint="@color/colorPrimary"
-                    fab:fab_label="Task"/>
+                    fab:fab_label="Task" />
 
             </com.github.clans.fab.FloatingActionMenu>
 
@@ -193,12 +210,12 @@
             android:textSize="20sp" />
 
         <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/tasks_list_layout_nav_create_project"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@color/colorPrimary"
-            android:src="@drawable/fab_add"
-            android:id="@+id/tasks_list_layout_nav_create_project"/>
+            android:src="@drawable/fab_add" />
 
 
         <com.codefish.android.taskmanager.component.projectsNavList.ProjectsNavListView

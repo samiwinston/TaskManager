@@ -46,7 +46,7 @@ android {
             buildConfigField 'String', 'HOST', '"http://codefishserver.com:8282/CodefishTestServer/mvc/"'
         }
         ach {
-            buildConfigField 'String', 'HOST', '"http://hrportal.ac-holding.net:8181/ACHoldingServer/mvc/"'
+            buildConfigField 'String', 'HOST', '"https://portal.ac-holding.net/ACHoldingServer/mvc/"'
         }
     }
 }

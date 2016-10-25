@@ -32,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class LoginFragment extends Fragment implements View.OnClickListener{
+public class LoginFragment extends Fragment implements View.OnClickListener {
 
 
     @Bind(R.id.userEdtView)
@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     LoginActivity loginActivity;
 
-   @Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
@@ -59,10 +59,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.login_layout,container,false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.login_layout, container, false);
+        ButterKnife.bind(this, view);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary),
+        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
         loginBtn.setOnClickListener(this);
@@ -71,6 +71,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
 
     public void validateCredentials(String username, String password) {
+
+
         showProgressBar();
 
 
@@ -78,9 +80,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 || password == null || password.length() == 0) {
             showToast("Please check your username or password");
             hideProgressBar();
+            showControls();
             return;
         }
         getUser(username, password);
+
     }
 
     public void getUser(final String username, final String password) {
@@ -95,11 +99,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         LoginModel.getInstance().setUserBean(user);
                         WidgetActionItemBean leaveActionBean = null;
 
-                        if(user.getActionItems()!=null && user.getActionItems().length>0)
-                        {
-                            for (WidgetActionItemBean actionBean:user.getActionItems()) {
-                                if(actionBean.workflowName!=null && actionBean.workflowName.equals("hrLeaveRequestWorkflow"))
-                                {
+                        if (user.getActionItems() != null && user.getActionItems().length > 0) {
+                            for (WidgetActionItemBean actionBean : user.getActionItems()) {
+                                if (actionBean.workflowName != null && actionBean.workflowName.equals("hrLeaveRequestWorkflow")) {
                                     leaveActionBean = actionBean;
                                     break;
                                 }
@@ -116,39 +118,37 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         Gson gson = new Gson();
                         String json = gson.toJson(user);
                         editor.putString("MobAppUserBean", json);
-                        editor.putString("email",user.getEmail());
-                        editor.putString("username",user.getUsername());
+                        editor.putString("email", user.getEmail());
+                        editor.putString("username", user.getUsername());
                         editor.putString("name", user.getName());
                         editor.putInt("userId", user.getId());
-                        editor.putString("userInitials", user.getName().charAt(0)+""+user.getName().charAt(user.getName().lastIndexOf(' ')+1));
+                        editor.putString("userInitials", user.getName().charAt(0) + "" + user.getName().charAt(user.getName().lastIndexOf(' ') + 1));
                         editor.putString("password", password);
                         editor.commit();
 
 
                         // TODO: Move this to where you establish a user session
-                        logUser(user.getUsername(),"Email Here",user.getName());
+                        logUser(user.getUsername(), "Email Here", user.getName());
 
 
                     } else {
                         showToast("Can not login, please check your username or password");
+                        showControls();
                     }
 
 
                 } else {
                     try {
-                        if(response.code()==500 && response.errorBody().contentLength()<500)
-                        {
+                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
                             showToast(response.errorBody().string());
-                        }
-                        else
-                        {
+                        } else {
                             throw new Exception();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        showToast("Illegal error "+response.code()+", please contact the admin");
+                        showToast("Illegal error " + response.code() + ", please contact the admin");
                     }
-
+                    showControls();
                 }
 
                 hideProgressBar();
@@ -175,23 +175,24 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onResume() {
         super.onResume();
 
-        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if (isAdded()) {
 
-        if(sharedpreferences!=null)
-        {
-            String userName = sharedpreferences.getString("username","");
-            String password = sharedpreferences.getString("password","");
 
-            if(userName !=null && userName.length()>0 && password !=null && password.length()>0)
-            {
+            SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-                hideControls();
-                showProgressBar();
-                getUser(userName,password);
+            if (sharedpreferences != null) {
+                String userName = sharedpreferences.getString("username", "");
+                String password = sharedpreferences.getString("password", "");
 
+                if (userName != null && userName.length() > 0 && password != null && password.length() > 0) {
+
+                    hideControls();
+                    showProgressBar();
+                    getUser(userName, password);
+
+                }
             }
         }
-
 
     }
 
@@ -217,11 +218,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
 
 
-
     public void loginHandler() {
         validateCredentials(userEdtView.getText().toString(), passEdtView.getText().toString());
     }
-
 
 
     public void showProgressBar() {
@@ -229,14 +228,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
 
 
-
     public void hideProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
     public void showToast(String msg) {
-        if(getContext()!=null)
-        {
+        if (getContext() != null) {
             Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
         }
     }

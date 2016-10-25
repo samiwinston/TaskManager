@@ -16,11 +16,14 @@ import com.codefish.android.taskmanager.presenter.ITaskPresenter;
 import com.codefish.android.taskmanager.service.IHrService;
 import com.codefish.android.taskmanager.service.ITaskService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,6 +50,70 @@ public class TaskInteractionImpl implements ITaskInteraction {
         MyApplication.getAppComponent().inject(this);
     }
 
+
+    @Override
+    public void updateProjectDueDate(Integer idWorkflowInstance, final Date date, Integer idAppUser, final ITaskPresenter taskPresenter) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        String dueDateStr = dateFormat.format(date);
+        ServiceModel.getInstance().taskService.updateProjectDueDate(idWorkflowInstance, idAppUser, dueDateStr).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    taskPresenter.updateDueCallBack(date);
+                } else {
+                    try {
+                        if (response.code() == 500) {
+                            taskPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                taskPresenter.showErrorMsg("Can not reach CodeFish");
+            }
+        });
+
+    }
+
+    @Override
+    public void removeProjectDueDate(Integer idTask, Integer idAppUser, final ITaskPresenter taskPresenter) {
+
+        ServiceModel.getInstance().taskService.removeProjectDueDate(idTask, idAppUser).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    taskPresenter.removeProjectDueDateCallBack();
+                } else {
+                    try {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                            taskPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                taskPresenter.showErrorMsg("Can not reach CodeFish");
+            }
+        });
+
+    }
 
     @Override
     public void getUserTasks(GetUserTasksParameter params, final ITaskPresenter taskPresenter) {
@@ -90,7 +157,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
                 if (response.isSuccessful()) {
                     UserTaskBean project = response.body();
                     taskListAdapter.setDataSet(project.children);
-                    taskPresenter.refreshList();
+                    taskPresenter.getProjectTasksCBH(project);
                 } else {
                     try {
                         if (response.code() == 500 && response.errorBody().contentLength()<500) {

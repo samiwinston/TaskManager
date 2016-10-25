@@ -37,7 +37,7 @@
             android:id="@+id/userEdtView"
             android:paddingLeft="5dp"
             android:hint="Username"
-            android:maxLines="1"
+            android:singleLine="true"
             />
 
         <EditText
@@ -50,7 +50,7 @@
             android:paddingLeft="5dp"
             android:inputType="textPassword"
             android:layout_marginTop="20dp"
-            android:maxLines="1"
+            android:singleLine="true"
             />
 
         <Button

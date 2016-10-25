@@ -85,6 +85,13 @@ public interface ITaskService {
     @GET("updateDueDate")
     Call<ResponseBody> updateDueDate(@Query("idUserTask") Integer idUserTask,
                                @Query("idAppUser") Integer idAppUser,@Query("dueDate") String dueDateStr);
+    @GET("updateProjectDueDate")
+    Call<ResponseBody> updateProjectDueDate(@Query("idWorkflowInstance") Integer idWorkflowInstance,
+                                     @Query("idAppUser") Integer idAppUser,@Query("dueDate") String dueDateStr);
+
+    @GET("removeProjectDueDate")
+    Call<ResponseBody> removeProjectDueDate(@Query("idWorkflowInstance") Integer idWorkflowInstance,
+                                     @Query("idAppUser") Integer idAppUser);
     @GET("createProject")
     Call<ResponseBody> createProject(@Query("idAppUser") Integer idAppUser,
                                      @Query("projectName") String projectName);

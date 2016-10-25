@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ListView;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,6 +34,20 @@ public class ProjectsNavListView extends ListView  {
     public void refreshProjects()
     {
         listAdapter.getMyProjects(true);
+    }
+
+    public void updateDueDate(Integer idProject, Date dueDate)
+    {
+        for (HashMap<String,Object> project:listAdapter.mResultList)
+        {
+            Double id = (Double) project.get("id");
+
+            if(id!=null && id == idProject.doubleValue())
+            {
+                project.put("dueDate",dueDate!=null?((Long)dueDate.getTime()).doubleValue():null);
+                break;
+            }
+        }
     }
 
     public List<HashMap<String, Object>> getList()

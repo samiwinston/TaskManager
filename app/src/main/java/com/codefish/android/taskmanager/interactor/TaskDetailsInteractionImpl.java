@@ -88,6 +88,37 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
     }
 
     @Override
+    public void removeDueDate(Integer idTask, Integer idAppUser, final ITaskDetailsPresenter taskDetailsPresenter) {
+
+        ServiceModel.getInstance().taskService.removeDueDate(idTask, idAppUser).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    taskDetailsPresenter.removeDueDateCallBack();
+                } else {
+                    try {
+                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
+            }
+        });
+
+    }
+
+    @Override
     public void getTask(GetTaskParameter params, final ITaskDetailsPresenter taskDetailsPresenter) {
 
         //params.idAppUser = 1;

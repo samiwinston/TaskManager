@@ -2,8 +2,6 @@ package com.codefish.android.taskmanager.presenter;
 
 import com.codefish.android.taskmanager.activity.ILeaveFormSummaryView;
 import com.codefish.android.taskmanager.activity.ILeaveWorkflowFormView;
-import com.codefish.android.taskmanager.activity.ILoginView;
-import com.codefish.android.taskmanager.interactor.ILoginInteraction;
 import com.codefish.android.taskmanager.interactor.IWorkflowFormInteraction;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
@@ -51,9 +52,10 @@ public class DatePickerFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date,null);
         ButterKnife.bind(this,view);
 
-        if(getArguments() !=null && getArguments().getSerializable(ARG_DATE)!=null)
+        Date date = (Date)getArguments().getSerializable(ARG_DATE);
+
+        if(getArguments() !=null && date!=null)
         {
-            Date date = (Date)getArguments().getSerializable(ARG_DATE);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             int year = calendar.get(Calendar.YEAR);
@@ -63,7 +65,7 @@ public class DatePickerFragment extends DialogFragment {
             mDatePicker.init(year,month,day,null);
         }
 
-        return new AlertDialog.Builder(getActivity())
+        Dialog dialog =   new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.date_picker_title)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -79,7 +81,17 @@ public class DatePickerFragment extends DialogFragment {
 
                     }
                 })
+                .setNegativeButton(date!=null?"Remove":"Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendResult(Activity.RESULT_OK, null);
+                    }
+                })
                 .create();
+
+
+
+        return dialog;
     }
 
     private void sendResult(int resultOk, Date date) {

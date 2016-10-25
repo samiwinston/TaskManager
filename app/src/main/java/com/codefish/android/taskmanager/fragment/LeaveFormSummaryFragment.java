@@ -83,12 +83,12 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
     TextView peersOnLeave;
     @Bind(R.id.leave_request_summary_form_days_requested_startDate)
     TextView requestedStartDate;
-  /*  @Bind(R.id.leave_request_summary_form_days_requested_endDate)
-    TextView requestedEndDate;*/
+    /*  @Bind(R.id.leave_request_summary_form_days_requested_endDate)
+      TextView requestedEndDate;*/
     @Bind(R.id.leave_request_summary_form_country)
     TextView countryOnLeaveView;
-   /* @Bind(R.id.leave_request_summary_form_days_requested_endDateGrp)
-    LinearLayout requestedEndDateGrp;*/
+    /* @Bind(R.id.leave_request_summary_form_days_requested_endDateGrp)
+     LinearLayout requestedEndDateGrp;*/
     @Bind(R.id.leave_request_summary_form_days_allowed_grp)
     LinearLayout daysAllowedGrp;
     @Bind(R.id.leave_request_summary_form_days_remaining_grp)
@@ -101,10 +101,10 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
     private Menu menu;
     private boolean isSaveVisible = false;
     private boolean isPeersLoaded = false;
-    private String enteredPhoneNumber = null;
-    private String enteredAddressOnLeave = null;
-    private Integer idSelectedCountry = 0;
-    private String selectedCountryName = "";
+    /*    private String enteredPhoneNumber = null;
+        private String enteredAddressOnLeave = null;
+        private Integer idSelectedCountry = 0;
+        private String selectedCountryName = null;*/
     private List<HashMap<String, Object>> peersOfLeaveList;
 
     @Override
@@ -113,10 +113,10 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
         outState.putBoolean("isSaveVisible", isSaveVisible);
         outState.putBoolean("isPeersLoaded", isPeersLoaded);
-        outState.putString("enteredPhoneNumber", enteredPhoneNumber);
+       /* outState.putString("enteredPhoneNumber", enteredPhoneNumber);
         outState.putString("enteredAddressOnLeave", enteredAddressOnLeave);
         outState.putInt("idSelectedCountry", idSelectedCountry);
-        outState.putString("selectedCountryName", selectedCountryName);
+        outState.putString("selectedCountryName", selectedCountryName);*/
         outState.putSerializable("peersOfLeaveList", (Serializable) peersOfLeaveList);
     }
 
@@ -127,10 +127,10 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
         if (savedInstanceState != null) {
             this.isSaveVisible = savedInstanceState.getBoolean("isSaveVisible");
             this.isPeersLoaded = savedInstanceState.getBoolean("isPeersLoaded");
-            this.enteredPhoneNumber = savedInstanceState.getString("enteredPhoneNumber");
+           /* this.enteredPhoneNumber = savedInstanceState.getString("enteredPhoneNumber");
             this.enteredAddressOnLeave = savedInstanceState.getString("enteredAddressOnLeave");
             this.selectedCountryName = savedInstanceState.getString("selectedCountryName");
-            this.idSelectedCountry = savedInstanceState.getInt("idSelectedCountry");
+            this.idSelectedCountry = savedInstanceState.getInt("idSelectedCountry");*/
             this.peersOfLeaveList = (List<HashMap<String, Object>>) savedInstanceState.getSerializable("peersOfLeaveList");
 
         }
@@ -144,9 +144,6 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
 
         // get peers on leave
-
-
-
 
 
     }
@@ -207,6 +204,14 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
         initToolBar();
 
         MobLeaveRequestFormBean bean = leaveWorkflowFormActivity.mobLeaveRequestFormBean;
+
+
+        /*enteredAddressOnLeave = bean.lastAddressOnLeave;
+        enteredPhoneNumber = bean.lastPhoneOnLeave;
+        idSelectedCountry = bean.lastCountryOnLeave;
+        selectedCountryName = bean.lastCountryOnLeaveName;*/
+
+
         leaveType.setText(bean.leaveTypeName + " leave was requested");
         daysRequested.setText(bean.totalDays + (bean.isOneDay ? " day" : " days") + " requested");
         String requestedStartDateMsg = "From ";
@@ -215,10 +220,10 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
         if (bean.isOneDay) {
             requestedStartDateMsg = "On ";
         } else {
-            requestedEndDateMsg =" To "+bean.getRequestedEndDateLbl();
+            requestedEndDateMsg = " To " + bean.getRequestedEndDateLbl();
         }
 
-        requestedStartDate.setText(requestedStartDateMsg + "" + bean.getRequestedStartDateLbl()+requestedEndDateMsg);
+        requestedStartDate.setText(requestedStartDateMsg + "" + bean.getRequestedStartDateLbl() + requestedEndDateMsg);
 
         if (bean.includeInLeave) {
             daysAllowed.setText(bean.leaveInfoBean.getDaysAllowed() + " allowed as of today");
@@ -246,37 +251,38 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
             phoneOnLeave.setTextLocale(Locale.getDefault());
             phoneOnLeave.addTextChangedListener(onTextChangeListener());
             addressOnLeave.setOnClickListener(addAddressOnLeave());
-            if (enteredAddressOnLeave != null)
-                addressOnLeave.setText(enteredAddressOnLeave);
-            if (selectedCountryName != null)
-                countryOnLeaveView.setText(selectedCountryName);
+            addressOnLeave.setText(bean.lastAddressOnLeave);
+            countryOnLeaveView.setText(bean.lastCountryOnLeaveName);
+            phoneOnLeave.setText(bean.lastPhoneOnLeave);
         }
 
         peersOnLeave.setOnClickListener(peersOnLeaveClick());
 
 
-        workflowFormPresenter
-                .getPeersOnLeave(PreferenceManager
-                                .getDefaultSharedPreferences(getContext()).getInt("userId", 0),
-                        bean.requestStartDate
-                        ,bean.requestEndDate);
+        if (!isPeersLoaded) {
+            workflowFormPresenter
+                    .getPeersOnLeave(PreferenceManager
+                                    .getDefaultSharedPreferences(getContext()).getInt("userId", 0),
+                            bean.requestStartDate
+                            , bean.requestEndDate);
+        }
+
 
         return view;
     }
 
     private View.OnClickListener peersOnLeaveClick() {
-     return new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-             if(isPeersLoaded)
-             {
-                 LeaveSummaryPeersOnLeaveFragment leaveSummaryPeersOnLeaveFragment = LeaveSummaryPeersOnLeaveFragment.
-                         newInstance(LeaveFormSummaryFragment.this,peersOfLeaveList);
-                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, leaveSummaryPeersOnLeaveFragment)
-                         .addToBackStack("Back To Parent").commit();
-             }
-         }
-     };
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPeersLoaded) {
+                    LeaveSummaryPeersOnLeaveFragment leaveSummaryPeersOnLeaveFragment = LeaveSummaryPeersOnLeaveFragment.
+                            newInstance(LeaveFormSummaryFragment.this, peersOfLeaveList);
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, leaveSummaryPeersOnLeaveFragment)
+                            .addToBackStack("Back To Parent").commit();
+                }
+            }
+        };
     }
 
     private View.OnClickListener onAddCountryClick() {
@@ -309,13 +315,13 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
         switch (requestCode) {
             case TasksModel.REQUEST_UPDATE_FIELD:
-                enteredAddressOnLeave = data.getStringExtra(LeaveSummaryStrFieldFragment.ARGS_ITEM);
+                leaveWorkflowFormActivity.mobLeaveRequestFormBean.lastAddressOnLeave = data.getStringExtra(LeaveSummaryStrFieldFragment.ARGS_ITEM);
                 updateSubmitVisibility();
                 break;
             case TasksModel.REQUEST_COUNTRY:
                 HashMap<String, Object> item = (HashMap<String, Object>) data.getSerializableExtra(LeaveSummaryAddCountryFragment.ARGS_ITEM);
-                idSelectedCountry = ((Double) item.get("id")).intValue();
-                selectedCountryName = (String) item.get("name");
+                leaveWorkflowFormActivity.mobLeaveRequestFormBean.lastCountryOnLeave = ((Double) item.get("id")).intValue();
+                leaveWorkflowFormActivity.mobLeaveRequestFormBean.lastCountryOnLeaveName = (String) item.get("name");
                 updateSubmitVisibility();
                 break;
             default:
@@ -339,10 +345,10 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
             public void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
                 if (s.length() > 3) {
-                    enteredPhoneNumber = s.toString();
+                    leaveWorkflowFormActivity.mobLeaveRequestFormBean.lastPhoneOnLeave = s.toString();
 
                 } else {
-                    enteredPhoneNumber = null;
+                    leaveWorkflowFormActivity.mobLeaveRequestFormBean.lastPhoneOnLeave = null;
                 }
                 updateSubmitVisibility();
             }
@@ -350,29 +356,17 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
     }
 
     private void updateSubmitVisibility() {
-
-        if (enteredPhoneNumber != null && enteredAddressOnLeave != null && idSelectedCountry > 0) {
-            isSaveVisible = true;
-        } else {
-            isSaveVisible = false;
-        }
-
-
+        isSaveVisible = leaveWorkflowFormActivity.mobLeaveRequestFormBean.isAddressInfoFilled();
         getActivity().invalidateOptionsMenu();
-
     }
 
 
     private void onSubmitForm() {
         progressBar.setVisibility(View.VISIBLE);
         MobLeaveRequestFormBean bean = leaveWorkflowFormActivity.mobLeaveRequestFormBean;
-        bean.lastPhoneOnLeave = enteredPhoneNumber;
-        bean.lastCountryOnLeave = idSelectedCountry;
-        bean.lastAddressOnLeave = enteredAddressOnLeave;
         bean.updateActionName();
         workflowFormPresenter.submitLeave(bean);
     }
-
 
 
     private void initToolBar() {
@@ -417,14 +411,14 @@ public class LeaveFormSummaryFragment extends Fragment implements ILeaveFormSumm
 
     @Override
     public void submitLeaveCBH(UserTaskBean userTaskBean) {
-        Toast.makeText(getContext(),"Request is sent, please refresh list",Toast.LENGTH_LONG).show();
-          getActivity().finish();
+        Toast.makeText(getContext(), "Request is sent, please refresh list", Toast.LENGTH_LONG).show();
+        getActivity().finish();
     }
 
     @Override
     public void showErrorMsg(String msg) {
         progressBar.setVisibility(View.GONE);
-        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
