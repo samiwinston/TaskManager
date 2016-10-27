@@ -177,7 +177,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
         if (taskTitle != null && taskTitle.length() > 0) {
             final TaskListBean taskListBean = new TaskListBean();
 
-            taskListBean.name = taskTitle;
+            taskListBean.title = taskTitle;
             taskListBean.idSubmittedBy = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getInt("userId",0);
             if (tasksListFragment.idSelectedProject != null && tasksListFragment.idSelectedProject >0)
             {

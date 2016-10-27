@@ -21,7 +21,7 @@ public class TaskListBean implements Serializable{
     public Integer idSubmittedBy;
     public String description;
     public Date dueDate;
-    public String name;
+    public String title;
     public String ownerName;
 
 
