@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/task_details_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorWhite"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorLighterGrey" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="40">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+
+                <TextView
+                    android:id="@+id/task_details_layout_task_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/task_details_layout_action_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/task_details_layout_task_title"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/task_details_owner_info_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/task_details_layout_action_button"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/task_details_layout_assignee_initials"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/circular_label"
+                            android:gravity="center"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/task_details_layout_assignee"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/task_details_layout_assignee_initials"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:paddingLeft="5dp"
+                            android:text="Unassigned" />
+                    </RelativeLayout>
+
+                    <com.codefish.android.taskmanager.component.smartDateView.SmartDateButton
+                        android:id="@+id/task_details_due_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:drawableLeft="@drawable/ic_date_range_black_18dp"
+                        android:drawablePadding="5dp"
+                        android:elevation="0dp"
+                        android:hint="Due On"
+                        android:textAllCaps="false"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/task_details_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/task_details_owner_info_group"
+                    android:paddingBottom="15dp"/>
+
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <!--<View
+            android:id="@+id/task_details_comments_seperator"
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="@color/colorLightGrey" />-->
+
+        <com.codefish.android.taskmanager.component.commentsView.CommentsListView
+            android:id="@+id/task_details_comments_list"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="60"
+            android:background="@color/colorClearGrey"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:padding="10dp" />
+
+    </LinearLayout>
+    <!--<View
+        android:id="@+id/task_details_comments_seperator"
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:layout_columnSpan="2"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorLightGrey" />-->
+
+    <!--  <com.codefish.android.taskmanager.component.commentsView.CommentsListView
+          android:id="@+id/task_details_comments_list"
+          android:layout_width="match_parent"
+          android:layout_height="400dp"
+          android:layout_weight="1"
+          android:background="@color/colorClearGrey"
+          android:divider="@null"
+          android:dividerHeight="0dp"
+          android:padding="10dp" />-->
+
+    <!-- <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:orientation="vertical"
+         android:weightSum="1">
+
+         <com.codefish.android.taskmanager.component.commentsView.CommentsListView
+             android:id="@+id/task_details_comments_list"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/colorClearGrey"
+             android:padding="10dp"
+             android:layout_weight="1"
+             android:divider="@null"
+             android:dividerHeight="0dp" />
+
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="0.8dp"
+             android:layout_below="@id/task_details_comments_list"
+             android:layout_columnSpan="2"
+             android:layout_marginBottom="10dp"
+             android:background="@color/colorLightGrey" />
+     </LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="30dp"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:paddingBottom="5dp"-->
+    <!--android:paddingLeft="5dp"-->
+    <!--android:paddingRight="5dp"-->
+    <!--android:weightSum="1">-->
+
+    <!--<EditText-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/invisible_separator"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:hint="Enter a comment..."-->
+    <!--android:textColorHint="@color/colorLightGrey"-->
+    <!--android:textSize="16sp" />-->
+
+    <!--<android.support.v7.widget.AppCompatImageButton-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/colorWhite"-->
+    <!--android:src="@drawable/ic_send_blue_24dp" />-->
+    <!--</LinearLayout>-->
+</LinearLayout>

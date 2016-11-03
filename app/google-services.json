@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "525112524399",
+    "firebase_url": "https://ach-taskmanager.firebaseio.com",
+    "project_id": "ach-taskmanager",
+    "storage_bucket": "ach-taskmanager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525112524399:android:abc50877a7e72664",
+        "android_client_info": {
+          "package_name": "com.codefish.android.taskmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525112524399-86lg0a7ve3drb7tbdcmi99o5m4h46t2b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1LKGY7-5UJAs3erV43lWp6UyNQdNhdDw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,9 +1,11 @@
 package com.codefish.android.taskmanager.service;
 
 
+import com.codefish.android.taskmanager.model.GenericCommentBean;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.GetUserTasksParameter;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
+import com.codefish.android.taskmanager.model.PostCommentParam;
 import com.codefish.android.taskmanager.model.SaveEntityAction;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.TaskListBean;
@@ -21,6 +23,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -92,6 +95,9 @@ public interface ITaskService {
     @GET("removeProjectDueDate")
     Call<ResponseBody> removeProjectDueDate(@Query("idWorkflowInstance") Integer idWorkflowInstance,
                                      @Query("idAppUser") Integer idAppUser);
+    @GET("getTaskGenericComments")
+    Call<List<GenericCommentBean>> getTaskGenericComments(@Query("idWorkflowInstance") Integer idWorkflowInstance,
+                                                          @Query("idCommentType") Integer idCommentType);
     @GET("createProject")
     Call<ResponseBody> createProject(@Query("idAppUser") Integer idAppUser,
                                      @Query("projectName") String projectName);
@@ -127,5 +133,10 @@ public interface ITaskService {
     @GET("unfollowTask")
     Call<String> unfollowTask(@Query("topicName") String topicName,
                                 @Query("subTopic") Integer subTopic,@Query("idAppUser") Integer idAppUser);
+
+
+    @POST("postTaskComment")
+    Call<ResponseBody> postTaskComment(@Body PostCommentParam param);
+
 
 }

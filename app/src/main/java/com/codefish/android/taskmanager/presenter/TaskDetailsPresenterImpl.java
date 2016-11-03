@@ -2,8 +2,10 @@ package com.codefish.android.taskmanager.presenter;
 
 import com.codefish.android.taskmanager.fragment.ITaskDetailsView;
 import com.codefish.android.taskmanager.interactor.ITaskDetailsInteraction;
+import com.codefish.android.taskmanager.model.GenericCommentBean;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
+import com.codefish.android.taskmanager.model.PostCommentParam;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 
@@ -104,6 +106,16 @@ public class TaskDetailsPresenterImpl implements ITaskDetailsPresenter {
     @Override
     public void loadUserTaskBean(UserTaskBean bean) {
         taskDetailsView.loadUserTaskBean(bean);
+    }
+
+    @Override
+    public void postTaskComment(PostCommentParam postCommentParam) {
+        taskDetailsInteraction.postTaskComment(postCommentParam,this);
+    }
+
+    @Override
+    public void publishTaskComment(GenericCommentBean genericCommentBean) {
+        taskDetailsInteraction.publishTaskComment(genericCommentBean,this);
     }
 
     @Override

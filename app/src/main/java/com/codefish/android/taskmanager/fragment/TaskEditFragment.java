@@ -402,7 +402,7 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
                 if (datePickerFragment.isAdded()) {
                     return;
                 }
-                datePickerFragment.show(getFragmentManager(), "dialog date");
+                datePickerFragment.show(getFragmentManager(), DatePickerFragment.ARG_DATE);
             }
         };
     }

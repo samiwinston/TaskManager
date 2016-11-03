@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
  */
 public class DatePickerFragment extends DialogFragment {
 
-    private static final String ARG_DATE = "date";
+    public static final String ARG_DATE = "date";
     public static final String EXTRA_DATE= "com.codefish.android.taskmanager.date";
 
     @Bind(R.id.dialog_date_date_picker)
@@ -52,9 +52,11 @@ public class DatePickerFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date,null);
         ButterKnife.bind(this,view);
 
-        Date date = (Date)getArguments().getSerializable(ARG_DATE);
+        Date date = null;
+        if(getArguments()!=null)
+          date = (Date)getArguments().getSerializable(ARG_DATE);
 
-        if(getArguments() !=null && date!=null)
+        if(date!=null)
         {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);

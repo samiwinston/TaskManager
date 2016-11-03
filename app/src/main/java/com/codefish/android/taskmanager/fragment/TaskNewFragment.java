@@ -193,7 +193,7 @@ public class TaskNewFragment extends Fragment implements View.OnClickListener {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment.show(getFragmentManager(), "dialog date");
+                fragment.show(getFragmentManager(), DatePickerFragment.ARG_DATE);
             }
         };
     }

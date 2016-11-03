@@ -1,16 +1,15 @@
 package com.codefish.android.taskmanager.interactor;
 
-import android.widget.Toast;
-
-import com.codefish.android.taskmanager.R;
+import com.codefish.android.taskmanager.model.GenericCommentBean;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
+import com.codefish.android.taskmanager.model.PostCommentParam;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
+import com.codefish.android.taskmanager.presenter.TaskDetailsPresenterImpl;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -34,14 +33,14 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.deleteTaskCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
                     }
                 }
             }
@@ -50,6 +49,39 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
                 taskDetailsPresenter.showErrorMsg("Can not reach Codefish");
+            }
+        });
+    }
+
+    @Override
+    public void postTaskComment(PostCommentParam postCommentParam, final ITaskDetailsPresenter taskDetailsPresenter) {
+
+        ServiceModel.getInstance().taskService.postTaskComment(postCommentParam).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                if (response.isSuccessful()) {
+                    /*GenericCommentBean genericCommentBean = response.body();
+                    taskDetailsPresenter.publishTaskComment(genericCommentBean);*/
+
+                } else {
+                    try {
+                        if (response.code() == 500) {
+                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        } else {
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
             }
         });
     }
@@ -73,7 +105,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
                     }
                 }
             }
@@ -97,14 +129,14 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.removeDueDateCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
                     }
                 }
             }
@@ -132,14 +164,14 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.loadUserTaskBean(bean);
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
                     }
                 }
             }
@@ -163,7 +195,7 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.changeStateCBH(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
@@ -193,14 +225,14 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.updateImportanceCBH();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                        taskDetailsPresenter.showErrorMsg(response.errorBody().string());
+                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
+                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
 
                     }
                 }
@@ -224,14 +256,14 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.loadWorkflowForm(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
+                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
                             taskDetailsPresenter.showErrorMsg(response.errorBody().string());
                         } else {
                             throw new Exception();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        taskDetailsPresenter.showErrorMsg("Illegal error "+response.code() +", please contact the admin");
+                        taskDetailsPresenter.showErrorMsg("Illegal error " + response.code() + ", please contact the admin");
                     }
                 }
             }
@@ -241,6 +273,13 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                 taskDetailsPresenter.showErrorMsg("Can not reach CodeFish");
             }
         });
+
+    }
+
+    @Override
+    public void publishTaskComment(GenericCommentBean genericCommentBean, TaskDetailsPresenterImpl taskDetailsPresenter) {
+
+
 
     }
 

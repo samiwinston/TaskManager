@@ -1,8 +1,8 @@
 package com.codefish.android.taskmanager.daggerConfig.module;
 
 
-import com.codefish.android.taskmanager.model.deserializer.MyDeserializer;
-import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
+import com.codefish.android.taskmanager.model.GenericCommentBean;
+import com.codefish.android.taskmanager.model.deserializer.GenericCommentDeserializer;
 import com.codefish.android.taskmanager.service.IHrService;
 import com.codefish.android.taskmanager.service.IProjectService;
 import com.codefish.android.taskmanager.service.IReportingService;
@@ -17,7 +17,6 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -50,7 +49,7 @@ public class NetModule {
         this.controllerMap = controllerMap;
         this.okHttpClient = okHttpClient;
         this.gson = new GsonBuilder()
-                //.registerTypeAdapter(MobLeaveRequestFormBean.class,new MyDeserializer<MobLeaveRequestFormBean>())
+                .registerTypeAdapter(GenericCommentBean.class,new GenericCommentDeserializer())
                 .registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
                     @Override
                     public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {

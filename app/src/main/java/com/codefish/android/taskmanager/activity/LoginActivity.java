@@ -20,6 +20,8 @@ import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.crashlytics.android.Crashlytics;
 import com.google.common.primitives.Booleans;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 
@@ -55,6 +57,8 @@ public class LoginActivity extends SingleFragmentActivity {
             loginFragment = (LoginFragment) getSupportFragmentManager().getFragment(savedInstanceState, "loginFragment");
         }
 
+
+        //String IID_TOKEN = FirebaseInstanceId.getInstance().getToken();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.codefish.android.taskmanager.interactor;
 
+import com.codefish.android.taskmanager.model.GenericCommentBean;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
+import com.codefish.android.taskmanager.model.PostCommentParam;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
 import com.codefish.android.taskmanager.presenter.ITaskPresenter;
@@ -14,6 +16,8 @@ import java.util.Date;
 public interface ITaskDetailsInteraction {
     void deleteTask(Integer idAppUser, int idTask, ITaskDetailsPresenter taskDetailsPresenter);
 
+    void postTaskComment(PostCommentParam postCommentParam, ITaskDetailsPresenter taskDetailsPresenter);
+
     void updateDueDate(Integer idTask, Date date, Integer idAppUser, ITaskDetailsPresenter taskDetailsPresenter);
 
     void removeDueDate(Integer idTask, Integer idAppUser, ITaskDetailsPresenter taskDetailsPresenter);
@@ -22,5 +26,7 @@ public interface ITaskDetailsInteraction {
     void changeState(SubmitActionParam submitParams, ITaskDetailsPresenter taskDetailsPresenter);
     void updateImportance(Integer idAppUser, Integer idUserTask, Integer importance, ITaskDetailsPresenter taskDetailsPresenter);
     void getWorkflowForm(Integer idAppUser, Integer idWorkflowInstance,ITaskDetailsPresenter taskDetailsPresenter);
+
+    void publishTaskComment(GenericCommentBean genericCommentBean, TaskDetailsPresenterImpl taskDetailsPresenter);
 }
 

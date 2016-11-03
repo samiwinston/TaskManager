@@ -1,35 +1,44 @@
 package com.codefish.android.taskmanager.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codefish.android.taskmanager.MyApplication;
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.TaskDetailsActivity;
+import com.codefish.android.taskmanager.component.commentsView.CommentsListView;
 import com.codefish.android.taskmanager.component.smartDateView.SmartDateButton;
+import com.codefish.android.taskmanager.model.GenericCommentBean;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
+import com.codefish.android.taskmanager.model.PostCommentParam;
 import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
 import com.codefish.android.taskmanager.utils.SmartDateFormatter;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Date;
 
@@ -45,6 +54,11 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
 
     public static final int REQUEST_TASK_BEAN = 1010;
 
+    @Inject
+    ITaskDetailsPresenter taskDetailsPresenter;
+    @Inject
+    SmartDateFormatter smartDateFormatter;
+
     @Bind(R.id.task_details_layout_toolbar)
     Toolbar toolbar;
     @Bind(R.id.task_details_due_date)
@@ -59,11 +73,14 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     Button actionButton;
     @Bind(R.id.task_details_description)
     TextView taskDescriptionView;
+    @Bind(R.id.task_details_layout_add_comment_button)
+    AppCompatImageButton addCommentBtn;
+    @Bind(R.id.task_details_layout_comment)
+    EditText commentEditText;
+
     TaskDetailsActivity taskDetailsActivity;
-    @Inject
-    ITaskDetailsPresenter taskDetailsPresenter;
-    @Inject
-    SmartDateFormatter smartDateFormatter;
+    CommentsListView commentsListView;
+
 
     TaskEditFragment taskEditFragment;
     private MobWorkflowForm loadedWorkflowForm = null;
@@ -106,18 +123,68 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         setHasOptionsMenu(true);
         taskDetailsPresenter.setTaskDetailsView(this);
         if (taskDetailsActivity.selectedTask != null)
+        {
+            Integer idWorkflowInstance = taskDetailsActivity.selectedTask.idWorkflowInstance;
             taskDetailsPresenter.getTask(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0),
-                    taskDetailsActivity.selectedTask.idWorkflowInstance);
+                    idWorkflowInstance);
+
+            FirebaseMessaging.getInstance().subscribeToTopic(idWorkflowInstance+"");
+        }
+
+        // This registers mMessageReceiver to receive messages.
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+                new IntentFilter("my-integer"));
+
+
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Extract data included in the Intent
+            String idPostedByVal = intent.getStringExtra("message");
+            Integer idPostedBy = 0;
+            if(idPostedByVal!=null)
+               idPostedBy = Integer.parseInt(idPostedByVal);
+            if(commentsListView!=null && idPostedBy>0 &&  !idPostedBy.equals(PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0)))
+            {
+                commentsListView.refreshComments();
+            }
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (taskDetailsActivity.selectedTask != null) {
+            Integer idWorkflowInstance = taskDetailsActivity.selectedTask.idWorkflowInstance;
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(idWorkflowInstance+"");
+        }
+
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
+
+    }
+
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.task_details_layout, container, false);
+        View headerView = inflater.inflate(R.layout.task_details_list_header_layout, null, false);
+
+        commentsListView= (CommentsListView) view.findViewById(R.id.task_details_comments_list);
+        commentsListView.addHeaderView(headerView);
+
         ButterKnife.bind(this, view);
+
+
+
         if (taskDetailsActivity.selectedTask != null) {
             UserTaskBean bean = taskDetailsActivity.selectedTask;
+            commentsListView.setIdWorkflowInstance(bean.idWorkflowInstance);
+            commentsListView.refreshComments();
             taskTitleView.setText(bean.title);
             taskDescriptionView.setText(bean.description);
             if (bean.dueDate != null)
@@ -132,12 +199,66 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
         }
         actionButton.setOnClickListener(onTakeActionClick());
         dueDateBtn.setOnClickListener(onDateClick());
+        addCommentBtn.setOnClickListener(onAddCommentClick());
+
 
         initToolBar();
         initBean();
 
 
         return view;
+    }
+
+    private View.OnClickListener onAddCommentClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(commentEditText.getText().length()>0)
+                {
+                    String comment = commentEditText.getText().toString();
+
+                    commentEditText.setText("");
+                    Integer idAppUser = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0);
+                    String postedBy = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("name", "");
+                    Integer idWorkflowInstance = taskDetailsActivity.selectedTask.idWorkflowInstance;
+
+                    GenericCommentBean genericCommentBean = new GenericCommentBean();
+                    genericCommentBean.setDatePosted(new Date());
+                    genericCommentBean.setText(comment);
+                    genericCommentBean.setIdPostedBy(idAppUser);
+                    genericCommentBean.setPostedBy(postedBy);
+                    genericCommentBean.setCommentType(1);
+                    genericCommentBean.setTopic("WorkflowInstance");
+                    genericCommentBean.setSubtopic(idWorkflowInstance+"");
+                    commentsListView.addItem(genericCommentBean);
+
+                    hideSoftKeyboard();
+
+
+                    PostCommentParam  postCommentParam = new PostCommentParam();
+                    postCommentParam.idAppUser = idAppUser;
+                    postCommentParam.comment = comment;
+                    postCommentParam.topic = "WorkflowInstance";
+                    postCommentParam.subtopic = idWorkflowInstance+"";
+                    postCommentParam.sendMail = true;
+
+                    taskDetailsPresenter.postTaskComment(postCommentParam);
+
+                }
+
+
+
+            }
+        };
+    }
+
+    private void hideSoftKeyboard() {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private View.OnClickListener onTakeActionClick() {
@@ -161,7 +282,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                 DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(taskDetailsActivity.selectedTask.dueDate);
                 datePickerFragment.setTargetFragment(TaskDetailsFragment.this, TasksModel.REQUEST_DATE);
                 if (!datePickerFragment.isAdded()) {
-                    datePickerFragment.show(getFragmentManager(), "dialog date");
+                    datePickerFragment.show(getFragmentManager(), DatePickerFragment.ARG_DATE);
                 }
             }
         };
@@ -361,6 +482,12 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
             actionButton.setVisibility(View.VISIBLE);
             workflowButtonIsLoaded = true;
         }
+
+        taskDescriptionView.setText(userTaskBean.description);
+
+        // refresh comments
+        //commentsListView.setIdWorkflowInstance();
+
     }
 
     @Override
