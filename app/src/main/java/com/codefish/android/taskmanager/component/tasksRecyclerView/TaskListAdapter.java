@@ -40,6 +40,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     private final View.OnClickListener mOnClickListener = new MyOnClickListener();
 
 
+
+
     // Provide a suitable constructor (depends on the kind of dataset)
 
     // Provide a reference to the views for each data item
@@ -138,13 +140,26 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
 
     public void updateSelectedItem(UserTaskBean userTaskBean) {
-        dataSet.set(currentlySelectedPosition, userTaskBean);
-        notifyItemChanged(currentlySelectedPosition);
+        try {
+            dataSet.set(currentlySelectedPosition, userTaskBean);
+            notifyItemChanged(currentlySelectedPosition);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void removeSelectedItem() {
-        dataSet.remove(currentlySelectedPosition);
-        notifyItemRemoved(currentlySelectedPosition);
+        try{
+            dataSet.remove(currentlySelectedPosition);
+            notifyItemRemoved(currentlySelectedPosition);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     public ArrayList<UserTaskBean> getDataSet() {

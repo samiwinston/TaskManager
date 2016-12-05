@@ -118,6 +118,7 @@ public class TaskAddFollowersFragment extends Fragment implements IGenericCallBa
             Intent intent = new Intent();
             intent.putExtras(followerBean.getBundle(item));
             getTargetFragment().onActivityResult(TasksModel.REQUEST_FOLLOWER,Activity.RESULT_OK,intent);
+            //getFragmentManager().beginTransaction().show(getTargetFragment()).commit();
             getFragmentManager().popBackStack();
         }
     }

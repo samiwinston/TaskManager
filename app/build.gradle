@@ -23,8 +23,8 @@ android {
         applicationId "com.codefish.android.taskmanager"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.4.3"
+        versionCode 5
+        versionName "1.5.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
 

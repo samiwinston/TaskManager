@@ -49,8 +49,12 @@ public class FollowersListView extends ListView implements IFollowerCallBack {
     }
 
     public void addFollower(FollowerBean bean) {
-        listAdapter.mAllResults.add(0, bean);
-        listAdapter.notifyDataSetChanged();
+        if(listAdapter.mAllResults!=null)
+        {
+            listAdapter.mAllResults.add(0, bean);
+            listAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override

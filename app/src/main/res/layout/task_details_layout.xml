@@ -20,16 +20,22 @@
         android:layout_height="1dp"
         android:background="@color/colorLighterGrey" />
 
-
+    <!--<android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/tasks_details_layout_swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">-->
     <com.codefish.android.taskmanager.component.commentsView.CommentsListView
         android:id="@+id/task_details_comments_list"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="60"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
         android:background="@color/colorClearGrey"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:padding="10dp" />
+   <!-- </android.support.v4.widget.SwipeRefreshLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"

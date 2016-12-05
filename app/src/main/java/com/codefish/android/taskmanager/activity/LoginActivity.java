@@ -100,11 +100,11 @@ public class LoginActivity extends SingleFragmentActivity {
 
 
 
-  /*  @Override
+    /*@Override
     protected void onResume() {
-        super.onResume();
+        super.onResume();*/
 
-        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+      /*  SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         if(sharedpreferences!=null)
         {
@@ -119,8 +119,8 @@ public class LoginActivity extends SingleFragmentActivity {
                 loginFragment.getUser(userName,password);
 
             }
-        }
-    }*/
+        }*/
+    //}
 
 
 

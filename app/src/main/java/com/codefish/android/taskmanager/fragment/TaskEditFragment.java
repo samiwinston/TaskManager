@@ -27,6 +27,7 @@ import com.codefish.android.taskmanager.model.TasksModel;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskEditPresenter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -293,6 +294,10 @@ public class TaskEditFragment extends Fragment implements ITaskEditView {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(userTaskBean.followers==null)
+                {
+                    userTaskBean.followers = new ArrayList<>();
+                }
                 TaskFollowersFragment taskFollowersFragment = TaskFollowersFragment.newInstance(TaskEditFragment.this, userTaskBean.idWorkflowInstance, userTaskBean.followers);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, taskFollowersFragment)
                         .addToBackStack("Back To Parent").commit();

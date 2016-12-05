@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.Toolbar;
@@ -77,6 +78,8 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
     AppCompatImageButton addCommentBtn;
     @Bind(R.id.task_details_layout_comment)
     EditText commentEditText;
+    /*@Bind(R.id.tasks_details_layout_swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;*/
 
     TaskDetailsActivity taskDetailsActivity;
     CommentsListView commentsListView;
@@ -228,7 +231,7 @@ public class TaskDetailsFragment extends Fragment implements ITaskDetailsView {
                     genericCommentBean.setText(comment);
                     genericCommentBean.setIdPostedBy(idAppUser);
                     genericCommentBean.setPostedBy(postedBy);
-                    genericCommentBean.setCommentType(1);
+                    genericCommentBean.setCommentType(GenericCommentBean.USER_COMMENT);
                     genericCommentBean.setTopic("WorkflowInstance");
                     genericCommentBean.setSubtopic(idWorkflowInstance+"");
                     commentsListView.addItem(genericCommentBean);

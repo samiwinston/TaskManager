@@ -32,6 +32,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,6 +81,11 @@ public class TaskFollowersFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,6 +103,7 @@ public class TaskFollowersFragment extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //getFragmentManager().beginTransaction().hide(TaskFollowersFragment.this).commit();
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, taskAddFollowersFragment)
                         .addToBackStack("Back To Parent").commit();
             }

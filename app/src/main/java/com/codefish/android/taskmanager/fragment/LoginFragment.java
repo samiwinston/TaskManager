@@ -171,6 +171,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -184,7 +186,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 String userName = sharedpreferences.getString("username", "");
                 String password = sharedpreferences.getString("password", "");
 
-                if (userName != null && userName.length() > 0 && password != null && password.length() > 0) {
+                if (!userName.equals("") && !password.equals("") ) {
 
                     hideControls();
                     showProgressBar();

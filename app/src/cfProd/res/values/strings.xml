@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">FishTank</string>
-    <string name="hrUrlEP">hrModule/</string>
+    <string name="hrUrlEP">hrWorkflowForm/</string>
     <string name="frmworkUrlEP">taskManager/</string>
     <string name ="complete_task" > Complete Task </string>
     <string name ="edit_task" > Edit Task</string>
@@ -9,5 +9,11 @@
     <string name="delete_task">Delete Task</string>
     <string name="illegal_error_msg">Illegal Error, please contact the admin</string>
     <string name="network_error">Can not reach CodeFish</string>
+    <string name="request_leave">Request Leave</string>
+    <string name="create_project">New Project</string>
+    <string name="create_task">New Task</string>
+
+
+
 
 </resources>

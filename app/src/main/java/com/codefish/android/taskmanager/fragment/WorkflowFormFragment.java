@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -140,6 +141,9 @@ public class WorkflowFormFragment extends Fragment {
 
         progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
+
+       /* WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);*/
 
         webView.setWebViewClient(new WebViewClient() {
 

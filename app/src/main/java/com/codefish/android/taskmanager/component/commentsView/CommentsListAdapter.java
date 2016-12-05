@@ -125,7 +125,7 @@ public class CommentsListAdapter extends BaseAdapter {
         mResultList.addAll(mockComments);
         notifyDataSetChanged();*/
 
-        ServiceModel.getInstance().taskService.getTaskGenericComments(idWorkflowInstance, 1).enqueue(new Callback<List<GenericCommentBean>>() {
+        ServiceModel.getInstance().taskService.getTaskGenericComments(idWorkflowInstance, 0).enqueue(new Callback<List<GenericCommentBean>>() {
             @Override
             public void onResponse(Call<List<GenericCommentBean>> call, Response<List<GenericCommentBean>> response) {
                 if (response.isSuccessful()) {

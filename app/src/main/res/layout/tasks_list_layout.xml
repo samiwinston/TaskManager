@@ -160,7 +160,7 @@
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimary"
                     fab:fab_colorRipple="#99FFFFFF"
-                    fab:fab_label="Request Leave" />
+                    fab:fab_label="@string/request_leave" />
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/tasks_list_layout_add_new_project"
@@ -172,7 +172,7 @@
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimary"
                     fab:fab_colorRipple="#99FFFFFF"
-                    fab:fab_label="Project" />
+                    fab:fab_label="@string/create_project" />
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/tasks_list_layout_add_new_task"
@@ -184,7 +184,7 @@
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimary"
                     fab:fab_colorRipple="#99FFFFFF"
-                    fab:fab_label="Task" />
+                    fab:fab_label="@string/create_task" />
 
             </com.github.clans.fab.FloatingActionMenu>
 

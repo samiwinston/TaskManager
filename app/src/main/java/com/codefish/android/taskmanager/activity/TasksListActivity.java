@@ -93,28 +93,6 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-
-
-    @Override
     public void onNewItemSelect() {
         Intent navToNewTask = TaskNewActivity.newInstance(this);
         startActivityForResult(navToNewTask, TasksModel.REQUEST_ADD_NEW_ITEM);
