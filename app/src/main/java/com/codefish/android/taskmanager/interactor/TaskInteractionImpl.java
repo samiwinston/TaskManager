@@ -123,7 +123,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
             public void onResponse(Call<ArrayList<UserTaskBean>> call, Response<ArrayList<UserTaskBean>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<UserTaskBean> list = response.body();
-                    taskListAdapter.setDataSet(list);
+                    taskListAdapter.setDataSet(list==null?new ArrayList<UserTaskBean>():list);
                     taskPresenter.refreshList();
                 } else {
                     try {
@@ -156,7 +156,7 @@ public class TaskInteractionImpl implements ITaskInteraction {
             public void onResponse(Call<UserTaskBean> call, Response<UserTaskBean> response) {
                 if (response.isSuccessful()) {
                     UserTaskBean project = response.body();
-                    taskListAdapter.setDataSet(project.children);
+                    taskListAdapter.setDataSet(project.children==null?new ArrayList<UserTaskBean>():project.children);
                     taskPresenter.getProjectTasksCBH(project);
                 } else {
                     try {
