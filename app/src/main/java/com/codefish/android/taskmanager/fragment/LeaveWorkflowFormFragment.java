@@ -143,12 +143,13 @@ public class LeaveWorkflowFormFragment extends Fragment implements ILeaveWorkflo
         calendarView.addDecorator(decorator);
 
         Calendar firstDayOfYear = Calendar.getInstance();
-        Calendar lastDayOfYear = Calendar.getInstance();
+        //Calendar maximumDate = Calendar.getInstance();
         firstDayOfYear.set(Calendar.DAY_OF_YEAR, 1);
-        lastDayOfYear.set(Calendar.DAY_OF_YEAR, lastDayOfYear.getActualMaximum(Calendar.DAY_OF_YEAR));
+        //maximumDate.add(Calendar.YEAR,1);
+        //maximumDate.set(Calendar.);
         calendarView.state().edit()
                 .setMinimumDate(firstDayOfYear)
-                .setMaximumDate(lastDayOfYear).commit();
+                .commit();
 
 
         initListView();

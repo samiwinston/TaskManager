@@ -14,7 +14,7 @@
     android:textStyle="bold"
     />
 
-    <ImageView
+    <ImageView android:contentDescription="An icon which represents a an approved leave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/peers_on_leave_status"

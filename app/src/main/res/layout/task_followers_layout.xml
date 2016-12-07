@@ -22,7 +22,8 @@
     android:padding="10dp"
     >
 
-    <ImageView android:id="@+id/task_edit_followers_icon"
+    <ImageView android:contentDescription="An icon which represents a task follower"
+        android:id="@+id/task_edit_followers_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_menu_follower"/>

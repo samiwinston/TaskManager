@@ -19,7 +19,7 @@
         android:layout_centerVertical="true"
         android:weightSum="1">
 
-        <ImageView
+        <ImageView android:contentDescription="An icon which represents the company's logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/company_logo"
