@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -18,7 +19,6 @@ import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobAppUserBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.WidgetActionItemBean;
-import com.crashlytics.android.Crashlytics;
 import com.google.common.primitives.Booleans;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -26,6 +26,10 @@ import com.google.gson.Gson;
 
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +40,7 @@ public class LoginActivity extends SingleFragmentActivity {
 
 
     private LoginFragment loginFragment;
-    private boolean mock = false;
+    //private boolean mock = false;
 
     public static final String MyPREFERENCES = "MyPrefs" ;
 
@@ -84,15 +88,16 @@ public class LoginActivity extends SingleFragmentActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (mock)
-        {
-           // LoginModel.getInstance().setUserBean(new MobAppUserBean(1164,"Abed Chmaytilli"));
-            navigateToTasksView(null);
-        }
+//        if (mock)
+//        {
+//           // LoginModel.getInstance().setUserBean(new MobAppUserBean(1164,"Abed Chmaytilli"));
+//            navigateToTasksView(null,null);
+//        }
     }
 
-    public void navigateToTasksView(WidgetActionItemBean leaveActionItemBean) {
+    public void navigateToTasksView(WidgetActionItemBean leaveActionItemBean, WidgetActionItemBean[]  widgetActionItems) {
         Intent intent = TasksListActivity.newInstance(this);
+        intent.putParcelableArrayListExtra("widgetActionItems", new ArrayList<>(Arrays.asList(widgetActionItems)));
         intent.putExtra("leaveActionItemBean",leaveActionItemBean);
         startActivity(intent);
     }

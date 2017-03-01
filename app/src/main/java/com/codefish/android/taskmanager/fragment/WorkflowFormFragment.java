@@ -29,6 +29,7 @@ import com.codefish.android.taskmanager.component.WorkflowActionButton;
 import com.codefish.android.taskmanager.model.ApiError;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
+import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.TasksModel;
@@ -106,8 +107,8 @@ public class WorkflowFormFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
 
-        outState.putParcelable("mobWorkflowForm",mobWorkflowForm);
-        outState.putInt("idWorkflowInstance",idWorkflowInstance);
+        outState.putParcelable("mobWorkflowForm", mobWorkflowForm);
+        outState.putInt("idWorkflowInstance", idWorkflowInstance);
 
     }
 
@@ -139,7 +140,7 @@ public class WorkflowFormFragment extends Fragment {
         View view = inflater.inflate(R.layout.workflow_form_layout, container, false);
         ButterKnife.bind(this, view);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary),
+        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
        /* WebSettings webSettings = webView.getSettings();
@@ -172,7 +173,6 @@ public class WorkflowFormFragment extends Fragment {
     }
 
 
-
     private void initToolBar() {
         taskDetailsActivity.setSupportActionBar(toolbar);
         ActionBar supportActionBar = taskDetailsActivity.getSupportActionBar();
@@ -189,7 +189,7 @@ public class WorkflowFormFragment extends Fragment {
                 actionBtnGroup.setVisibility(View.GONE);
                 webView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
-                WorkflowActionButton actionButton =((WorkflowActionButton) v);
+                WorkflowActionButton actionButton = ((WorkflowActionButton) v);
                 WorkflowActionBean bean = actionButton.getWorkflowActionBean();
                 submitWorkflowAction(bean);
             }
@@ -234,18 +234,18 @@ public class WorkflowFormFragment extends Fragment {
                 } else {
 
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
-                            actionBtnGroup.setVisibility(View.VISIBLE);
-                            webView.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        Toast.makeText(getContext(), responseBean.description, Toast.LENGTH_LONG).show();
+                        actionBtnGroup.setVisibility(View.VISIBLE);
+                        webView.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
 
-                        } else {
-                            throw new Exception();
-                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Toast.makeText(getContext(), "Illegal error "+response.code()+", please contact the admin", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Illegal error " + response.code() + ", please contact the admin", Toast.LENGTH_LONG).show();
                     }
 
 

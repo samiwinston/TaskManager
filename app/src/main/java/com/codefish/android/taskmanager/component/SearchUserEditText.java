@@ -15,7 +15,9 @@ import android.widget.Toast;
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.component.userListView.UserListAdapter;
 import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -146,11 +148,10 @@ public class SearchUserEditText extends EditText {
                     showList();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        Toast.makeText(getContext(), responseBean.description, Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(getContext(), "Illegal error "+response.code()+", please contact the admin", Toast.LENGTH_LONG).show();

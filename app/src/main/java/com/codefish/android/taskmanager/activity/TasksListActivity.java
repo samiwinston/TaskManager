@@ -100,9 +100,11 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
 
 
     @Override
-    public void onOpenLeaveForm(WidgetActionItemBean leaveActionItemBean) {
-        Intent navToDetails = LeaveWorkflowFormActivity.newInstance(this,leaveActionItemBean);
-        startActivityForResult(navToDetails, TasksModel.REQUEST_WORKFLOW_TASK_UPDATE);
+    public void onOpenWidgetActionItems(ArrayList<WidgetActionItemBean> widgetActionItems) {
+        //Intent navToDetails = LeaveWorkflowFormActivity.newInstance(this,leaveActionItemBean);
+        Intent navToWidgetActionItems = WidgetActionItemsActivity.newInstance(this,widgetActionItems);
+
+        startActivityForResult(navToWidgetActionItems, TasksModel.REQUEST_WORKFLOW_TASK_UPDATE);
     }
 
     @Override
@@ -172,7 +174,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
                             tasksListFragment.showTaskViewSnackBar(newTaskBean);
                             tasksListFragment.refreshUserTasks();
                         } else {
-                            Toast.makeText(getBaseContext(),getBaseContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG);
+                            Toast.makeText(getBaseContext(),getBaseContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();
                         }
                     }
                     else
@@ -180,7 +182,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
                         try {
                             if(response.code()==500 && response.errorBody().contentLength()<500)
                             {
-                                Toast.makeText(getBaseContext(), response.errorBody().string(), Toast.LENGTH_LONG);
+                                Toast.makeText(getBaseContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();;
                             }
                             else
                             {
@@ -188,7 +190,7 @@ public class TasksListActivity extends SingleFragmentActivity implements TasksLi
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(getBaseContext(), getBaseContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG);
+                            Toast.makeText(getBaseContext(), getBaseContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();;
                         }
                     }
 

@@ -89,8 +89,8 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     com.github.clans.fab.FloatingActionButton addNewProjectBtn;
     @Bind(R.id.task_list_float_action_menu)
     com.github.clans.fab.FloatingActionMenu floatActionMenu;
-    @Bind(R.id.tasks_list_layout_add_new_leave)
-    com.github.clans.fab.FloatingActionButton addNewLeave;
+    @Bind(R.id.tasks_list_layout_view_widget_action_items)
+    com.github.clans.fab.FloatingActionButton viewWidgetActionItemsBtn;
     @Bind(R.id.tasks_list_layout_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     public Integer idSelectedProject= 0;
@@ -101,11 +101,16 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     boolean isMockData = false;
 
     WidgetActionItemBean leaveActionItemBean;
+   // ArrayList<WidgetActionItemBean> widgetActionItems;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MyApplication.getAppComponent().inject(this);
         leaveActionItemBean = getActivity().getIntent().getParcelableExtra("leaveActionItemBean");
+        ArrayList<WidgetActionItemBean> list = getActivity().getIntent().getParcelableArrayListExtra("widgetActionItems");
+        taskPresenter.setWidgetActionItems(list);
     }
 
     @Override
@@ -132,7 +137,10 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
         View view = inflater.inflate(R.layout.tasks_list_layout, container, false);
         ButterKnife.bind(this, view);
-        MyApplication.getAppComponent().inject(this);
+
+        //init widgetActions
+
+
         taskPresenter.setLoginView(this);
         userWidget.setOnClickListener(onWidgetCick());
         openProfileBtn.setOnClickListener(onWidgetCick());
@@ -153,10 +161,10 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         addNewProjectBtn.setOnClickListener(onNewProjectClick());
         navCreateProjectBtn.setOnClickListener(onNewProjectClick());
         projectDueDateBtn.setOnClickListener(onProjectDueDateClick());
-        if(leaveActionItemBean!=null)
+        if(taskPresenter.getWidgetActionItems()!=null && taskPresenter.getWidgetActionItems().size()>0)
         {
-            addNewLeave.setVisibility(View.VISIBLE);
-            addNewLeave.setOnClickListener(onNewLeaveClick());
+            viewWidgetActionItemsBtn.setVisibility(View.VISIBLE);
+            viewWidgetActionItemsBtn.setOnClickListener(onWidgetActionItemsClick());
         }
 
 
@@ -226,12 +234,12 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         };
     }
 
-    private View.OnClickListener onNewLeaveClick() {
+    private View.OnClickListener onWidgetActionItemsClick() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideFobMenu();
-                activity.onOpenLeaveForm(leaveActionItemBean);
+                activity.onOpenWidgetActionItems(taskPresenter.getWidgetActionItems());
 
             }
         };
@@ -445,7 +453,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
     public interface Callbacks {
         void onNewItemSelect();
-        void onOpenLeaveForm(WidgetActionItemBean leaveActionItemBean);
+        void onOpenWidgetActionItems(ArrayList<WidgetActionItemBean> widgetActionItems);
         void onItemSelected(UserTaskBean bean);
     }
 

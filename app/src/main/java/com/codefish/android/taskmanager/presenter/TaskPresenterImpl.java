@@ -12,6 +12,7 @@ import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -24,9 +25,21 @@ public class TaskPresenterImpl implements ITaskPresenter {
 
     ITasksView taskView;
 
+    private ArrayList<WidgetActionItemBean>  widgetActionItems;
 
     public TaskPresenterImpl(ITaskInteraction tasksInteraction) {
         this.taskInteraction = tasksInteraction;
+    }
+
+
+    @Override
+    public void setWidgetActionItems(ArrayList<WidgetActionItemBean> widgetActionItems) {
+        this.widgetActionItems = widgetActionItems;
+    }
+
+    @Override
+    public ArrayList<WidgetActionItemBean> getWidgetActionItems() {
+        return this.widgetActionItems;
     }
 
     @Override
@@ -97,6 +110,8 @@ public class TaskPresenterImpl implements ITaskPresenter {
         taskView.showErrorMsg(msg);
         taskView.hideProgressBar();
     }
+
+
 
     @Override
     public void setLoginView(ITasksView taskView) {

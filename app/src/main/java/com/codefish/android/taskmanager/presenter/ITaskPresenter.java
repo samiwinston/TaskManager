@@ -1,16 +1,23 @@
 package com.codefish.android.taskmanager.presenter;
 
+import android.os.Parcelable;
+
 import com.codefish.android.taskmanager.activity.ITasksView;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.codefish.android.taskmanager.model.hr.MobLeaveRequestFormBean;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by abedch on 2/2/2016.
  */
 public interface ITaskPresenter {
+
+    void setWidgetActionItems(ArrayList<WidgetActionItemBean> widgetActionItems);
+
+    ArrayList<WidgetActionItemBean>  getWidgetActionItems();
 
 
     void updateProjectDueDate(Integer idAppUser, Integer idTask, Date date);

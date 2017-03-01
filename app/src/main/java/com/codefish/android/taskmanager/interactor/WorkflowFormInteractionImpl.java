@@ -3,6 +3,7 @@ package com.codefish.android.taskmanager.interactor;
 import com.codefish.android.taskmanager.MyApplication;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobAppUserBean;
+import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
@@ -13,6 +14,7 @@ import com.codefish.android.taskmanager.presenter.ITaskPresenter;
 import com.codefish.android.taskmanager.presenter.IWorkflowFormPresenter;
 import com.codefish.android.taskmanager.service.IHrService;
 import com.codefish.android.taskmanager.service.IUserService;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,11 +59,10 @@ public class WorkflowFormInteractionImpl implements IWorkflowFormInteraction {
                     workflowFormPresenter.getPeersOnLeaveCBH(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
-                            workflowFormPresenter.showErrorMsgInSummary(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        workflowFormPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         workflowFormPresenter.showErrorMsgInSummary("Illegal error, " + response.code() + " please contact the admin");
@@ -86,11 +87,10 @@ public class WorkflowFormInteractionImpl implements IWorkflowFormInteraction {
                     workflowFormPresenter.submitLeaveCBH(null);
                 }  else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            workflowFormPresenter.showErrorMsgInSummary(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        workflowFormPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         workflowFormPresenter.showErrorMsgInSummary("Illegal error, "+response.code() +" please contact the admin");
@@ -122,11 +122,10 @@ public class WorkflowFormInteractionImpl implements IWorkflowFormInteraction {
                 }
                 else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            workflowFormPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        workflowFormPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         workflowFormPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");

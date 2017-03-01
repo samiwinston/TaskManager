@@ -19,11 +19,16 @@ import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.activity.LoginActivity;
 import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobAppUserBean;
+import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -109,7 +114,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         }
 
 
-                        loginActivity.navigateToTasksView(leaveActionBean);
+                        loginActivity.navigateToTasksView(leaveActionBean, user.getActionItems());
                         loginActivity.finish();
 
 
@@ -124,7 +129,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         editor.putInt("userId", user.getId());
                         editor.putString("userInitials", user.getName().charAt(0) + "" + user.getName().charAt(user.getName().lastIndexOf(' ') + 1));
                         editor.putString("password", password);
-                        editor.commit();
+                        editor.apply();
 
 
                         // TODO: Move this to where you establish a user session
@@ -139,11 +144,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
-                            showToast(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        showToast(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         showToast("Illegal error " + response.code() + ", please contact the admin");
@@ -165,7 +169,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.clear();
-                editor.commit();
+                editor.apply();
             }
         });
 

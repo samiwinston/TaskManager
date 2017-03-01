@@ -40,6 +40,7 @@ public class WidgetActionItemBean implements Parcelable {
 		idEntity = in.readString();
 		groupName = in.readString();
 		workflowName =in.readString();
+		description = in.readString();
 	}
 
 	@Override
@@ -58,6 +59,7 @@ public class WidgetActionItemBean implements Parcelable {
 		dest.writeString(idEntity);
 		dest.writeString(groupName);
 		dest.writeString(workflowName);
+		dest.writeString(description);
 	}
 
 
@@ -71,4 +73,13 @@ public class WidgetActionItemBean implements Parcelable {
 		}
 	};
 
+	public boolean isWorkflowForm() {
+		return workflowName!=null;
+	}
+
+	public String formIdentifier() {
+		if(isWorkflowForm())
+			return workflowName;
+		else return formName;
+	}
 }

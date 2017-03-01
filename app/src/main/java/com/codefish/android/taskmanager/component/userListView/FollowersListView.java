@@ -11,7 +11,9 @@ import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.component.IGenericCallBack;
 import com.codefish.android.taskmanager.model.FollowerBean;
 import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.List;
@@ -73,11 +75,10 @@ public class FollowersListView extends ListView implements IFollowerCallBack {
 
                         } else {
                             try {
-                                if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                                    Toast.makeText(getContext(), response.errorBody().string(), Toast.LENGTH_LONG).show();
-                                } else {
-                                    throw new Exception();
-                                }
+                                String errorB = response.errorBody().string();
+                                Gson gson = new Gson();
+                                ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                                Toast.makeText(getContext(), responseBean.description, Toast.LENGTH_LONG).show();
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Toast.makeText(getContext(), getContext().getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();

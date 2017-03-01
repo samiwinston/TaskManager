@@ -54,7 +54,7 @@ public class MyProjectsEditText extends EditText {
     }
 
     private void initExtraAttributes(Context context, AttributeSet attrs) {
-        TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.SearchUserEditText);
+       // TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.SearchUserEditText);
         mLabelField = "title";
     }
 

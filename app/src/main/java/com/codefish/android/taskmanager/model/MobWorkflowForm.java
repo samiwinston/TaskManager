@@ -25,8 +25,6 @@ public class MobWorkflowForm implements Parcelable {
         dest.writeTypedList(this.actionBeans);
     }
 
-    public MobWorkflowForm() {
-    }
 
     protected MobWorkflowForm(Parcel in) {
         this.htmlForm = in.readString();

@@ -6,8 +6,8 @@ import android.app.Application;
 import com.codefish.android.taskmanager.daggerConfig.component.AppComponent;
 import com.codefish.android.taskmanager.daggerConfig.component.DaggerAppComponent;
 import com.codefish.android.taskmanager.daggerConfig.module.NetModule;
-
 import com.crashlytics.android.Crashlytics;
+
 
 import java.util.HashMap;
 

@@ -3,8 +3,10 @@ package com.codefish.android.taskmanager.interactor;
 import android.widget.Toast;
 
 import com.codefish.android.taskmanager.model.LoginModel;
+import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.presenter.ITaskEditPresenter;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,11 +38,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     }
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            taskEditPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskEditPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
@@ -68,11 +69,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.deleteTaskCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            taskEditPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskEditPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
@@ -97,11 +97,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.moveToProjectCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            taskEditPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskEditPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
@@ -129,11 +128,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.updateDueCallBack(date);
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            taskEditPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskEditPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
@@ -161,11 +159,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.removeDueDateCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            taskEditPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskEditPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
@@ -193,11 +190,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.updatePossibleAssignees(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            taskEditPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskEditPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");
@@ -226,11 +222,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
                     taskEditPresenter.updateMyProjects(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            taskEditPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskEditPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskEditPresenter.showErrorMsg("Can not reach Codefish");
@@ -259,11 +254,10 @@ public class TaskEditInteractionImpl implements ITaskEditInteraction {
 
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            taskEditPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskEditPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskEditPresenter.showErrorMsg("Illegal error, "+response.code() +" please contact the admin");

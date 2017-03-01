@@ -22,6 +22,8 @@
         </activity>
         <activity android:name=".activity.TasksListActivity" android:configChanges="keyboardHidden|orientation|screenSize"  />
         <activity android:name=".activity.LeaveWorkflowFormActivity" android:configChanges="keyboardHidden|orientation|screenSize"  />
+        <activity android:name=".activity.WidgetActionItemsActivity" android:configChanges="keyboardHidden|orientation|screenSize"  />
+        <activity android:name=".activity.WorkflowFormSubmitActivity" android:configChanges="keyboardHidden|orientation|screenSize"  />
         <activity android:name=".activity.TaskDetailsActivity"  android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden"  />
         <activity android:name=".activity.TaskNewActivity" android:windowSoftInputMode="adjustResize" android:configChanges="keyboardHidden|orientation|screenSize"/>

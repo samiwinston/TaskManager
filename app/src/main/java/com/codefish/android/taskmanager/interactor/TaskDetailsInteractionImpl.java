@@ -1,14 +1,18 @@
 package com.codefish.android.taskmanager.interactor;
 
+import android.widget.Toast;
+
 import com.codefish.android.taskmanager.model.GenericCommentBean;
 import com.codefish.android.taskmanager.model.GetTaskParameter;
 import com.codefish.android.taskmanager.model.MobWorkflowForm;
 import com.codefish.android.taskmanager.model.PostCommentParam;
+import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
 import com.codefish.android.taskmanager.model.SubmitActionParam;
 import com.codefish.android.taskmanager.model.UserTaskBean;
 import com.codefish.android.taskmanager.presenter.ITaskDetailsPresenter;
 import com.codefish.android.taskmanager.presenter.TaskDetailsPresenterImpl;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,11 +37,10 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.deleteTaskCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
-                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskDetailsPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
@@ -66,11 +69,10 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
 
                 } else {
                     try {
-                        if (response.code() == 500) {
-                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskDetailsPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
@@ -98,11 +100,10 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.updateDueCallBack(date);
                 } else {
                     try {
-                        if (response.code() == 500) {
-                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskDetailsPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
@@ -129,11 +130,10 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.removeDueDateCallBack();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
-                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskDetailsPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
@@ -164,11 +164,10 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.loadUserTaskBean(bean);
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
-                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskDetailsPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
@@ -195,11 +194,10 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.changeStateCBH(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
-                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskDetailsPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskDetailsPresenter.showErrorMsg("Can not reach Codefish, please contact the admin");
@@ -225,11 +223,10 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.updateImportanceCBH();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
-                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskDetailsPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskDetailsPresenter.showErrorMsg("Illegal error, " + response.code() + " please contact the admin");
@@ -256,11 +253,10 @@ public class TaskDetailsInteractionImpl implements ITaskDetailsInteraction {
                     taskDetailsPresenter.loadWorkflowForm(response.body());
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength() < 500) {
-                            taskDetailsPresenter.showErrorMsg(response.errorBody().string());
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        taskDetailsPresenter.showErrorMsg(responseBean.description);
                     } catch (Exception e) {
                         e.printStackTrace();
                         taskDetailsPresenter.showErrorMsg("Illegal error " + response.code() + ", please contact the admin");

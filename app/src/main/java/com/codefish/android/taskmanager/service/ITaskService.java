@@ -66,6 +66,11 @@ public interface ITaskService {
     Call<MobWorkflowForm> getWorkflowForm(@Query("idAppUser") Integer idAppUser,
                                           @Query("idWorkflowInstance") Integer idWorkflowInstance);
 
+    @GET("submitNewWorkflowAction")
+    Call<MobWorkflowForm> submitNewWorkflowAction(@Query("idAppUser") Integer idAppUser,
+                                            @Query("formIdentifier") String formIdentifier,
+                                                  @Query("isWorkflowForm") Boolean isWorkflowForm);
+
     @GET("submitWorkflowAction")
     Call<UserTaskBean> submitWorkflowAction(@Query("idAppUser") Integer idAppUser,
                                             @Query("idWorkflowInstance") Integer idWorkflowInstance,

@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.codefish.android.taskmanager.R;
 import com.codefish.android.taskmanager.model.GenericCommentBean;
+import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -133,11 +135,10 @@ public class CommentsListAdapter extends BaseAdapter {
                         notifyDataSetChanged();
                 } else {
                     try {
-                        if (response.code() == 500 && response.errorBody().contentLength()<500) {
-                            Toast.makeText(mContext, response.errorBody().string(), Toast.LENGTH_LONG).show();
-                        } else {
-                            throw new Exception();
-                        }
+                        String errorB = response.errorBody().string();
+                        Gson gson = new Gson();
+                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                        Toast.makeText(mContext, responseBean.description, Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(mContext, mContext.getString(R.string.illegal_error_msg), Toast.LENGTH_LONG).show();
