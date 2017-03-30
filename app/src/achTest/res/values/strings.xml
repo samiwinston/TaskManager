@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Streamline Test</string>
+    <string name="hrUrlEP">hrWorkflowForm/</string>
+    <string name="frmworkUrlEP">taskManager/</string>
+    <string name ="complete_task" > Complete Task </string>
+    <string name ="edit_task" > Edit Task</string>
+    <string name ="important_task" > Set As Important</string>
+    <string name="date_picker_title">Select Date</string>
+    <string name="delete_task">Delete Task</string>
+    <string name="illegal_error_msg">Illegal Error, please contact the admin</string>
+    <string name="network_error">Can not reach CodeFish</string>
+    <string name="request_leave">Request Leave</string>
+    <string name="create_project">New Project</string>
+    <string name="create_task">New Task</string>
+    <string name="procurement_request_form">ProcurementRequest</string>
+    <string name="travel_request_form">Travel Request</string>
+    <string name="gift_request_form">Request Gift</string>
+
+
+
+
+</resources>

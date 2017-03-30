@@ -54,7 +54,6 @@ public class WorkflowFormSubmitFragment extends Fragment implements AdvancedWebV
     @Bind(R.id.workflow_form_submit_layout_progress_bar)
     ProgressBar progressBar;
     private WorkflowFormSubmitActivity workflowFormSubmitActivity;
-    private WidgetActionItemBean widgetActionItemBean;
 
 //    public static WorkflowFormSubmitFragment newInstance(Fragment targetFragment, Integer requestCode,WidgetActionItemBean widgetActionItemBean) {
 //
@@ -79,7 +78,7 @@ public class WorkflowFormSubmitFragment extends Fragment implements AdvancedWebV
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
-            widgetActionItemBean = savedInstanceState.getParcelable("widgetActionItemBean");
+            // widgetActionItemBean = savedInstanceState.getParcelable("widgetActionItemBean");
         }
     }
 
@@ -87,14 +86,13 @@ public class WorkflowFormSubmitFragment extends Fragment implements AdvancedWebV
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putParcelable("widgetActionItemBean", widgetActionItemBean);
+        //outState.putParcelable("widgetActionItemBean", widgetActionItemBean);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
 
 
     }
@@ -117,19 +115,17 @@ public class WorkflowFormSubmitFragment extends Fragment implements AdvancedWebV
         View view = inflater.inflate(R.layout.workflow_form_submit_layout, container, false);
         ButterKnife.bind(this, view);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary),
+        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
-        mWebView.setListener(getActivity(),this);
+        mWebView.setListener(getActivity(), this);
 
 
-//        progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary),
-//                android.graphics.PorterDuff.Mode.MULTIPLY);
-
-
-        WebView.setWebContentsDebuggingEnabled(true);
+        WidgetActionItemBean widgetActionItemBean = workflowFormSubmitActivity.widgetActionItemBean;
+        String formTitle = (widgetActionItemBean != null ? widgetActionItemBean.description : "");
+        //WebView.setWebContentsDebuggingEnabled(true);
         mWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
-        mWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
+        mWebView.addJavascriptInterface(new WebAppInterface(this, formTitle), "Android");
         //mWebView.getSettings().setJavaScriptEnabled(true);
 
         initToolBar();
@@ -142,6 +138,13 @@ public class WorkflowFormSubmitFragment extends Fragment implements AdvancedWebV
     private void initToolBar() {
         workflowFormSubmitActivity.setSupportActionBar(toolbar);
         ActionBar supportActionBar = workflowFormSubmitActivity.getSupportActionBar();
+
+        WidgetActionItemBean widgetActionItemBean = workflowFormSubmitActivity.widgetActionItemBean;
+        if (widgetActionItemBean != null) {
+            supportActionBar.setTitle(widgetActionItemBean.description);
+        }
+
+
         supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setDisplayShowHomeEnabled(true);
         supportActionBar.setDisplayShowTitleEnabled(true);
@@ -171,40 +174,50 @@ public class WorkflowFormSubmitFragment extends Fragment implements AdvancedWebV
         Integer idAppUser = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("userId", 0);
         WidgetActionItemBean widgetActionItemBean = workflowFormSubmitActivity.widgetActionItemBean;
 
-        ServiceModel.getInstance().taskService.submitNewWorkflowAction(idAppUser, widgetActionItemBean.formIdentifier(),widgetActionItemBean.isWorkflowForm())
+        ServiceModel.getInstance().taskService.submitNewWorkflowAction(idAppUser, widgetActionItemBean.formIdentifier(), widgetActionItemBean.isWorkflowForm())
                 .enqueue(new Callback<MobWorkflowForm>() {
-            @Override
-            public void onResponse(Call<MobWorkflowForm> call, Response<MobWorkflowForm> response) {
+                    @Override
+                    public void onResponse(Call<MobWorkflowForm> call, Response<MobWorkflowForm> response) {
 
-                MobWorkflowForm workflowForm = response.body();
-                if (response.isSuccessful()) {
-                    if (workflowForm.htmlForm != null && workflowForm.htmlForm.length() > 0) {
-                        mWebView.loadData(workflowForm.htmlForm, "text/html", "UTF-8");
-                    } else
-                        Toast.makeText(getContext(), "Can not load form, please contact the admin!!", Toast.LENGTH_SHORT).show();
-                } else {
+                        MobWorkflowForm workflowForm = response.body();
+                        if (response.isSuccessful()) {
+                            if (workflowForm.htmlForm != null && workflowForm.htmlForm.length() > 0) {
+                                mWebView.loadData(workflowForm.htmlForm, "text/html", "UTF-8");
+                            } else
+                                Toast.makeText(getContext(), "Can not load form, please contact the admin!!", Toast.LENGTH_SHORT).show();
+                        } else {
 
-                    try {
-                        String errorB = response.errorBody().string();
-                        Gson gson = new Gson();
-                        ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
-                        Toast.makeText(getContext(), responseBean.description, Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(getContext(), "Illegal error " + response.code() + ", please contact the admin", Toast.LENGTH_LONG).show();
+                            try {
+                                String errorB = response.errorBody().string();
+                                Gson gson = new Gson();
+                                ResponseBean responseBean = gson.fromJson(errorB, ResponseBean.class);
+                                Toast.makeText(getContext(), responseBean.description, Toast.LENGTH_LONG).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Toast.makeText(getContext(), "Illegal error " + response.code() + ", please contact the admin", Toast.LENGTH_LONG).show();
+                            }
+
+
+                        }
+
                     }
 
+                    @Override
+                    public void onFailure(Call<MobWorkflowForm> call, Throwable t) {
+                        Toast.makeText(getContext(), "Can not reach Codefish", Toast.LENGTH_LONG).show();
+                    }
+                });
 
-                }
+    }
 
-            }
+    public void showSubmitProgress(){
+        mWebView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
-            @Override
-            public void onFailure(Call<MobWorkflowForm> call, Throwable t) {
-                Toast.makeText(getContext(), "Can not reach Codefish", Toast.LENGTH_LONG).show();
-            }
-        });
-
+    public void hideSubmitProgress(){
+        progressBar.setVisibility(View.GONE);
+        mWebView.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("NewApi")
@@ -238,20 +251,23 @@ public class WorkflowFormSubmitFragment extends Fragment implements AdvancedWebV
     }
 
     @Override
-    public void onPageStarted(String url, Bitmap favicon) { }
-
-    @Override
-    public void onPageFinished(String url) {
-        progressBar.setVisibility(View.GONE);
-        mWebView.setVisibility(View.VISIBLE);
+    public void onPageStarted(String url, Bitmap favicon) {
     }
 
     @Override
-    public void onPageError(int errorCode, String description, String failingUrl) { }
+    public void onPageFinished(String url) {
+        hideSubmitProgress();
+    }
 
     @Override
-    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) { }
+    public void onPageError(int errorCode, String description, String failingUrl) {
+    }
 
     @Override
-    public void onExternalPageRequest(String url) { }
+    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
+    }
+
+    @Override
+    public void onExternalPageRequest(String url) {
+    }
 }

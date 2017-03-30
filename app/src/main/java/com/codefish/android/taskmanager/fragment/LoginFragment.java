@@ -102,19 +102,19 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     MobAppUserBean user = response.body();
                     if (user.getId() > 0) {
                         LoginModel.getInstance().setUserBean(user);
-                        WidgetActionItemBean leaveActionBean = null;
+                       // WidgetActionItemBean leaveActionBean = null;
 
-                        if (user.getActionItems() != null && user.getActionItems().length > 0) {
-                            for (WidgetActionItemBean actionBean : user.getActionItems()) {
-                                if (actionBean.workflowName != null && actionBean.workflowName.equals("hrLeaveRequestWorkflow")) {
-                                    leaveActionBean = actionBean;
-                                    break;
-                                }
-                            }
-                        }
+//                        if (user.getActionItems() != null && user.getActionItems().length > 0) {
+//                            for (WidgetActionItemBean actionBean : user.getActionItems()) {
+//                                if (actionBean.workflowName != null && actionBean.workflowName.equals("hrLeaveRequestWorkflow")) {
+//                                    leaveActionBean = actionBean;
+//                                    break;
+//                                }
+//                            }
+//                        }
 
 
-                        loginActivity.navigateToTasksView(leaveActionBean, user.getActionItems());
+                        loginActivity.navigateToTasksView(user.getActionItems());
                         loginActivity.finish();
 
 
@@ -133,7 +133,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 
                         // TODO: Move this to where you establish a user session
-                        logUser(user.getUsername(), "Email Here", user.getName());
+                        logUser(user.getId(), "Email Here", user.getUsername());
 
 
                     } else {
@@ -202,10 +202,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void logUser(String userName, String userEmail, String name) {
+    private void logUser(Integer userId, String userEmail, String userName) {
         // TODO: Use the current user's information
         // You can call any combination of these three methods
-        Crashlytics.setUserIdentifier(name);
+        Crashlytics.setUserIdentifier(userId.toString());
         Crashlytics.setUserEmail(userEmail);
         Crashlytics.setUserName(userName);
     }

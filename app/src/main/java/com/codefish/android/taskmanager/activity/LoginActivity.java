@@ -95,10 +95,17 @@ public class LoginActivity extends SingleFragmentActivity {
 //        }
     }
 
-    public void navigateToTasksView(WidgetActionItemBean leaveActionItemBean, WidgetActionItemBean[]  widgetActionItems) {
+    public void navigateToTasksView(WidgetActionItemBean[]  widgetActionItems) {
         Intent intent = TasksListActivity.newInstance(this);
-        intent.putParcelableArrayListExtra("widgetActionItems", new ArrayList<>(Arrays.asList(widgetActionItems)));
-        intent.putExtra("leaveActionItemBean",leaveActionItemBean);
+        try{
+            intent.putParcelableArrayListExtra("widgetActionItems", new ArrayList<>(Arrays.asList(widgetActionItems)));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
+       // intent.putExtra("leaveActionItemBean",leaveActionItemBean);
         startActivity(intent);
     }
 

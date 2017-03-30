@@ -132,14 +132,12 @@ public class WidgetActionItemsFragment extends Fragment {
 
         ArrayList<WidgetActionItemBean> filteredActions = new ArrayList<>();
 
-        String procReqForm = getResources().getString(R.string.procurement_request_form);
 
-        for (WidgetActionItemBean actionItem:widgetActionItemsActivity.widgetActionItems) {
+        for (WidgetActionItemBean actionItem : widgetActionItemsActivity.widgetActionItems) {
 
-            if(actionItem.formIdentifier().equals(procReqForm) || actionItem.formIdentifier().equals("hrLeaveRequestWorkflow"))
-            {
+            if (actionItem.isUserForm)
                 filteredActions.add(actionItem);
-            }
+
 
         }
 
@@ -163,11 +161,11 @@ public class WidgetActionItemsFragment extends Fragment {
                     showErrorMsg("The selected action doesn't have an identifier, please contact the admin!!");
                     return;
                 }
-                Intent navToDetails ;
-                if (widgetActionItemBean.isWorkflowForm() &&  widgetActionItemBean.workflowName.equals("hrLeaveRequestWorkflow")) {
-                     navToDetails = LeaveWorkflowFormActivity.newInstance(getContext(), widgetActionItemBean);
+                Intent navToDetails;
+                if (widgetActionItemBean.isWorkflowForm() && widgetActionItemBean.workflowName.equals("hrLeaveRequestWorkflow")) {
+                    navToDetails = LeaveWorkflowFormActivity.newInstance(getContext(), widgetActionItemBean);
                 } else {
-                     navToDetails = WorkflowFormSubmitActivity.newInstance(getContext(), widgetActionItemBean);
+                    navToDetails = WorkflowFormSubmitActivity.newInstance(getContext(), widgetActionItemBean);
                 }
                 startActivityForResult(navToDetails, TasksModel.REQUEST_WORKFLOW_TASK_UPDATE);
                 getActivity().finish();

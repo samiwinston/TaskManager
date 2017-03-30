@@ -9,9 +9,11 @@ import android.widget.Toast;
 
 public class WebAppInterface {
     WorkflowFormSubmitFragment fragment;
+    String formDescription;
     /** Instantiate the interface and set the context */
-    WebAppInterface(WorkflowFormSubmitFragment fragment) {
+    WebAppInterface(WorkflowFormSubmitFragment fragment,String formDescription) {
         this.fragment = fragment;
+        this.formDescription = formDescription;
     }
 
 
@@ -24,6 +26,13 @@ public class WebAppInterface {
     @JavascriptInterface
     public void submitError(String toast) {
         Toast.makeText(fragment.getContext(), toast, Toast.LENGTH_SHORT).show();
+        fragment.hideSubmitProgress();
+    }
+
+    @JavascriptInterface
+    public void onFormSubmit() {
+
+        fragment.showSubmitProgress();
     }
 
 }

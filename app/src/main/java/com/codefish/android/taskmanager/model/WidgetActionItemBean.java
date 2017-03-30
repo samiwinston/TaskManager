@@ -36,6 +36,7 @@ public class WidgetActionItemBean implements Parcelable {
 		formName = in.readString();
 		name = in.readString();
 		customViewName = in.readString();
+		isUserForm = (Boolean)in.readValue(null);
 		widgetName = in.readString();
 		idEntity = in.readString();
 		groupName = in.readString();
@@ -55,6 +56,7 @@ public class WidgetActionItemBean implements Parcelable {
 		dest.writeString(formName);
 		dest.writeString(name);
 		dest.writeString(customViewName);
+		dest.writeValue(isUserForm);
 		dest.writeString(widgetName);
 		dest.writeString(idEntity);
 		dest.writeString(groupName);

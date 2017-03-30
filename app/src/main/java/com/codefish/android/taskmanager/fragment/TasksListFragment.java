@@ -100,7 +100,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     private TaskListLayoutManager mLayoutManager;
     boolean isMockData = false;
 
-    WidgetActionItemBean leaveActionItemBean;
+    //WidgetActionItemBean leaveActionItemBean;
    // ArrayList<WidgetActionItemBean> widgetActionItems;
 
 
@@ -108,9 +108,17 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MyApplication.getAppComponent().inject(this);
-        leaveActionItemBean = getActivity().getIntent().getParcelableExtra("leaveActionItemBean");
-        ArrayList<WidgetActionItemBean> list = getActivity().getIntent().getParcelableArrayListExtra("widgetActionItems");
-        taskPresenter.setWidgetActionItems(list);
+        //leaveActionItemBean = getActivity().getIntent().getParcelableExtra("leaveActionItemBean");
+        try{
+            ArrayList<WidgetActionItemBean> list = getActivity().getIntent().getParcelableArrayListExtra("widgetActionItems");
+            taskPresenter.setWidgetActionItems(list);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Toast.makeText(getContext(),"Can not load user actions, please contact the admin",Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
@@ -118,7 +126,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
         super.onSaveInstanceState(outState);
 
         outState.putInt("idSelectedProject",0);
-        outState.putParcelable("leaveActionItemBean",leaveActionItemBean);
+        //outState.putParcelable("leaveActionItemBean",leaveActionItemBean);
     }
 
     @Override
@@ -127,7 +135,7 @@ public class TasksListFragment extends Fragment implements ITasksView, View.OnCl
 
         if (savedInstanceState != null) {
             idSelectedProject = savedInstanceState.getInt("idSelectedProject");
-            leaveActionItemBean = savedInstanceState.getParcelable("leaveActionItemBean");
+            //leaveActionItemBean = savedInstanceState.getParcelable("leaveActionItemBean");
         }
     }
 
