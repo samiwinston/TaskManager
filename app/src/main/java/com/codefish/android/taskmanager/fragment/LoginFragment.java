@@ -21,14 +21,8 @@ import com.codefish.android.taskmanager.model.LoginModel;
 import com.codefish.android.taskmanager.model.MobAppUserBean;
 import com.codefish.android.taskmanager.model.ResponseBean;
 import com.codefish.android.taskmanager.model.ServiceModel;
-import com.codefish.android.taskmanager.model.WidgetActionItemBean;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
-
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -102,7 +96,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     MobAppUserBean user = response.body();
                     if (user.getId() > 0) {
                         LoginModel.getInstance().setUserBean(user);
-                       // WidgetActionItemBean leaveActionBean = null;
+                        // WidgetActionItemBean leaveActionBean = null;
 
 //                        if (user.getActionItems() != null && user.getActionItems().length > 0) {
 //                            for (WidgetActionItemBean actionBean : user.getActionItems()) {
@@ -113,29 +107,31 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 //                            }
 //                        }
 
-
-                        loginActivity.navigateToTasksView(user.getActionItems());
-                        loginActivity.finish();
+                        if (isAdded()) {
 
 
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user);
-                        editor.putString("MobAppUserBean", json);
-                        editor.putString("email", user.getEmail());
-                        editor.putString("username", user.getUsername());
-                        editor.putString("name", user.getName());
-                        editor.putInt("userId", user.getId());
-                        editor.putString("userInitials", user.getName().charAt(0) + "" + user.getName().charAt(user.getName().lastIndexOf(' ') + 1));
-                        editor.putString("password", password);
-                        editor.apply();
+                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(loginActivity);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            Gson gson = new Gson();
+                            String json = gson.toJson(user);
+                            editor.putString("MobAppUserBean", json);
+                            editor.putString("email", user.getEmail());
+                            editor.putString("username", user.getUsername());
+                            editor.putString("name", user.getName());
+                            editor.putInt("userId", user.getId());
+                            editor.putString("userInitials", user.getName().charAt(0) + "" + user.getName().charAt(user.getName().lastIndexOf(' ') + 1));
+                            editor.putString("password", password);
+                            editor.apply();
 
 
-                        // TODO: Move this to where you establish a user session
-                        logUser(user.getId(), "Email Here", user.getUsername());
+                            // TODO: Move this to where you establish a user session
+                            logUser(user.getId(), "Email Here", user.getUsername());
 
 
+                            loginActivity.navigateToTasksView(user.getActionItems());
+                            loginActivity.finish();
+
+                        }
                     } else {
                         showToast("Can not login, please check your username or password");
                         showControls();
@@ -166,7 +162,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 showControls();
                 t.printStackTrace();
 
-                SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(loginActivity);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.clear();
                 editor.apply();
@@ -176,7 +172,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -184,13 +179,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         if (isAdded()) {
 
 
-            SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(loginActivity);
 
             if (sharedpreferences != null) {
                 String userName = sharedpreferences.getString("username", "");
                 String password = sharedpreferences.getString("password", "");
 
-                if (!userName.equals("") && !password.equals("") ) {
+                if (!userName.equals("") && !password.equals("")) {
 
                     hideControls();
                     showProgressBar();
